@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="configMapper">
+	<!-- 根据报表名称获取报表推送配置信息 -->
+	<select id="findConfigDetail" parameterType="pd" resultType="pd">
+		SELECT
+		*
+		FROM
+		config_plan a
+		WHERE
+		a.VIEWNAME = #{viewName}
+	</select>
+	
+	
+	<!-- 根据报表ID获取报表推送配置信息 -->
+	<select id="findConfigDetailById" parameterType="pd" resultType="pd">
+		SELECT
+		*
+		FROM
+		config_plan a
+		WHERE
+		a.ID = #{ID}
+	</select>
+	<!-- 新增报表推送配置信息 -->
+	<insert id="addPlan" parameterType="pd">
+		INSERT INTO config_plan 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			RULE,
+			<if test="week != null">
+			DAY_FOR_WEEK,
+			</if>
+			<if test="month != null">
+			DAY_FOR_MONTH,
+			</if>
+			<if test="DAYTIME != null">
+			DAYTIME,
+			</if>
+			<if test="WEEKTIME != null">
+			WEEKTIME,
+			</if>
+			<if test="MONTHTIME != null">
+			MONTHTIME,
+			</if>
+			DATA_TYPE,
+			START_DATE,
+			END_DATE,
+			VIEWNAME,
+			MODEL
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{rule},
+			<if test="week != null">
+			#{week},
+			</if>
+			<if test="month != null">
+			#{month},
+			</if>
+			<if test="DAYTIME != null">
+			#{DAYTIME},
+			</if>
+			<if test="WEEKTIME != null">
+			#{WEEKTIME},
+			</if>
+			<if test="MONTHTIME != null">
+			#{MONTHTIME},
+			</if>
+			#{DATA_TYPE},
+			#{START_DATE},
+			#{END_DATE},
+			#{viewName},
+			#{MODEL}
+		</trim>
+	</insert>
+	
+	
+	<!-- 批量新增报表推送配置信息中的推送人与配送数据的关系 -->
+	<insert id="batchSavePlan" parameterType="pd">
+		insert into 
+			plan_emp_rel(PLAN_ID,EMP_ID)
+		values
+		<foreach collection="list" separator="," item="plan">
+			(#{plan.PLAN_ID}, #{plan.EMP_ID})
+		</foreach>
+	</insert>
+	
+	<!-- 根据推送计划ID获取推送人 -->
+	<select id="findEmpByPlanId" parameterType="pd" resultType="pd">
+		select 
+			* 
+		from 
+			plan_emp_rel
+		where 
+			PLAN_ID=#{ID}
+	</select>
+	
+	<!-- 修改报表推送配置信息 -->	
+	<update id="editPlan" parameterType="pd">
+		update config_plan
+			set 
+				RULE = #{rule},
+				<if test="week != null and week != ''">
+				DAY_FOR_WEEK = #{week},
+				</if>
+				<if test="month != null and month != ''">
+				DAY_FOR_MONTH = #{month},
+				</if>
+				<if test="DAYTIME != null and DAYTIME != ''">
+				DAYTIME = #{DAYTIME},
+				</if>
+				<if test="MONTHTIME != null and MONTHTIME != ''">
+				MONTHTIME = #{MONTHTIME},
+				</if>
+				<if test="WEEKTIME != null and WEEKTIME != ''">
+				WEEKTIME = #{WEEKTIME},
+				</if>
+				DATA_TYPE = #{DATA_TYPE},
+				START_DATE =  STR_TO_DATE(#{START_DATE},'%Y-%m-%d'),
+				END_DATE =  STR_TO_DATE(#{END_DATE},'%Y-%m-%d'),
+				VIEWNAME = #{viewName},
+				MODEL = #{MODEL}
+			where 
+				ID = #{ID}
+	</update>
+	
+	<!-- 根据推送计划ID删除推送人 -->
+	<delete id="deleteConfigPerson" parameterType="pd">
+		DELETE
+		FROM
+			plan_emp_rel
+		WHERE
+			PLAN_ID = #{ID}
+	</delete>
+	
+	<!-- 获取所有报表的推送配置信息 -->
+	<select id="findAllConfig" parameterType="pd" resultType="pd">
+		SELECT
+		*
+		FROM
+		config_plan a
+		<if test="(status == '0' or status == 0) and viewName != 'daily'
+		and viewName != 'cProject' and viewName != 'business' and viewName != 'flow' and viewName != 'temp'">
+		WHERE
+			START_DATE &lt;= NOW()
+			AND END_DATE &gt;= NOW()			
+		</if>
+		<if test="status == '1' or status == 1">
+		WHERE
+			START_DATE &gt; NOW()
+			OR END_DATE &lt; NOW()
+		</if>
+		
+	</select>
+	
+	<!-- 删除推送计划-->
+	<delete id="deletePlanConfig" parameterType="pd">
+		DELETE
+		FROM
+			config_plan
+		WHERE
+			ID = #{ID}
+	</delete>
+</mapper>

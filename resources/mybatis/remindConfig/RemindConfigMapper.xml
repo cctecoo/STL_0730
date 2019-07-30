@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="remindConfigMapper">
+	<!-- 根据报表名称获取报表推送配置信息 -->
+	<select id="findConfig" parameterType="pd" resultType="pd">
+		SELECT
+		*
+		FROM
+		remind_plan
+	</select>
+	
+	<!-- 新增报表推送配置信息 -->
+	<insert id="addPlan" parameterType="pd">
+		INSERT INTO remind_plan 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			MESSAGETYPE,
+			<if test="TIME != null and TIME != ''">
+			TIME,
+			</if>
+			<if test="STARTTIME != null">
+			STARTTIME,
+			</if>
+			<if test="ENDTIME != null">
+			ENDTIME,
+			</if>
+			<if test="DAILYTIME != null">
+			DAILYTIME,
+			</if>
+			<if test="AIMTIME != null and AIMTIME != ''">
+			AIMTIME,
+			</if>
+			<if test="TEMPTIME != null and TEMPTIME != ''">
+			TEMPTIME,
+			</if>
+			<if test="GROUPTIME != null and GROUPTIME != ''">
+			GROUPTIME,
+			</if>
+			<if test="FLOWTIME != null and FLOWTIME != ''">
+			FLOWTIME,
+			</if>
+			<if test="TYPE != null and TYPE != ''">
+			TYPE,
+			</if>
+			<if test="WEEK != null and WEEK != ''">
+			WEEK,
+			</if>
+			<if test="AIMREMINDTIME != null and AIMREMINDTIME != ''">
+			AIMREMINDTIME,
+			</if>
+			<if test="GROUPREMINDTIME != null and GROUPREMINDTIME != ''">
+			GROUPREMINDTIME,
+			</if>
+			<if test="TEMPREMINDTIME != null and TEMPREMINDTIME != ''">
+			TEMPREMINDTIME,
+			</if>
+			<if test="FLOWREMINDTIME != null and FLOWREMINDTIME != ''">
+			FLOWREMINDTIME
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{MESSAGETYPE},
+			<if test="TIME != null and TIME != ''">
+			#{TIME},
+			</if>
+			<if test="STARTTIME != null">
+			#{STARTTIME},
+			</if>
+			<if test="ENDTIME != null">
+			#{ENDTIME},
+			</if>
+			<if test="DAILYTIME != null">
+			#{DAILYTIME},
+			</if>
+			<if test="AIMTIME != null and AIMTIME != ''">
+			#{AIMTIME},
+			</if>
+			<if test="TEMPTIME != null and TEMPTIME != ''">
+			#{TEMPTIME},
+			</if>
+			<if test="GROUPTIME != null and GROUPTIME != ''">
+			#{GROUPTIME},
+			</if>
+			<if test="FLOWTIME != null and FLOWTIME != ''">
+			#{FLOWTIME},
+			</if>
+			<if test="TYPE != null and TYPE != ''">
+			#{TYPE},
+			</if>
+			<if test="WEEK != null and WEEK != ''">
+			#{WEEK},
+			</if>
+			<if test="AIMREMINDTIME != null and AIMREMINDTIME != ''">
+			#{AIMREMINDTIME},
+			</if>
+			<if test="GROUPREMINDTIME != null and GROUPREMINDTIME != ''">
+			#{GROUPREMINDTIME},
+			</if>
+			<if test="TEMPREMINDTIME != null and TEMPREMINDTIME != ''">
+			#{TEMPREMINDTIME},
+			</if>
+			<if test="FLOWREMINDTIME != null and FLOWREMINDTIME != ''">
+			#{FLOWREMINDTIME}
+			</if>
+		</trim>
+	</insert>
+		
+	<!-- 修改报表推送配置信息 -->	
+	<update id="editPlan" parameterType="pd">
+		update remind_plan
+			set 
+				MESSAGETYPE = #{MESSAGETYPE},
+				TIME = #{TIME},
+				STARTTIME = #{STARTTIME},
+				ENDTIME = #{ENDTIME},
+				DAILYTIME = #{DAILYTIME},
+				AIMTIME = #{AIMTIME},
+				TEMPTIME = #{TEMPTIME},
+				GROUPTIME = #{GROUPTIME},
+				FLOWTIME = #{FLOWTIME},
+				TYPE=#{TYPE},
+				WEEK=#{WEEK},
+				AIMREMINDTIME=#{AIMREMINDTIME},
+				GROUPREMINDTIME=#{GROUPREMINDTIME},
+				TEMPREMINDTIME=#{TEMPREMINDTIME},
+				FLOWREMINDTIME=#{FLOWREMINDTIME}
+			where 
+				ID = #{ID}
+	</update>
+	
+	
+	<!-- 查询所有员工ID -->
+	<select id="listAllEmpCode" parameterType="pd" resultType="pd">
+		select
+			EMP_CODE,
+			EMP_NAME,
+			ID
+		from 
+			BD_EMPLOYEE
+		where ENABLED = 1
+	</select>
+
+
+
+	<!-- 查询未提交今日日清的员工 -->
+	<select id="findUnTodayDaily" parameterType="pd" resultType="pd">
+			SELECT
+				a.EMP_CODE,
+				a.EMP_NAME,
+				a.ID,
+				b.`status`
+			FROM
+				BD_EMPLOYEE a
+			LEFT JOIN position_daily_task b ON b.EMP_CODE = a.EMP_CODE
+			AND b.datetime = CURDATE()
+			WHERE
+				a.ENABLED = 1
+			AND b.`status` IS NULL
+			OR b.`status` = 'YW_CG'
+	</select>
+	
+	
+	<!-- 查询未提交昨日日清的员工 -->
+	<select id="findUnYesterdayDaily" parameterType="pd" resultType="pd">
+			SELECT
+				a.EMP_CODE,
+				a.EMP_NAME,
+				a.ID,
+				b.`status`
+			FROM
+				BD_EMPLOYEE a
+			LEFT JOIN position_daily_task b ON b.EMP_CODE = a.EMP_CODE
+			AND b.datetime = DATE_FORMAT(ADDDATE(now(),-1),'%Y-%m-%d')
+			WHERE
+				a.ENABLED = 1
+				and a.ID in
+				<foreach item="item" index="index" collection="empList" open="(" separator="," close=")">
+					#{item.EMP_ID}
+				</foreach>
+			AND (b.`status` IS NULL
+			OR b.`status` = 'YW_CG')
+	</select>
+	
+	<!-- 新增提醒消息记录-->
+	<insert id="addMsgRecord" parameterType="pd" useGeneratedKeys="true" keyProperty="ID">
+		INSERT INTO message_record 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			RECEIVER_CODE,
+			WORK_NAME,
+			STATUS,
+			URL,
+			TIME,
+			<if test="SUBMITTER_NAME != null and SUBMITTER_NAME != ''">
+			SUBMITTER_NAME,
+			</if>
+			<if test="WORK_ID != null and WORK_ID != ''">
+			WORK_ID,
+			</if>
+			<if test="WORK != null and WORK != ''">
+			WORK,
+			</if>
+			<if test="TYPE != null and TYPE != ''">
+			TYPE
+			</if>			
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{RECEIVER_CODE},
+			#{WORK_NAME},
+			#{STATUS},
+			#{URL},
+			#{TIME},
+			<if test="SUBMITTER_NAME != null and SUBMITTER_NAME != ''">
+			#{SUBMITTER_NAME},
+			</if>
+			<if test="WORK_ID != null and WORK_ID != ''">
+			#{WORK_ID},
+			</if>
+			<if test="WORK != null and WORK != ''">
+			#{WORK},
+			</if>
+			<if test="TYPE != null and TYPE != ''">
+			#{TYPE}
+			</if>		
+		</trim>
+	</insert>
+	<!--查询即将超期的协同工作-->
+	<select id="findUnProjctEvent" parameterType="pd" resultType="pd">
+		SELECT
+			CONCAT(
+				(
+					SELECT
+						p.NAME
+					FROM
+						c_project p
+					WHERE
+						p. CODE = EVENT .C_PROJECT_CODE
+				),
+				'-节点-',
+				(
+					SELECT
+						n.NODE_TARGET
+					FROM
+						c_project_node n
+					WHERE
+						n.ID = EVENT.C_PROJECT_NODE_ID
+				),
+				'-活动-',
+				EVENT.NAME
+			) taskName,
+			DATE_FORMAT(EVENT.END_DATE, '%Y-%c-%e') taskEndDate,
+			EVENT.ID taskId,
+			EVENT.EMP_CODE taskEmpCode,
+			emp.EMP_NAME EMP_NAME,
+			emp.ID EMP_ID
+		FROM
+			c_project_event EVENT
+		LEFT JOIN c_project project ON (
+			EVENT.C_PROJECT_CODE = project.CODE
+			AND project.ISDEL != 1
+		)
+		LEFT JOIN bd_employee emp ON EVENT.EMP_CODE = emp.EMP_CODE
+		LEFT JOIN (
+			SELECT
+				task.C_PROJECT_EVENT_ID,
+				IFNULL(sum(task.FINISH_PERCENT), 0) finish_percent
+			FROM
+				c_daily_emp_task task
+			WHERE
+				task.ISDEL = 0
+			AND task. STATUS != 'YW_YTH'
+			GROUP BY
+				task.C_PROJECT_EVENT_ID
+		) finishTask ON finishTask.C_PROJECT_EVENT_ID = EVENT.ID
+		WHERE
+			EVENT.ISDEL != 1
+		AND EVENT. STATUS != 'YW_CG'
+		AND EVENT. STATUS != 'YW_YZZ'
+		AND project.ISDEL != 1
+		AND IFNULL(
+			finishTask.finish_percent,
+			0
+		) <![CDATA[  <  ]]>100
+		AND EVENT.END_DATE = #{time}
+	</select>
+	
+	<!--查询即将超期的目标工作-->
+	<select id="findUnBusiness" parameterType="pd" resultType="pd">
+	select 
+				CONCAT(weekTask.YEAR, "年", weekTask.MONTH, "月第", weekTask.WEEK, "周目标") taskName,
+				DATE_FORMAT(weekTask.WEEK_END_DATE, '%Y-%c-%e') taskEndDate,
+				weekTask.ID taskId,
+				weekTask.EMP_CODE taskEmpCode,
+ 				emp.EMP_NAME EMP_NAME,
+ 				emp.ID EMP_ID
+			from b_week_emp_task weekTask
+			left join b_year_target target on(target.ISDEL = 0 and target.CODE = weekTask.B_YEAR_TARGET_CODE)
+			LEFT JOIN bd_employee emp ON weekTask.EMP_CODE = emp.EMP_CODE
+			left join (
+				select task.B_WEEK_EMP_TASK_ID, IFNULL(sum(task.FINISH_PERCENT), 0) finish_percent 
+				from b_daily_emp_task task 
+				where task.ISDEL=0 and task.STATUS!='YW_YTH'
+				group by task.B_WEEK_EMP_TASK_ID
+			) finishTask on finishTask.B_WEEK_EMP_TASK_ID=weekTask.ID
+			where 
+				weekTask.ISDEL = 0 and weekTask.STATUS = 'YW_YSX'
+				and target.ISDEL = 0 
+				and weekTask.WEEK_COUNT!=0 
+				and (select ydt.ID from b_year_dept_task ydt 
+					where ydt.ISDEL=0 
+						and ydt.ID=(select mdt.B_YEAR_DEPT_TASK_ID from b_month_dept_task mdt
+							where mdt.ISDEL=0 
+								and mdt.ID = (select met.B_MONTH_DEPT_TASK_ID from b_month_emp_target met
+									where met.ISDEL = 0 and met.ID=weekTask.B_MONTH_EMP_TARGET_ID
+								)
+						)
+				) is not null
+ 				<![CDATA[ 
+				and IFNULL(finishTask.finish_percent, 0)<100 				
+				]]>
+				and weekTask.WEEK_END_DATE = #{time}
+	</select>
+	
+	<!--查询超期未接收的流程工作-->
+	<select id="findUnFlow" parameterType="pd" resultType="pd">
+	select 
+				CONCAT(flow.FLOW_NAME, '-', node.NODE_NAME) taskName,
+				DATE_FORMAT(history.OPERA_TIME, '%Y-%c-%e') taskEndDate,
+				node.ID taskId,
+				node.EMP_CODE taskEmpCode,
+				emp.EMP_NAME EMP_NAME,
+				emp.ID EMP_ID
+			from flow_work_node node
+			left join flow_work flow on flow.ID = node.FLOW_ID
+			LEFT JOIN bd_employee emp ON node.EMP_CODE = emp.EMP_CODE
+			left join flow_work_history history 
+			on (history.NEXT_NODE = node.ID 
+				and history.ID=(select max(ID) from flow_work_history where NEXT_NODE = node.ID)
+			)	
+			where 
+				node.ISDEL = 0 and node.STATUS != 'YW_DSX'
+				and flow.STATUS is null 
+				and
+				 (
+						1=1
+					or node.ID in(
+						select FLOW_WORK_NODE_ID from flow_work_node_joint_checkup m
+						where 
+						m.OPINION_TYPE is null
+					) 
+				)
+				and node.STATUS!='YW_YWB' and node.STATUS!='YW_YJS' and DATE_FORMAT(history.OPERA_TIME, '%Y-%m-%d') = #{time}
+	</select>
+	
+	<!--查询超期的工作-->
+	<select id="findUnTemp" parameterType="pd" resultType="pd">
+		SELECT
+			b.TASK_NAME taskName,
+			DATE_FORMAT(b.END_TIME, '%Y-%m-%d') taskEndDate,
+			b.ID taskId,
+			c.EMP_CODE taskEmpCode,
+			c.EMP_NAME EMP_NAME,
+			c.ID EMP_ID		
+		FROM
+			daily_task_information_detail a
+		LEFT JOIN daily_task_information b ON b.ID = a.DAILY_TASK_ID
+		LEFT JOIN bd_employee c ON c.ID = a.EMP_ID
+		WHERE
+			a.`STATUS` IN ('YW_YSX', 'YW_TYH')
+		AND DATE_FORMAT(b.END_TIME, '%Y-%m-%d') = #{time};
+	</select>
+	
+	
+	<!-- 根据员工编号查找历史消息 -->
+	<select id="findRecord" parameterType="pd" resultType="pd">
+		SELECT
+			ID,
+			SUBMITTER_NAME,
+			RECEIVER_CODE,
+			WORK_NAME,
+			STATUS,
+			URL,
+			TYPE,
+			WORK,
+			DATE_FORMAT(TIME, '%Y-%m-%d %H:%i:%s') TIME,
+			DATE_FORMAT(TIME, '%y/%m/%d %H:%i:%s') APP_TIME,
+			IFNULL(WORK_ID,'') WORK_ID
+		FROM
+		message_record
+		where 
+		RECEIVER_CODE = #{empCode}
+		<if test="STATUS != null and STATUS != ''">
+			and	STATUS = #{STATUS}
+		</if>
+		<if test="TYPE != null and TYPE != ''">
+			and	TYPE = #{TYPE}
+		</if>
+		ORDER BY ID  DESC
+	</select>
+	
+	<!-- 根据ID查找历史消息 -->
+	<select id="findRecordById" parameterType="pd" resultType="pd">
+		SELECT
+			*
+		FROM
+			MESSAGE_RECORD
+		WHERE
+			ID = #{ID}
+	</select>
+	
+	<!-- 修改历史消息状态 -->	
+	<update id="editRecord" parameterType="pd">
+		update message_record
+			set 
+				STATUS = #{status}
+			where 
+				ID = #{ID}
+	</update>
+	
+	<!-- 一键标记为已读 -->	
+	<update id="updateAll" parameterType="pd">
+		update message_record
+			set 
+				STATUS = '2'
+			where 
+				RECEIVER_CODE = #{RECEIVER_CODE}
+	</update>
+</mapper>

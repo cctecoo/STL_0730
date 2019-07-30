@@ -1,0 +1,934 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20091224">
+<TableDataMap>
+<TableData name="stl-oec" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="startmonthtime"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="endmonthtime"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="yeartime"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dept_code"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="monthtime"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="employee"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[FlyReportor]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT
+	cus.CUSTOMER_NAME MARKET_NAME,
+	product.PRODUCT_NAME,
+	taskdaily.CUSTOM_NAME,
+	employee.EMP_NAME,
+  IFNULL(SUM(weekTask.WEEK_COUNT),0) WEEK_COUNT,
+  IFNULL(SUM(weekTask.MONEY_COUNT),0) MONEY_COUNT,
+  IFNULL(SUM(taskdaily.DAILY_COUNT),0) DAILY_COUNT,
+  IFNULL(SUM(taskdaily.MONEY_COUNT),0) DAILY_MONEY_COUNT,
+	IFNULL(lastyear.DAILY_COUNT1,0) DAILY_COUNT1,
+	IFNULL(lastyear.DAILY_MONEY_COUNT1,0) DAILY_MONEY_COUNT1,
+	IFNULL(lastyear.WEEK_COUNT1,0) WEEK_COUNT1,
+	IFNULL(lastyear.MONEY_COUNT1,0) MONEY_COUNT1,
+	IFNULL(accumulate.DAILY_COUNT2,0) DAILY_COUNT2,
+	IFNULL(accumulate.DAILY_MONEY_COUNT2,0) DAILY_MONEY_COUNT2,
+	IFNULL(accumulate.WEEK_COUNT2,0) WEEK_COUNT2,
+	IFNULL(accumulate.MONEY_COUNT2,0) MONEY_COUNT2,
+	IFNULL(lastaccumulate.DAILY_COUNT3,0) DAILY_COUNT3,
+	IFNULL(lastaccumulate.DAILY_MONEY_COUNT3,0) DAILY_MONEY_COUNT3,
+	IFNULL(lastaccumulate.WEEK_COUNT3,0) WEEK_COUNT3,
+	IFNULL(lastaccumulate.MONEY_COUNT3,0) MONEY_COUNT3
+
+FROM
+	b_week_emp_task weekTask
+LEFT JOIN (select B_WEEK_EMP_TASK_ID,sum(daily.DAILY_COUNT)DAILY_COUNT,sum(daily.MONEY_COUNT)MONEY_COUNT ,CUSTOM_NAME
+					from b_daily_emp_task daily 
+					where daily.ISDEL=0 group by B_WEEK_EMP_TASK_ID,CUSTOM_NAME)taskdaily ON(taskdaily.B_WEEK_EMP_TASK_ID = weekTask.ID)
+LEFT JOIN B_MONTH_EMP_TARGET monthEmpTarget ON (
+	weekTask.B_MONTH_EMP_TARGET_ID = monthEmpTarget.ID
+)
+LEFT JOIN B_MONTH_DEPT_TASK monthDeptTarget ON (
+	monthEmpTarget.B_MONTH_DEPT_TASK_ID = monthDeptTarget.ID
+)
+LEFT JOIN B_YEAR_DEPT_TASK yearDeptTarget ON (
+	monthDeptTarget.B_YEAR_DEPT_TASK_ID = yearDeptTarget.ID
+)
+LEFT JOIN b_year_target target ON (
+	weekTask.B_YEAR_TARGET_CODE = target.`CODE`
+	AND target.ISDEL != 1
+)
+LEFT JOIN bd_product product ON (
+	yearDeptTarget.PRODUCT_CODE = product.PRODUCT_CODE
+	AND product.ISDEL != 1
+)
+LEFT JOIN bd_department dep ON (
+	dep.dept_code = weekTask.dept_code
+	AND dep.ENABLED = 1
+)
+LEFT JOIN bd_customer cus ON (
+	cus.CUSTOMER_CODE = yearDeptTarget.CUSTOMER_CODE
+  AND cus.isdel=0 
+)
+LEFT JOIN bd_employee employee on weekTask.EMP_CODE=employee.EMP_CODE
+LEFT JOIN(
+		SELECT
+			yearDeptTarget1.PRODUCT_CODE PRODUCT_CODE,
+			yearDeptTarget1.CUSTOMER_CODE CUSTOMER_CODE,
+			weekTask1.EMP_CODE EMP_CODE,
+			taskdaily1.CUSTOM_NAME CUSTOM_NAME,
+			IFNULL(SUM(weekTask1.WEEK_COUNT),0) WEEK_COUNT1,
+			IFNULL(SUM(weekTask1.MONEY_COUNT),0) MONEY_COUNT1,
+			IFNULL(SUM(taskdaily1.DAILY_COUNT),0) DAILY_COUNT1,
+			IFNULL(SUM(taskdaily1.MONEY_COUNT),0) DAILY_MONEY_COUNT1
+
+		FROM
+			b_week_emp_task weekTask1
+		LEFT JOIN (select B_WEEK_EMP_TASK_ID,sum(daily.DAILY_COUNT)DAILY_COUNT,sum(daily.MONEY_COUNT)MONEY_COUNT ,CUSTOM_NAME
+							from b_daily_emp_task daily 
+							where daily.ISDEL=0 group by B_WEEK_EMP_TASK_ID,CUSTOM_NAME)taskdaily1 ON(taskdaily1.B_WEEK_EMP_TASK_ID = weekTask1.ID)
+		LEFT JOIN B_MONTH_EMP_TARGET monthEmpTarget1 ON (
+			weekTask1.B_MONTH_EMP_TARGET_ID = monthEmpTarget1.ID
+		)
+		LEFT JOIN B_MONTH_DEPT_TASK monthDeptTarget1 ON (
+			monthEmpTarget1.B_MONTH_DEPT_TASK_ID = monthDeptTarget1.ID
+		)
+		LEFT JOIN B_YEAR_DEPT_TASK yearDeptTarget1 ON (
+			monthDeptTarget1.B_YEAR_DEPT_TASK_ID = yearDeptTarget1.ID
+		)
+		LEFT JOIN b_year_target target1 ON (
+			weekTask1.B_YEAR_TARGET_CODE = target1.`CODE`
+			AND target1.ISDEL = 0
+		)
+		where
+			weekTask1.ISDEL = 0
+			AND target1.TARGET_TYPE='XSH'
+			AND ${if(len(yeartime)=0," 1=1"," weekTask1.YEAR='"+(yeartime-1)+"'")}
+			AND ${if(len(monthtime)=0," 1=1"," weekTask1.YEAR=SUBSTRING('"+monthtime+"',1,4)-1"+" and weekTask1.MONTH=SUBSTRING('"+monthtime+"',6,2)")}
+			AND ${if(len(startmonthtime)=0," 1=1"," weekTask1.YEAR=SUBSTRING('"+startmonthtime+"',1,4)-1"+" and weekTask1.MONTH>=SUBSTRING('"+startmonthtime+"',6,2)"+" and weekTask1.MONTH<=SUBSTRING('"+endmonthtime+"',6,2)")}
+			AND ${if(len(dept_code)=0," 1=1"," weekTask1.dept_code='"+dept_code+"'")}
+			AND ${if(len(employee)=0," 1=1"," weekTask1.EMP_CODE='"+employee+"'")}
+		GROUP BY 
+			yearDeptTarget1.PRODUCT_CODE,
+			yearDeptTarget1.CUSTOMER_CODE,
+			taskdaily1.CUSTOM_NAME,
+			weekTask1.EMP_CODE
+	)lastyear ON(lastyear.PRODUCT_CODE = yearDeptTarget.PRODUCT_CODE
+			and lastyear.CUSTOMER_CODE = yearDeptTarget.CUSTOMER_CODE
+			and lastyear.EMP_CODE = weekTask.EMP_CODE
+			and lastyear.CUSTOM_NAME = taskdaily.CUSTOM_NAME)
+LEFT JOIN(
+		SELECT
+			yearDeptTarget2.PRODUCT_CODE PRODUCT_CODE,
+			yearDeptTarget2.CUSTOMER_CODE CUSTOMER_CODE,
+			weekTask2.EMP_CODE EMP_CODE,
+			taskdaily2.CUSTOM_NAME CUSTOM_NAME,
+			IFNULL(SUM(weekTask2.WEEK_COUNT),0) WEEK_COUNT2,
+			IFNULL(SUM(weekTask2.MONEY_COUNT),0) MONEY_COUNT2,
+			IFNULL(SUM(taskdaily2.DAILY_COUNT),0) DAILY_COUNT2,
+			IFNULL(SUM(taskdaily2.MONEY_COUNT),0) DAILY_MONEY_COUNT2
+
+		FROM
+			b_week_emp_task weekTask2
+		LEFT JOIN (select B_WEEK_EMP_TASK_ID,sum(daily.DAILY_COUNT)DAILY_COUNT,sum(daily.MONEY_COUNT)MONEY_COUNT ,CUSTOM_NAME
+							from b_daily_emp_task daily 
+							where daily.ISDEL=0 group by B_WEEK_EMP_TASK_ID,CUSTOM_NAME)taskdaily2 ON(taskdaily2.B_WEEK_EMP_TASK_ID = weekTask2.ID)
+		LEFT JOIN B_MONTH_EMP_TARGET monthEmpTarget2 ON (
+			weekTask2.B_MONTH_EMP_TARGET_ID = monthEmpTarget2.ID
+		)
+		LEFT JOIN B_MONTH_DEPT_TASK monthDeptTarget2 ON (
+			monthEmpTarget2.B_MONTH_DEPT_TASK_ID = monthDeptTarget2.ID
+		)
+		LEFT JOIN B_YEAR_DEPT_TASK yearDeptTarget2 ON (
+			monthDeptTarget2.B_YEAR_DEPT_TASK_ID = yearDeptTarget2.ID
+		)
+		LEFT JOIN b_year_target target2 ON (
+			weekTask2.B_YEAR_TARGET_CODE = target2.`CODE`
+			AND target2.ISDEL = 0
+		)
+		where
+			weekTask2.ISDEL = 0
+			AND target2.TARGET_TYPE='XSH'
+			AND ${if(len(yeartime)=0," 1=1"," weekTask2.YEAR='"+yeartime+"'")}
+			AND ${if(len(monthtime)=0," 1=1"," weekTask2.YEAR=SUBSTRING('"+monthtime+"',1,4)"+" and weekTask2.MONTH<=SUBSTRING('"+monthtime+"',6,2)")}
+      AND ${if(len(startmonthtime)=0," 1=1"," weekTask2.YEAR=SUBSTRING('"+startmonthtime+"',1,4)"+" and weekTask2.MONTH<=SUBSTRING('"+endmonthtime+"',6,2)")}
+			AND ${if(len(dept_code)=0," 1=1"," weekTask2.dept_code='"+dept_code+"'")}
+			AND ${if(len(employee)=0," 1=1"," weekTask2.EMP_CODE='"+employee+"'")}
+		GROUP BY 
+			yearDeptTarget2.PRODUCT_CODE,
+			yearDeptTarget2.CUSTOMER_CODE,
+			taskdaily2.CUSTOM_NAME,
+			weekTask2.EMP_CODE
+	)accumulate ON(accumulate.PRODUCT_CODE = yearDeptTarget.PRODUCT_CODE
+			and accumulate.CUSTOMER_CODE = yearDeptTarget.CUSTOMER_CODE
+			and accumulate.EMP_CODE = weekTask.EMP_CODE
+			and accumulate.CUSTOM_NAME = taskdaily.CUSTOM_NAME)
+LEFT JOIN(
+		SELECT
+			yearDeptTarget3.PRODUCT_CODE PRODUCT_CODE,
+			yearDeptTarget3.CUSTOMER_CODE CUSTOMER_CODE,
+			weekTask3.EMP_CODE EMP_CODE,
+			taskdaily3.CUSTOM_NAME CUSTOM_NAME,
+			IFNULL(SUM(weekTask3.WEEK_COUNT),0) WEEK_COUNT3,
+			IFNULL(SUM(weekTask3.MONEY_COUNT),0) MONEY_COUNT3,
+			IFNULL(SUM(taskdaily3.DAILY_COUNT),0) DAILY_COUNT3,
+			IFNULL(SUM(taskdaily3.MONEY_COUNT),0) DAILY_MONEY_COUNT3
+
+		FROM
+			b_week_emp_task weekTask3
+		LEFT JOIN (select B_WEEK_EMP_TASK_ID,sum(daily.DAILY_COUNT)DAILY_COUNT,sum(daily.MONEY_COUNT)MONEY_COUNT ,CUSTOM_NAME
+							from b_daily_emp_task daily 
+							where daily.ISDEL=0 group by B_WEEK_EMP_TASK_ID,CUSTOM_NAME)taskdaily3 ON(taskdaily3.B_WEEK_EMP_TASK_ID = weekTask3.ID)
+		LEFT JOIN B_MONTH_EMP_TARGET monthEmpTarget3 ON (
+			weekTask3.B_MONTH_EMP_TARGET_ID = monthEmpTarget3.ID
+		)
+		LEFT JOIN B_MONTH_DEPT_TASK monthDeptTarget3 ON (
+			monthEmpTarget3.B_MONTH_DEPT_TASK_ID = monthDeptTarget3.ID
+		)
+		LEFT JOIN B_YEAR_DEPT_TASK yearDeptTarget3 ON (
+			monthDeptTarget3.B_YEAR_DEPT_TASK_ID = yearDeptTarget3.ID
+		)
+		LEFT JOIN b_year_target target3 ON (
+			weekTask3.B_YEAR_TARGET_CODE = target3.`CODE`
+			AND target3.ISDEL = 0
+		)
+		where
+			weekTask3.ISDEL = 0
+			AND target3.TARGET_TYPE='XSH'
+			AND ${if(len(yeartime)=0," 1=1"," weekTask3.YEAR='"+(yeartime-1)+"'")}
+			AND ${if(len(monthtime)=0," 1=1"," weekTask3.YEAR=SUBSTRING('"+monthtime+"',1,4)-1"+" and weekTask3.MONTH<=SUBSTRING('"+monthtime+"',6,2)")}
+      AND ${if(len(startmonthtime)=0," 1=1"," weekTask3.YEAR=SUBSTRING('"+startmonthtime+"',1,4)-1"+" and weekTask3.MONTH<=SUBSTRING('"+endmonthtime+"',6,2)")}
+			AND ${if(len(dept_code)=0," 1=1"," weekTask3.dept_code='"+dept_code+"'")}
+			AND ${if(len(employee)=0," 1=1"," weekTask3.EMP_CODE='"+employee+"'")}
+		GROUP BY 
+			yearDeptTarget3.PRODUCT_CODE,
+			yearDeptTarget3.CUSTOMER_CODE,
+			taskdaily3.CUSTOM_NAME,
+			weekTask3.EMP_CODE
+	)lastaccumulate ON(lastaccumulate.PRODUCT_CODE = yearDeptTarget.PRODUCT_CODE
+			and lastaccumulate.CUSTOMER_CODE = yearDeptTarget.CUSTOMER_CODE
+			and lastaccumulate.EMP_CODE = weekTask.EMP_CODE
+			and lastaccumulate.CUSTOM_NAME = taskdaily.CUSTOM_NAME)
+WHERE
+	weekTask.ISDEL = 0
+  AND target.TARGET_TYPE='XSH'
+	AND ${if(len(yeartime)=0," 1=1"," weekTask.YEAR='"+yeartime+"'")}
+	AND ${if(len(monthtime)=0," 1=1"," weekTask.YEAR=SUBSTRING('"+monthtime+"',1,4)"+" and weekTask.MONTH=SUBSTRING('"+monthtime+"',6,2)")}
+	AND ${if(len(startmonthtime)=0," 1=1"," weekTask.YEAR=SUBSTRING('"+startmonthtime+"',1,4)"+" and weekTask.MONTH>=SUBSTRING('"+startmonthtime+"',6,2)"+" and weekTask.MONTH<=SUBSTRING('"+endmonthtime+"',6,2)")}	
+	AND ${if(len(dept_code)=0," 1=1"," weekTask.dept_code='"+dept_code+"'")}
+	AND ${if(len(employee)=0," 1=1"," weekTask.EMP_CODE='"+employee+"'")}
+GROUP BY 
+	product.PRODUCT_NAME,
+          cus.CUSTOMER_NAME,
+	taskdaily.CUSTOM_NAME,
+	employee.EMP_NAME]]></Query>
+</TableData>
+</TableDataMap>
+<ReportSettings orientation="1" headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.27" left="0.7499999999999999" bottom="0.27" right="0.7499999999999999"/>
+</ReportSettings>
+<ReportParameterAttr>
+<Attributes showWindow="false" delayPlaying="true" windowPosition="1" align="1"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.27" left="0.75" bottom="0.27" right="0.75"/>
+</ReportSettings>
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<ReportWebAttr>
+<EmailManager mailHost="" password="___" user="" fromEmailAddres=""/>
+<ServerPrinter/>
+<WebPageContent>
+<ToolBars>
+<ToolBarManager>
+<Location>
+<Embed position="1"/>
+</Location>
+<ToolBar>
+<Widget class="com.fr.report.web.ui.impl.page.First">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[首页]]></Text>
+<IconName>
+<![CDATA[first]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.Previous">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[上一页]]></Text>
+<IconName>
+<![CDATA[previous]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.PageNavi">
+<WidgetAttr/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.Next">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[下一页]]></Text>
+<IconName>
+<![CDATA[next]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.Last">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[末页]]></Text>
+<IconName>
+<![CDATA[last]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.PageSetup">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[页面设置]]></Text>
+<IconName>
+<![CDATA[pagesetup]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.FlashPrint">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[打印[客户端]A]]></Text>
+<IconName>
+<![CDATA[flashprint]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Print">
+<PrintButtons appletPrint="false"/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Export">
+<Buttons pdf="true" excelP="true" excelO="true" excelS="true" word="true"/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Email">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[邮件]]></Text>
+<ShowIcon>
+<![CDATA[false]]></ShowIcon>
+<ShowText>
+<![CDATA[false]]></ShowText>
+<IconName>
+<![CDATA[email]]></IconName>
+</Widget>
+</ToolBar>
+</ToolBarManager>
+</ToolBars>
+<WebPage isPage="true"/>
+<WebMargin margins="0,auto,0,auto"/>
+</WebPageContent>
+<WebFormContent>
+<ToolBars>
+<ToolBarManager>
+<Location>
+<Embed position="1"/>
+</Location>
+<ToolBar>
+<Widget class="com.fr.report.web.ui.impl.FlashPrint">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[Flash打印[客户端]A]]></Text>
+<IconName>
+<![CDATA[flashprint]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Print">
+<PrintButtons/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Export">
+<Buttons pdf="true" excelP="true" excelO="true" excelS="true" word="true"/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Email">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[邮件]]></Text>
+<IconName>
+<![CDATA[email]]></IconName>
+</Widget>
+</ToolBar>
+</ToolBarManager>
+</ToolBars>
+</WebFormContent>
+<WebWriteContent>
+<ToolBars>
+<ToolBarManager>
+<Location>
+<Embed position="1"/>
+</Location>
+<ToolBar>
+<Widget class="com.fr.report.web.ui.impl.write.Submit">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[提交]]></Text>
+<IconName>
+<![CDATA[submit]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.write.Verify">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[数据校验]]></Text>
+<IconName>
+<![CDATA[verify]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.FlashPrint">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[Flash打印[客户端]A]]></Text>
+<IconName>
+<![CDATA[flashprint]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Print">
+<PrintButtons/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Export">
+<Buttons pdf="true" excelP="true" excelO="true" excelS="true" word="true"/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Email">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[邮件]]></Text>
+<IconName>
+<![CDATA[email]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.write.AppendColumnRow">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[增加记录]]></Text>
+<IconName>
+<![CDATA[appendcolumn]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.write.ShowCellValue">
+<WidgetAttr/>
+</Widget>
+</ToolBar>
+</ToolBarManager>
+</ToolBars>
+<SelectedColor/>
+</WebWriteContent>
+<Background name="NullBackground"/>
+</ReportWebAttr>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+<RowHeight defaultValue="19">
+<![CDATA[21,19,45,19,19,19,19,19,19,19,19]]></RowHeight>
+<ColumnWidth defaultValue="72">
+<![CDATA[72,72,72,72,63,61,59,59,58,57,58,72,58,60,72,72,71,79,71,75,72]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" cs="22" s="0">
+<O>
+<![CDATA[XXXX年全年/全季/全月销售分析]]></O>
+<Expand/>
+</C>
+<C c="0" r="1" rs="2" s="1">
+<O>
+<![CDATA[市场]]></O>
+<Expand/>
+</C>
+<C c="1" r="1" rs="2" s="1">
+<O>
+<![CDATA[产品名称]]></O>
+<Expand/>
+</C>
+<C c="2" r="1" rs="2" s="1">
+<O>
+<![CDATA[客户]]></O>
+<Expand/>
+</C>
+<C c="3" r="1" rs="2" s="1">
+<O>
+<![CDATA[责任人]]></O>
+<Expand/>
+</C>
+<C c="4" r="1" cs="6" s="1">
+<O>
+<![CDATA[全年/全季/全月计划]]></O>
+<Expand/>
+</C>
+<C c="10" r="1" cs="6" s="1">
+<O>
+<![CDATA[年度/季度/月度数量完成]]></O>
+<Expand/>
+</C>
+<C c="16" r="1" cs="6" s="1">
+<O>
+<![CDATA[年度/季度/月度金额完成]]></O>
+<Expand/>
+</C>
+<C c="4" r="2" s="1">
+<O>
+<![CDATA[同期数量（T）]]></O>
+<Expand/>
+</C>
+<C c="5" r="2" s="1">
+<O>
+<![CDATA[计划数量（T）]]></O>
+<Expand/>
+</C>
+<C c="6" r="2" s="1">
+<O>
+<![CDATA[计划数量同比增幅]]></O>
+<Expand/>
+</C>
+<C c="7" r="2" s="1">
+<O>
+<![CDATA[同期金额（万元）]]></O>
+<Expand/>
+</C>
+<C c="8" r="2" s="1">
+<O>
+<![CDATA[计划金额（万元）]]></O>
+<Expand/>
+</C>
+<C c="9" r="2" s="1">
+<O>
+<![CDATA[计划金额同比增幅]]></O>
+<Expand/>
+</C>
+<C c="10" r="2" s="2">
+<O>
+<![CDATA[本次完成数量(T)]]></O>
+<Expand/>
+</C>
+<C c="11" r="2" s="1">
+<O>
+<![CDATA[累计同期完成数量（T）]]></O>
+<Expand/>
+</C>
+<C c="12" r="2" s="1">
+<O>
+<![CDATA[累计计划数量（T）]]></O>
+<Expand/>
+</C>
+<C c="13" r="2" s="1">
+<O>
+<![CDATA[累计完成数量（T）]]></O>
+<Expand/>
+</C>
+<C c="14" r="2" s="1">
+<O>
+<![CDATA[累计完成数量同比增幅]]></O>
+<Expand/>
+</C>
+<C c="15" r="2" s="1">
+<O>
+<![CDATA[累计完成率]]></O>
+<Expand/>
+</C>
+<C c="16" r="2" s="2">
+<O>
+<![CDATA[本次完成金额（万元）]]></O>
+<Expand/>
+</C>
+<C c="17" r="2" s="1">
+<O>
+<![CDATA[累计同期完成金额（万元）]]></O>
+<Expand/>
+</C>
+<C c="18" r="2" s="1">
+<O>
+<![CDATA[累计计划金额（万元）]]></O>
+<Expand/>
+</C>
+<C c="19" r="2" s="1">
+<O>
+<![CDATA[累计完成金额（万元）]]></O>
+<Expand/>
+</C>
+<C c="20" r="2" s="1">
+<O>
+<![CDATA[累计完成金额同比增幅]]></O>
+<Expand/>
+</C>
+<C c="21" r="2" s="1">
+<O>
+<![CDATA[累计完成率]]></O>
+<Expand/>
+</C>
+<C c="0" r="3" s="1">
+<O>
+<![CDATA[合计]]></O>
+<Expand/>
+</C>
+<C c="1" r="3" s="3">
+<Expand/>
+</C>
+<C c="2" r="3" s="3">
+<Expand/>
+</C>
+<C c="3" r="3" s="3">
+<Expand/>
+</C>
+<C c="4" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(E5)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="5" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(F5)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="6" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(E4=0,0,ROUND(((F4-E4)/E4)*100,2)+"%")]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="7" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(H5)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="8" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(I5)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="9" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(H4=0,0,ROUND(((I4-H4)/H4)*100,2)+"%")]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="10" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(K5)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="11" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(L5)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="12" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(M5)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="13" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(N5)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="14" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(L4=0,0,ROUND(((N4-L4)/L4)*100,2)+"%")]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="15" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(M4=0,0,ROUND((N4/M4)*100,2)+"%")]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="16" r="3" s="3">
+<O>
+<![CDATA[SUM(Q5)]]></O>
+<Expand/>
+</C>
+<C c="17" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(R5)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="18" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(S5)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="19" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(T5)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="20" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(R4=0,0,ROUND(((T4-R4)/R4)*100,2)+"%")]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="21" r="3" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(S4=0,0,ROUND((T4/S4)*100,2)+"%")]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="MARKET_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="PRODUCT_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="CUSTOM_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="EMP_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="MONEY_COUNT1"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="MONEY_COUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="4" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(E5=0,0,ROUND(((F5-E5)/E5)*100,2)+"%")]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="7" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="WEEK_COUNT1"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="8" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="WEEK_COUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="9" r="4" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(H5=0,0,ROUND(((I5-H5)/H5)*100,2)+"%")]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="10" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="DAILY_MONEY_COUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="11" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="DAILY_MONEY_COUNT3"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="12" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="MONEY_COUNT2"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="13" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="DAILY_MONEY_COUNT2"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="14" r="4" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(L5=0,0,ROUND(((N5-L5)/L5)*100,2)+"%")]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="15" r="4" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(M5=0,0,ROUND((N5/M5)*100,2)+"%")]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="16" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="DAILY_COUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="17" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="DAILY_COUNT3"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="18" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="WEEK_COUNT2"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="19" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="stl-oec" columnName="DAILY_COUNT2"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="20" r="4" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(R5=0,0,ROUND(((T5-R5)/R5)*100,2)+"%")]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="21" r="4" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(S5=0,0,ROUND((T5/S5)*100,2)+"%")]]></Attributes>
+</O>
+<Expand/>
+</C>
+</CellElementList>
+</Report>
+<StyleList>
+<Style style_name="Title"/>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="12"/>
+<Background name="ImageBackground" specifiedImageWidth="-1.0" specifiedImageHeight="-1.0" layout="2">
+<Image width="271" height="20">
+<![CDATA[mDD3s_Ctrm_#OF0>K!!9WJ6!OQ7+.ZoaQ9>0E]Ad2laNppWiE)!WiGp)li!RsTDPW,0?[QWIV
+_g1pu1d?NUQ%!281S82*R8))W+4iebJi;<TD!-WQ)u!;iUeW~
+]]></Image>
+</Background>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style>
+<FRFont name="SimSun" style="0" size="12"/>
+<Background name="ImageBackground" specifiedImageWidth="-1.0" specifiedImageHeight="-1.0" layout="2">
+<Image width="271" height="20">
+<![CDATA[mDD3s_Ctrm_#OF0>K!!9WJ6!OQ7+.ZoaQ9>0E]Ad2laNppWiE)!WiGp)li!RsTDPW,0?[QWIV
+_g1pu1d?NUQ%!281S82*R8))W+4iebJi;<TD!-WQ)u!;iUeW~
+]]></Image>
+</Background>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style>
+<FRFont name="SimSun" style="0" size="12"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

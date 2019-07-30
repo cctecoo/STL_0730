@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20091224">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters/>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[FlyReportor]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT * FROM STSCORE ORDER BY STSCORE.CLASSNO ASC,STSCORE.SEX ASC]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings shrinkToFitMode="0" headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.27" left="0.75" bottom="0.27" right="0.75"/>
+</ReportSettings>
+<RowHeight defaultValue="19">
+<![CDATA[19,19,19,19,19,19,19,19,19,19,19]]></RowHeight>
+<ColumnWidth defaultValue="72">
+<![CDATA[72,72,72,72,72,72,72,72,72,72,72]]></ColumnWidth>
+<FloatElementList>
+<com.fr.report.FloatElement>
+<Location column="1" row="2" leftDistance="-38" topDistance="-17" width="500.0" height="270.0"/>
+<O t="CC">
+<LayoutAttr selectedIndex="0" columns="0"/>
+<Chart name="Default">
+<Chart class="com.fr.chart.Chart">
+<GI>
+<Background name="ColorBackground" color="-1"/>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Plot class="com.fr.chart.plot.Bar2DPlot">
+<Plot>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<NewSeriesCollection>
+<SeriesAttr class="com.fr.chart.plot.BarSeriesAttr">
+<BarSeriesAttr>
+<Marker class="com.fr.chart.marker.DiamondFilledMarker" size="5.0"/>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+</BarSeriesAttr>
+</SeriesAttr>
+</NewSeriesCollection>
+<Legend>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Attr position="4" legendNum="10" visible="true"/>
+<FRFont name="SimSun" style="0" size="12"/>
+</Legend>
+<CateAttr isStacked="false" bgStagger="false" bgColor="-1"/>
+<Axis class="com.fr.chart.axis.CategoryAxis">
+<Title>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<O>
+<![CDATA[X轴]]></O>
+<TextAttr>
+<Attr alignText="0">
+<FRFont name="SimSun" style="0" size="12"/>
+</Attr>
+</TextAttr>
+<TitleVisible value="true"/>
+</Title>
+<AxisLine style="1" color="-8355712"/>
+<AxisPosition value="3"/>
+<AxisLabelPosition value="3"/>
+<MainGridLine style="0"/>
+<SecGridLine style="0"/>
+<AxisLabelCount value="-1"/>
+<TickLine type="1" mainStroke="1.0" len="4" secType="1" secStroke="1.0" secLen="0"/>
+<Stagger value="false"/>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+</Axis>
+<Axis class="com.fr.chart.axis.ValueAxis">
+<Title>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<O>
+<![CDATA[Y轴]]></O>
+<TextAttr>
+<Attr alignText="0">
+<FRFont name="SimSun" style="0" size="12"/>
+</Attr>
+</TextAttr>
+<TitleVisible value="true"/>
+</Title>
+<AxisLine style="1" color="-8355712"/>
+<AxisPosition value="2"/>
+<AxisLabelPosition value="3"/>
+<MainGridLine style="3" color="-8355712"/>
+<SecGridLine style="0"/>
+<AxisLabelCount value="-1"/>
+<TickLine type="1" mainStroke="1.0" len="4" secType="1" secStroke="1.0" secLen="0"/>
+<Stagger value="false"/>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+<AxisRange/>
+<AxisAlert startValue="80" endValue="80"/>
+</Axis>
+<BarAttr isHorizontal="false" overlap="0.0" interval="2.0"/>
+</Plot>
+</Plot>
+</Chart>
+</Chart>
+<OneValueCDDefinition seriesName="COURSE" valueName="GRADE" function="com.fr.data.util.function.AverageFunction">
+<Top topCate="-1" topValue="-1"/>
+<TableData class="com.fr.data.impl.NameTableData">
+<Name>
+<![CDATA[ds1]]></Name>
+</TableData>
+<CategoryName value="CLASSNO"/>
+</OneValueCDDefinition>
+</O>
+<Style index="0"/>
+</com.fr.report.FloatElement>
+</FloatElementList>
+<CellElementList/>
+</Report>
+<StyleList>
+<Style>
+<FRFont name="SimSun" style="0" size="12"/>
+<Background name="ColorBackground" color="-1"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

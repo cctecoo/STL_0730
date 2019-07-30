@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="NoticeMapper">
+
+	<!-- 分页查询公告信息 -->
+	<select id="notelistPage" parameterType="page" resultType="pd">
+		select 
+			n.ID, n.TITLE, n.CREATE_USER, n.STATUS, n.AREA,
+			DATE_FORMAT(n.CREATE_TIME, '%Y-%m-%d') CREATE_TIME, 
+			u.`NAME`CREATE_NAME, s.`NAME` STATUS_NAME 
+		from 
+			bd_notice n 
+		LEFT JOIN sys_user u on n.CREATE_USER=u.USERNAME
+		LEFT JOIN sys_status s on n.`STATUS`=s.BIANMA 
+		where 
+			n.isdel=0
+			and (n.CREATE_USER=#{pd.CREATEUSER} or n.STATUS='YW_YSX')
+		<if test="pd.noticeTitle!=null">
+			and n.title like "%"#{pd.noticeTitle}"%"
+		</if>
+		<choose>
+			<when test="pd.sortKey != null and pd.sortKey != ''">
+				order by n.${pd.sortKey} ${pd.sortMethod}
+			</when>
+			<otherwise>
+				order by n.CREATE_TIME desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 作废消息 -->
+	<update id="deleteById" parameterType="String">
+		update bd_notice set isdel=1 where ID = #{id}
+	</update>
+	
+	<!-- 根据id查询消息内容 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select n.ID, n.TITLE, n.STATUS, n.CONTENT, n.AREA, n.ISDEL, 
+			n.CREATE_USER, DATE_FORMAT(n.CREATE_TIME, '%Y-%m-%d %T') CREATE_TIME, 
+			n.UPDATE_USER, DATE_FORMAT(n.UPDATE_TIME, '%Y-%m-%d %T') UPDATE_TIME,
+			u.NAME CREATE_USER_NAME,
+			(select count(ID) from bd_notice_emp_read where NOTICE_ID = n.ID and EMP_CODE= #{empCode}) EMP_READ_COUNT
+		from bd_notice n
+		left join sys_user u on u.USERNAME = n.CREATE_USER
+		where isdel=0 and ID = #{id}
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="add" parameterType="pd" keyProperty="id" useGeneratedKeys="true">
+		insert into bd_notice(title, `status`, content, area, create_user, create_time) 
+		values(#{title}, #{status}, #{content}, #{area}, #{create_user}, #{create_time})
+	</insert>
+	
+	<!-- 发布 -->
+	<update id="publish" parameterType="pd">
+		update 
+			bd_notice 
+		set 
+			status=#{STATUS},
+			update_user=#{UPDATE_USER},
+			update_time=#{UPDATE_TIME} 
+		where 
+			isdel=0 
+			and id=#{ID}
+	</update>
+	
+	<!-- 新增消息通知的员工查看记录 -->
+	<insert id="addNoticeEmpRead" parameterType="pd">
+		insert into bd_notice_emp_read(NOTICE_ID, EMP_CODE, EMP_NAME, DEPT_ID, DEPT_NAME, CREATE_TIME)
+		values(#{noticeId}, #{empCode}, #{empName}, #{deptId}, #{deptName}, now())
+	</insert>
+	
+</mapper>

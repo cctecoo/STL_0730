@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WorkBook>
+<Version>6.5</Version>
+<XMLVersion>20091127</XMLVersion>
+<TableDataMap>
+<TableData name="股价" class="com.fr.data.impl.EmbeddedTableData">
+<Parameters>
+</Parameters>
+<XMLVersion>20091130</XMLVersion><ColumnNames><![CDATA[盘高,,.,,盘低,,.,,收盘,,.,,成交量,,.,,分类]]></ColumnNames><ColumnTypes><![CDATA[class java.lang.Double,class java.lang.Double,class java.lang.Double,class java.lang.Double,class java.lang.String]]></ColumnTypes><RowData>
+<![CDATA[(!F,s^b?0ad@),2O@Um^b8gE*'Vus:*^FQ`aPql1M,Yh)TuDV8-b=K%NI/0KaK5rT<XI*>nX
+jGiQ]ARO'IK~
+
+]]>
+</RowData>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.0" left="0.0" bottom="0.0" right="0.0" />
+</ReportSettings>
+<RowHeight defaultValue="19">
+<![CDATA[19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19]]>
+</RowHeight>
+<ColumnWidth defaultValue="72">
+<![CDATA[72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72]]>
+</ColumnWidth>
+<CellElementList>
+<C c="0" r="0" s="0"><O><![CDATA[分类]]></O>
+</C>
+<C c="1" r="0" s="0"><O><![CDATA[成交量]]></O>
+</C>
+<C c="2" r="0" s="0"><O><![CDATA[盘高]]></O>
+</C>
+<C c="3" r="0" s="0"><O><![CDATA[盘低]]></O>
+</C>
+<C c="4" r="0" s="0"><O><![CDATA[收盘]]></O>
+</C>
+<C c="0" r="1" s="0"><O t="DSColumn"><Attributes dsName="股价" columnName="分类" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="1" r="1" s="0"><O t="DSColumn"><Attributes dsName="股价" columnName="成交量" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="2" r="1" s="0"><O t="DSColumn"><Attributes dsName="股价" columnName="盘高" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="3" r="1" s="0"><O t="DSColumn"><Attributes dsName="股价" columnName="盘低" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="4" r="1" s="0"><O t="DSColumn"><Attributes dsName="股价" columnName="收盘" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="0" r="3" cs="5" rs="11"><O t="CC"><LayoutAttr selectedIndex="0" columns="0"/><Chart name="Default">
+<Chart class="com.fr.chart.Chart"><GI><Background name="ColorBackground"
+ color="-3355393">
+</Background>
+<Border style="0" color="-16777216" /><Alpha value="0.4" />
+</GI><Plot class="com.fr.chart.plot.StockPlot">
+<Plot><GI><Border style="0" color="-16777216" /></GI><SeriesCollection><Default borderLineStyle="0" borderLineColor="-8355712" seriesLineStyle="1" alpha="0.5"><DataLabel><Attr seriesName="false" cateName="false" showValue="false" position="1" showItem="false"/><Separation><![CDATA[,]]></Separation><Format class="java.text.DecimalFormat"><![CDATA[#0]]></Format>
+</DataLabel></Default></SeriesCollection><Legend position="4" legendNum="10">
+<GI><Border style="0" color="-16777216" /></GI><FRFont name="SimSun" style="0" size="12" />
+</Legend>
+<Type value="2"/><CategoryAxis><Axis class="com.fr.chart.axis.CategoryAxis"><AxisLine style="1" color="-8355712" />
+<AxisPosition value="3" />
+<AxisLabelPosition value="3" />
+<MainGridLine style="0" />
+<SecGridLine style="0" />
+<AxisLabelCount value="-1" />
+<TickLine type = "2" mainStroke = "1.0" len = "8" secType = "1" secStroke = "1.0" secLen = "0" />
+<Stagger value = "false"/>
+<TextAttr><Attr alignText="0" /></TextAttr>
+</Axis>
+</CategoryAxis><PriceAxis><Axis class="com.fr.chart.axis.ValueAxis" ><AxisLine style="1" color="-8355712" />
+<AxisPosition value="2" />
+<AxisLabelPosition value="3" />
+<MainGridLine style="3" color="-8355712" />
+<SecGridLine style="0" />
+<AxisLabelCount value="-1" />
+<TickLine type = "2" mainStroke = "1.0" len = "8" secType = "1" secStroke = "1.0" secLen = "0" />
+<Stagger value = "false"/>
+<TextAttr><Attr alignText="0" /></TextAttr>
+<AxisRange/></Axis>
+</PriceAxis><VolumeAxis><Axis class="com.fr.chart.axis.ValueAxis" ><AxisLine style="1" color="-8355712" />
+<AxisPosition value="4" />
+<AxisLabelPosition value="3" />
+<MainGridLine style="3" color="-8355712" />
+<SecGridLine style="0" />
+<AxisLabelCount value="-1" />
+<TickLine type = "2" mainStroke = "1.0" len = "8" secType = "1" secStroke = "1.0" secLen = "0" />
+<Stagger value = "false"/>
+<TextAttr><Attr alignText="0" /></TextAttr>
+<AxisRange/></Axis>
+</VolumeAxis><Close style="0" color="-16777216"><Marker class="com.fr.chart.marker.DowJonesMarker">
+<Marker><Style size="5.0"/></Marker></Marker>
+</Close><HighLow style="1" color="-16777216"/><UpBar style="1" color="-16777216"><Background name="ColorBackground"
+ color="-16711936">
+</Background>
+</UpBar><DownBar style="1" color="-16777216"><Background name="ColorBackground"
+ color="-65536">
+</Background>
+</DownBar><BG bgStagger="false" color="-1"/></Plot></Plot>
+</Chart>
+</Chart>
+<ReportDataDefinition>
+<CategoryDefintion value="A2" />
+<SeriesDefinition name="B1:E1" value="B2:E2" />
+<SeriesPos value="0" />
+<BaseOn value="true" />
+<Top topCate="-1" topValue="-1" />
+</ReportDataDefinition>
+</O>
+</C>
+</CellElementList>
+</Report>
+<StyleList>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="12" />
+<Background name="NullBackground" />
+<Border></Border>
+</Style>
+</StyleList>
+</WorkBook>

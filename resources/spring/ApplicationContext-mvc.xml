@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd	
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<mvc:annotation-driven/>	
+		
+	<context:component-scan base-package="com.mfw.controller" />
+	<context:component-scan base-package="com.json" />
+
+	<mvc:view-controller path="/userlog/list.do" view-name="/system/log/userlog"/>
+
+	<!-- 访问拦截  -->  
+  	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*.do*"/>
+			<bean class="com.mfw.interceptor.LoginHandlerInterceptor"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/app*/*.do*"/>
+			<bean class="com.mfw.interceptor.AppLoginHandlerInterceptor"/>
+		</mvc:interceptor>
+		
+		<!-- 设置文件上传的拦截器 -->
+		<mvc:interceptor>
+        	<mvc:mapping path="/**"/>
+        	<bean class="com.mfw.interceptor.FileUploadInterceptor">
+            	<property name="maxSize" value="104857600"/><!-- 100M -->
+        	</bean>
+    	</mvc:interceptor>
+	</mvc:interceptors>
+	 
+	<!-- 配置SpringMVC的视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	<bean id="exceptionResolver" class="com.mfw.resolver.MyExceptionResolver"></bean>
+	<!-- 上传拦截，如最大上传值及最小上传值 -->
+	<bean id="multipartResolver"   class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >   
+	 	<property name="maxUploadSize">    
+	        <value>1048576000</value><!-- 1000M -->
+	    </property>   
+	    <property name="maxInMemorySize">    
+	        <value>4096</value>    
+	    </property>   
+	    <property name="defaultEncoding">    
+	        <value>utf-8</value>    
+	    </property> 
+    </bean>
+
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">         
+		<property name="basename" value="message" />              
+		<property name="useCodeAsDefaultMessage" value="true" /> 
+		<property name="defaultEncoding" value="UTF-8"/>    
+	</bean>
+</beans>

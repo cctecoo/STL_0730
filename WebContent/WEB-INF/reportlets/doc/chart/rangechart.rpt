@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WorkBook>
+<Version>6.5</Version>
+<XMLVersion>20091127</XMLVersion>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.0" left="0.0" bottom="0.0" right="0.0" />
+</ReportSettings>
+<RowHeight defaultValue="19">
+<![CDATA[19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19]]>
+</RowHeight>
+<ColumnWidth defaultValue="72">
+<![CDATA[72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72]]>
+</ColumnWidth>
+<FloatElementList>
+<com.fr.report.FloatElement>
+<Location column="0" row="0" leftDistance="33" topDistance="12" width="500.0" height="270.0" />
+<O t="CC"><LayoutAttr selectedIndex="0" columns="0"/><Chart name="Default">
+<Chart class="com.fr.chart.Chart"><GI><Background name="ColorBackground"
+ color="-3355393">
+</Background>
+<Border style="0" color="-16777216" /><Alpha value="0.4" />
+</GI><Title>
+<GI><Border style="0" color="-16777216" /></GI><O><![CDATA[图表标题]]></O>
+<TextAttr><Attr alignText="0" /><FRFont name="SimSun" style="0" size="12" />
+</TextAttr>
+<TitleVisible value="true" />
+</Title>
+<Plot class="com.fr.chart.plot.RangePlot">
+<Plot><GI><Border style="1" color="-16777216" /></GI><SeriesCollection><Default borderLineStyle="0" borderLineColor="-8355712" seriesLineStyle="1" alpha="0.6"><DataLabel><Attr seriesName="false" cateName="false" showValue="false" position="1" showItem="false"/><Separation><![CDATA[,]]></Separation><Format class="java.text.DecimalFormat"><![CDATA[#0]]></Format>
+</DataLabel></Default><ColorMap><Entry index="0" color="-13159"/><Entry index="1" color="-65281"/><Entry index="2" color="-65536"/><Entry index="3" color="-3342337"/></ColorMap><LineColorMap><Entry index="0"/><Entry index="1"/><Entry index="2"/><Entry index="3"/></LineColorMap><LineStyleMap><Entry index="0" lineStyle="0"/><Entry index="1" lineStyle="0"/><Entry index="2" lineStyle="0"/><Entry index="3" lineStyle="0"/></LineStyleMap><SeriesLineStyleMap><Entry index="0" lineStyle="0"/><Entry index="1" lineStyle="0"/><Entry index="2" lineStyle="0"/><Entry index="3" lineStyle="0"/></SeriesLineStyleMap><DataLabelMap><Entry index="0"><DataLabel><Attr seriesName="true" cateName="false" showValue="true" position="1" showItem="false"/><Separation><![CDATA[,]]></Separation><Format class="java.text.DecimalFormat"><![CDATA[#0]]></Format>
+</DataLabel></Entry><Entry index="1"><DataLabel><Attr seriesName="true" cateName="false" showValue="true" position="1" showItem="false"/><Separation><![CDATA[,]]></Separation><Format class="java.text.DecimalFormat"><![CDATA[#0]]></Format>
+</DataLabel></Entry><Entry index="2"><DataLabel><Attr seriesName="true" cateName="false" showValue="true" position="1" showItem="false"/><Separation><![CDATA[,]]></Separation><Format class="java.text.DecimalFormat"><![CDATA[#0]]></Format>
+</DataLabel></Entry><Entry index="3"><DataLabel><Attr seriesName="true" cateName="false" showValue="true" position="1" showItem="false"/><Separation><![CDATA[,]]></Separation><Format class="java.text.DecimalFormat"><![CDATA[#0]]></Format>
+</DataLabel></Entry></DataLabelMap></SeriesCollection><Legend position="4" legendNum="10">
+<GI><Border style="0" color="-16777216" /></GI><FRFont name="SimSun" style="0" size="12" />
+</Legend>
+<MiddleLine color="-16777216" style="1"/>
+<MinColor color="-39322"/>
+<MaxColor color="-10027162"/>
+<SeriesWidth value="8.0" />
+<Axis class="com.fr.chart.axis.ValueAxis" ><AxisLine style="1" color="-8355712" />
+<AxisPosition value="3" />
+<AxisLabelPosition value="3" />
+<MainGridLine style="0" />
+<SecGridLine style="0" />
+<AxisLabelCount value="-1" />
+<TickLine type = "3" mainStroke = "4.0" len = "50" secType = "3" secStroke = "4.0" secLen = "15" />
+<Stagger value = "false"/>
+<TextAttr><Attr alignText="0" /></TextAttr>
+<AxisRange/></Axis>
+<RangeAxisGlyph><ValueAxisGlyph><AxisGlyph unitLen="14.242424242424242" unit="10.0" smallUnit="2.0" axisLength="470.0" axisGridLength="226.60000000000002" axisLabelWidth="8.0"/><Point2D x="0.0" y="0.0" /><Bounds x="0.0" y="113.30000000000001" w="470.0" h="10.0"/><Attr  minValue="0.0" maxValue="33.0" /><Axis class="com.fr.chart.axis.ValueAxis" ><AxisLine style="1" color="-8355712" />
+<AxisPosition value="3" />
+<AxisLabelPosition value="3" />
+<MainGridLine style="0" />
+<SecGridLine style="0" />
+<AxisLabelCount value="-1" />
+<TickLine type = "3" mainStroke = "4.0" len = "50" secType = "3" secStroke = "4.0" secLen = "15" />
+<Stagger value = "false"/>
+<TextAttr><Attr alignText="0" /></TextAttr>
+<AxisRange/></Axis>
+</ValueAxisGlyph><Color leftColor="-39322" rightColor="-10027162"/></RangeAxisGlyph></Plot></Plot>
+</Chart>
+</Chart>
+<SeriesListDefinition><CategoryList><Entry value="分数"/></CategoryList><SeriesList><SeriesEntry name="最低分"><O><![CDATA[50]]></O>
+</SeriesEntry><SeriesEntry name="最高分"><O><![CDATA[99]]></O>
+</SeriesEntry><SeriesEntry name="平均分"><O><![CDATA[86]]></O>
+</SeriesEntry><SeriesEntry name="当前分"><O><![CDATA[65]]></O>
+</SeriesEntry></SeriesList><Top topCate="-1" topValue="-1" />
+</SeriesListDefinition></O>
+<Style index="0" /></com.fr.report.FloatElement>
+</FloatElementList>
+<CellElementList>
+</CellElementList>
+</Report>
+<StyleList>
+<Style>
+<FRFont name="SimSun" style="0" size="12" />
+<Background name="ColorBackground"
+ color="-1">
+</Background>
+<Border><Top style="1" /><Bottom style="1" /><Left style="1" /><Right style="1" /></Border>
+</Style>
+</StyleList>
+</WorkBook>

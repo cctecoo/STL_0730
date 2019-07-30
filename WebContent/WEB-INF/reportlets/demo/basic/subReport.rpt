@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WorkBook>
+<Version>6.5</Version>
+<TableDataMap>
+<TableData name="orderdetail" class="com.fr.data.impl.EmbeddedTableData">
+<Parameters>
+</Parameters>
+<Semantic>
+<Dictionary class="com.fr.data.impl.DatabaseDictionary">
+<FormulaDictAttr ki="0" vi="0"></FormulaDictAttr>
+<DBDictAttr tableName="" schemaName="" ki="0" vi="0"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+</Connection></Dictionary></Semantic>
+<ColumnNames><![CDATA[Product,,.,,Unit,,.,,CustomerID,,.,,Price,,.,,Amount,,.,,Remarks]]></ColumnNames><ColumnTypes><![CDATA[class java.lang.String,class java.lang.String,class java.lang.String,class java.lang.String,class java.lang.String,class java.lang.String]]></ColumnTypes><RowData>
+<![CDATA[?'*5>_*Aikf@,M;\[4DG%.SupYoqJX;UiQ@0%#hQ=9oja5_9.Go?S[<B)@#D3G8?X[]JpIPC
+%=:h#kNQF,C7C(_M@jlsJ0`i(CS
+`/NMq,P`/ID(7?+4aZ4@8j(;^&;J=NYIOs\9B[mqWpDM*
+t[>g"Sf>J4%fJbO\!+n8qNeBa]$pX&sIZA>r:FGXaV;tCFMRJ[XKqc
+#=AH[aqe+commje.>F
+,f(UpJ?:J5i=73V+I_V?i#aJXZ[VAS`qp:blSEN5XVsP#Dn1MV'd<l*!0`f+m9^~
+
+]]>
+</RowData>
+</TableData>
+</TableDataMap>
+<ReportParameterAttr>
+<Attributes showWindow="false" delayPlaying="true" windowPosition="1" align="1" />
+<PWTitle><![CDATA[参数]]></PWTitle>
+<Parameter>
+<Attributes name="customerID" />
+<O><![CDATA[03882]]></O>
+</Parameter>
+</ReportParameterAttr>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.27" left="0.75" bottom="0.27" right="0.75" />
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground" />
+<LeftList>
+</LeftList>
+<CenterList>
+</CenterList>
+<RightList>
+</RightList>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground" />
+<LeftList>
+</LeftList>
+<CenterList>
+</CenterList>
+<RightList>
+</RightList>
+</Footer>
+<RowHeight defaultValue="19">
+<![CDATA[19,19,19,19,19,19,19,19,19,19,19]]>
+</RowHeight>
+<ColumnWidth defaultValue="72">
+<![CDATA[43,116,72,72,72,72,129,72,72,72,72]]>
+</ColumnWidth>
+<CellElementList>
+<C c="0" r="0" s="0"></C>
+<C c="1" r="0" s="1"></C>
+<C c="2" r="0" s="1"></C>
+<C c="3" r="0" s="1"></C>
+<C c="4" r="0" s="1"></C>
+<C c="5" r="0" s="1"></C>
+<C c="6" r="0" s="2"></C>
+<C c="0" r="1" s="3"><O><![CDATA[序号]]></O>
+</C>
+<C c="1" r="1" s="3"><O><![CDATA[产品名称]]></O>
+</C>
+<C c="2" r="1" s="3"><O><![CDATA[计量单位]]></O>
+</C>
+<C c="3" r="1" s="3"><O><![CDATA[单价]]></O>
+</C>
+<C c="4" r="1" s="3"><O><![CDATA[数量]]></O>
+</C>
+<C c="5" r="1" s="3"><O><![CDATA[金额]]></O>
+</C>
+<C c="6" r="1" s="3"><O><![CDATA[备注]]></O>
+</C>
+<C c="0" r="2" s="4"><O t="Formula" class="Formula"><Attributes><![CDATA[=&B3]]></Attributes></O>
+<Expand leftParentDefault="false" left="B3" />
+</C>
+<C c="1" r="2" s="4"><O t="DSColumn"><Attributes dsName="orderdetail" columnName="Product" />
+<Condition class="com.fr.data.condition.CommonCondition"><CNAME><![CDATA[CustomerID]]></CNAME><Compare op="0">
+<Parameter>
+<Attributes name="customerID" />
+<O><![CDATA[03882]]></O>
+</Parameter>
+</Compare>
+</Condition>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+<Result><![CDATA[$$$]]></Result></O>
+<Expand dir="0" multiNumber="5" />
+</C>
+<C c="2" r="2" s="5"><O t="DSColumn"><Attributes dsName="orderdetail" columnName="Unit" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="3" r="2" s="6"><O t="DSColumn"><Attributes dsName="orderdetail" columnName="Price" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="4" r="2" s="6"><O t="DSColumn"><Attributes dsName="orderdetail" columnName="Amount" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="5" r="2" s="7"><O t="Formula" class="Formula"><Attributes><![CDATA[=D3 * E3]]></Attributes></O>
+</C>
+<C c="6" r="2" s="4"><O t="DSColumn"><Attributes dsName="orderdetail" columnName="Remarks" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="0" r="3" cs="5" s="8"><O><![CDATA[合计金额]]></O>
+</C>
+<C c="5" r="3" cs="2" s="9"><O t="Formula" class="Formula"><Attributes><![CDATA[=sum(F3)]]></Attributes></O>
+</C>
+<C c="0" r="4" cs="5" s="8"><O><![CDATA[合计金额大写]]></O>
+</C>
+<C c="5" r="4" cs="2" s="10"><O t="Formula" class="Formula"><Attributes><![CDATA[=CNMONEY(F4)]]></Attributes></O>
+</C>
+</CellElementList>
+</Report>
+<StyleList>
+<Style>
+<FRFont name="SimSun" style="0" size="12" />
+<Background name="ImageBackground"
+ specifiedImageWidth="-1.0"
+ specifiedImageHeight="-1.0"
+ layout="2">
+<Image width="271" height="20">
+<![CDATA[mDD3s_Ctrm_#OF0>K!!9WJ6!OQ7+.ZoaQ9>0E]d2laNppWiE)!WiGp)li!RsTDPW,0?[QWIV
+_g1pu1d?NUQ%!281S82*R8))W+4
+iebJi;<TD!-WQ)u!;iUeW~
+
+]]>
+</Image>
+</Background>
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /><Left style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style>
+<FRFont name="SimSun" style="0" size="12" />
+<Background name="ImageBackground"
+ specifiedImageWidth="-1.0"
+ specifiedImageHeight="-1.0"
+ layout="2">
+<Image width="271" height="20">
+<![CDATA[mDD3s_Ctrm_#OF0>K!!9WJ6!OQ7+.ZoaQ9>0E]d2laNppWiE)!WiGp)li!RsTDPW,0?[QWIV
+_g1pu1d?NUQ%!281S82*R8))W+4
+iebJi;<TD!-WQ)u!;iUeW~
+
+]]>
+</Image>
+</Background>
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style>
+<FRFont name="SimSun" style="0" size="12" />
+<Background name="ImageBackground"
+ specifiedImageWidth="-1.0"
+ specifiedImageHeight="-1.0"
+ layout="2">
+<Image width="271" height="20">
+<![CDATA[mDD3s_Ctrm_#OF0>K!!9WJ6!OQ7+.ZoaQ9>0E]d2laNppWiE)!WiGp)li!RsTDPW,0?[QWIV
+_g1pu1d?NUQ%!281S82*R8))W+4
+iebJi;<TD!-WQ)u!;iUeW~
+
+]]>
+</Image>
+</Background>
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /><Right style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="方正楷体简体" style="0" size="14" />
+<Background name="ColorBackground"
+ color="-1577999">
+</Background>
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /><Left style="1" color="-6894375"
+ /><Right style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style>
+<FRFont name="方正楷体简体" style="0" size="14" />
+<Background name="NullBackground" />
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /><Left style="1" color="-6894375"
+ /><Right style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="方正楷体简体" style="0" size="14" />
+<Background name="NullBackground" />
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /><Left style="1" color="-6894375"
+ /><Right style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style horizontal_alignment="4">
+<FRFont name="方正楷体简体" style="0" size="14" />
+<Background name="NullBackground" />
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /><Left style="1" color="-6894375"
+ /><Right style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style horizontal_alignment="4">
+<Format class="java.text.DecimalFormat"><![CDATA[¤#0]]></Format>
+<FRFont name="方正楷体简体" style="0" size="14" />
+<Background name="NullBackground" />
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /><Left style="1" color="-6894375"
+ /><Right style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="方正楷体简体" style="0" size="14" />
+<Background name="ColorBackground"
+ color="-1380101">
+</Background>
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /><Left style="1" color="-6894375"
+ /><Right style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style>
+<Format class="java.text.DecimalFormat"><![CDATA[¤#0]]></Format>
+<FRFont name="方正楷体简体" style="0" size="14" />
+<Background name="ColorBackground"
+ color="-1380101">
+</Background>
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /><Left style="1" color="-6894375"
+ /><Right style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style>
+<FRFont name="方正楷体简体" style="0" size="14" />
+<Background name="ColorBackground"
+ color="-1380101">
+</Background>
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /><Left style="1" color="-6894375"
+ /><Right style="1" color="-6894375"
+ /></Border>
+</Style>
+</StyleList>
+</WorkBook>

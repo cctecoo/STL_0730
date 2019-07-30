@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20091224">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters/>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[FRDemo]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT orders.orderid,productname,country FROM ORDERS,ordersdetail,producer,product where orders.orderid=ordersdetail.orderid and ordersdetail.productid=product.productid and product.producerid=producer.producerid]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings shrinkToFitMode="0" headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.27" left="0.75" bottom="0.27" right="0.75"/>
+</ReportSettings>
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC F="0" T="0"/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="19">
+<![CDATA[46,25,30,17,19,19,19,19,19,19,19]]></RowHeight>
+<ColumnWidth defaultValue="72">
+<![CDATA[79,72,228,81,72,72,72,72,72,72,72]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" cs="3" s="0">
+<O>
+<![CDATA[各地区产品统计]]></O>
+</C>
+<C c="0" r="2" s="1">
+<O t="BiasTextPainter">
+<IsBackSlash value="false"/>
+<![CDATA[国家|产品]]></O>
+</C>
+<C c="1" r="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="COUNTRY"/>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+</O>
+<Expand dir="1"/>
+</C>
+<C c="2" r="2" s="2">
+<O>
+<![CDATA[统计图]]></O>
+</C>
+<C c="0" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="PRODUCTNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="ORDERID"/>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.SummaryGrouper">
+<FN>
+<![CDATA[com.fr.data.util.function.CountFunction]]></FN>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+</O>
+</C>
+<C c="2" r="3">
+<O t="CC">
+<LayoutAttr selectedIndex="0" columns="0"/>
+<Chart name="Default">
+<Chart class="com.fr.chart.Chart">
+<GI>
+<Background name="ColorBackground" color="-1"/>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Title>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<O>
+<![CDATA[]]></O>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+<TitleVisible value="true"/>
+</Title>
+<Plot class="com.fr.chart.plot.PiePlot">
+<Plot>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<NewSeriesCollection>
+<SeriesAttr class="com.fr.chart.plot.BarSeriesAttr">
+<BarSeriesAttr>
+<Marker class="com.fr.chart.marker.DiamondFilledMarker" size="5.0"/>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+</BarSeriesAttr>
+</SeriesAttr>
+</NewSeriesCollection>
+<Legend>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Attr position="4" legendNum="10" visible="true"/>
+<FRFont name="SimSun" style="0" size="12"/>
+</Legend>
+<PieAttr startAngle="145" separate="0"/>
+</Plot>
+</Plot>
+</Chart>
+</Chart>
+<ReportDataDefinition>
+<CategoryDefinition value="A4"/>
+<SeriesDefinition name="B3" value="B4"/>
+<SeriesPos value="0"/>
+<BaseOn value="false"/>
+<Top topCate="-1" topValue="-1"/>
+</ReportDataDefinition>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false" up="B3"/>
+<CellPageAttr pageAfterColumn="true"/>
+</C>
+<C c="2" r="6"/>
+</CellElementList>
+</Report>
+<StyleList>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="1" size="18"/>
+<Background name="NullBackground"/>
+<Border>
+<Bottom style="6"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="12"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="12"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+</StyleList>
+</WorkBook>

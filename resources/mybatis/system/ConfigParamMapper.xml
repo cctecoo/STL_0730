@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ConfigParamMapper">
+
+	<!-- 保存 -->
+	<insert id="saveConfigParam" parameterType="pd" useGeneratedKeys="true" keyProperty="ID">
+		insert into sys_config_param(ITEM_NAME, ITEM_VALUE, REMARK) 
+		values(#{itemName}, #{itemValue}, #{remark})
+	</insert>
+	
+	<!-- 根据名称查询 -->
+	<select id="findParamByName" parameterType="pd" resultType="pd">
+		select ID, ITEM_NAME, ITEM_VALUE, REMARK
+		from sys_config_param
+		where ITEM_NAME = #{itemName}
+	</select>
+	
+	<!-- 查询多个 -->
+	<select id="findParamByNames" parameterType="pd" resultType="pd">
+		select 1
+		<foreach collection="params" item="param" index="index">
+			, (select ITEM_VALUE from sys_config_param where ITEM_NAME=#{param}) ${param}
+		</foreach>
+		from dual
+	</select>
+	
+	<!-- 更新 -->
+	<update id="updateParam" parameterType="pd">
+		update sys_config_param 
+		set ITEM_VALUE=#{itemValue}
+		where ITEM_NAME=#{itemName}
+	</update>
+	
+</mapper>

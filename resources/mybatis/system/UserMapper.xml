@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserMapper">
+	<sql id="userColumns">USERNAME,NAME,DEPT_ID,PASSWORD,RIGHTS,STATUS,ROLE_ID</sql>
+
+	<resultMap type="User" id="userAndRoleResultMap">
+		<id column="USER_ID" property="USER_ID"/>
+		<result column="USERNAME" property="USERNAME"/>
+		<result column="PASSWORD" property="PASSWORD"/>
+		<result column="NAME" property="NAME"/>
+		<result column="DEPT_ID" property="deptId"/>
+		<result column="DEPT_NAME" property="deptName"/>
+		<result column="RIGHTS" property="RIGHTS"/>
+		<result column="LAST_LOGIN" property="LAST_LOGIN"/>
+		<result column="IP" property="IP"/>
+		<result column="STATUS" property="STATUS"/>
+		<result column="SKIN" property="SKIN"/>
+		<result column="NUMBER" property="NUMBER" />
+		<association property="role" column="ROLE_ID" javaType="Role">
+			<id column="ROLE_ID" property="ROLE_ID"/>
+			<result column="ROLE_NAME" property="ROLE_NAME"/>
+			<result column="ROLE_RIGHTS" property="RIGHTS"/>
+			<result column="PARENT_ID" property="PARENT_ID"/>
+		</association>
+	</resultMap>
+	<resultMap type="User" id="userResultMap">
+		<id column="USER_ID" property="USER_ID"/>
+		<result column="USERNAME" property="USERNAME"/>
+		<result column="PASSWORD" property="PASSWORD"/>
+		<result column="NAME" property="NAME"/>
+		<result column="DEPT_ID" property="deptId"/>
+		<result column="DEPT_NAME" property="deptName"/>
+		<result column="RIGHTS" property="RIGHTS"/>
+		<result column="LAST_LOGIN" property="LAST_LOGIN"/>
+		<result column="IP" property="IP"/>
+		<result column="STATUS" property="STATUS"/>
+		<result column="ROLE_ID" property="ROLE_ID"/>
+		<result column="SKIN" property="SKIN"/>
+		<result column="OPEN_ID" property="OPEN_ID"/>
+	</resultMap>
+	
+	<!-- 判断用户名和密码 -->
+	<select id="getUserInfo" parameterType="User" resultMap="userResultMap">
+		select * from SYS_USER 
+		where 1=1
+		<if test="USERNAME!=null and PASSWORD!=null">
+		and USERNAME = #{USERNAME} and PASSWORD=#{PASSWORD}
+		</if>
+		<if test="USER_ID!=null and USER_ID>0">
+		and USER_ID = #{USER_ID}
+		</if>
+	</select>
+	
+	<select id="getUserAndRoleById" parameterType="String" resultMap="userAndRoleResultMap">
+		select  u.USER_ID,
+				u.USERNAME,
+				u.NAME,
+				u.DEPT_ID,
+				u.DEPT_NAME,
+				u.RIGHTS as USER_RIGHTS,
+				u.PASSWORD,
+				u.SKIN,
+				u.NUMBER,
+				r.ROLE_ID,
+				r.ROLE_NAME,
+				r.RIGHTS as ROLE_RIGHTS,
+				r.PARENT_ID
+		from SYS_USER u 
+		left join SYS_ROLE r 
+		on u.ROLE_ID=r.ROLE_ID 
+		where u.STATUS=0 
+		and u.USER_ID=#{USER_ID}
+	</select>
+
+	<update id="updateLastLogin" parameterType="User">
+		update SYS_USER set 
+		LAST_LOGIN=#{LAST_LOGIN} 
+		where USER_ID=#{USER_ID}
+	</update>
+	
+	<select id="getUserNameByNumber" parameterType="String" resultType="java.util.LinkedHashMap">
+		select  
+				u.USERNAME
+				
+		from SYS_USER u 
+		
+		where u.STATUS=0 
+		and u.NUMBER=#{number}
+	</select>
+	
+	<!-- 通过ID获取累计登陆时长 -->
+	<select id="findTimeById" parameterType="pd" resultType="String">
+		select 
+			TOTAL_TIME
+		from
+			sys_user
+		where
+			USER_ID = #{USER_ID}
+	</select>
+	
+	<!-- 根据openID找到用户信息 -->
+	<select id="findUserByOpenid" parameterType="pd" resultMap="userResultMap">
+		select 
+			u.*,(select JOB_RANK 
+			from bd_position_level where ID=(
+				select EMP_GRADE_ID from bd_employee where EMP_CODE=u.NUMBER )
+			) JOB_RANK
+		from
+			sys_user u
+		where
+			u.OPEN_ID = #{openId}
+	</select>
+	
+
+	
+	<!-- 查询登陆时间点 （新）-->
+	<select id="searchOnlineTimeChange" parameterType="pd" resultType="String">
+		select ONLINE_TIME_CHANGE
+		FROM  sys_user
+		where USER_ID=#{USER_ID}
+	</select>
+	
+	<!-- 更新登陆时长 （新）-->
+	<update id="updateOnlineTime" parameterType="pd">
+		update sys_user set 
+		TOTAL_TIME=#{ONLINE_TIME},
+		ONLINE_TIME_CHANGE= #{ONLINE_TIME_CHANGE}
+		where USER_ID=#{USER_ID}
+	</update>
+	<!-- 绑定微信 -->
+	<update id="bindOpenId" parameterType="User">
+		update SYS_USER set
+		OPEN_ID=#{OPEN_ID}
+		where USERNAME=#{USERNAME}
+	</update>
+	
+	<!-- 解绑微信 -->
+	<update id="unBindOpenId" parameterType="User">
+		update SYS_USER set 
+		OPEN_ID=NULL
+		where USERNAME=#{USERNAME}
+	</update>
+	
+	<select id="getUserPositionLevel" parameterType="User" resultType="Integer">
+		select 
+			l.JOB_RANK 
+		from 
+			sys_user u 
+		LEFT JOIN bd_employee e on u.NUMBER = e.EMP_CODE 
+		LEFT JOIN bd_position_level l on e.EMP_GRADE_ID = l.ID 
+		where 
+			u.USERNAME=#{USERNAME}
+	</select>
+	
+	<select id="findOpenIdByEmpId" parameterType="pd" resultType="pd">
+		SELECT
+			a.*,
+			b.OPEN_ID,
+			b.USER_ID,
+			a.EMP_DEPARTMENT_ID deptId
+		FROM
+			bd_employee a
+		LEFT JOIN sys_user b ON b.NUMBER = a.EMP_CODE
+		WHERE
+			a.ID = #{EMP_ID}
+	</select>
+	
+	<select id="findUserByUsernameAndDeptId" parameterType="pd" resultType="pd">
+		select USER_ID, USERNAME, NAME, DEPT_ID, DEPT_NAME
+		from sys_user
+		where USERNAME = #{username} and DEPT_ID = #{deptId}
+	</select>
+	
+	<!-- 通过部门id查找用户信息，用于生成用户树 -->
+	<select id="findUserByDeptId" parameterType="pd" resultType="pd">
+		select 
+			USERNAME,
+			NUMBER,
+			NAME,
+			DEPT_ID
+		from sys_user 
+		where DEPT_ID = #{deptId}
+		and ENABLED = 1
+	</select>
+</mapper>

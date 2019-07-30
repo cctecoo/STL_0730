@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DailyTaskMapper">
+	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into BD_DAILY_TASK(
+			id,	
+			task_code,	
+			task_name,	
+			task_type,
+			task_towho,
+			complete_standard,
+			task_comment,
+			is_check,
+			status,
+			enable,
+			create_user,
+			create_time,
+			last_update_user,
+			last_update_time
+		) values (
+			#{id},	
+			#{task_code},	
+			#{task_name},		
+			#{task_type},
+			#{task_towho},
+			#{complete_standard},
+			#{is_check},
+			'1',
+			'1',
+			#{create_user},
+			#{create_time},
+			#{last_update_user},
+			#{last_update_time}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from BD_DAILY_TASK
+		where 
+			ID = #{ID}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  BD_DAILY_TASK
+			set 
+				task_code = #{task_code},
+				task_name = #{task_name},
+				task_type = #{task_type},
+				task_towho = #{task_towho},
+				complete_standard = #{complete_standard},
+				task_comment = #{task_comment},
+				is_check = #{is_check},
+				create_user = #{create_user},
+				create_time = #{create_time},
+				last_update_user = #{last_update_user},
+				last_update_time = #{last_update_time}				
+			where 
+				ID = #{ID}
+	</update>
+	
+
+	
+	<!-- 通过名称获取ID -->
+	<select id="findIdByN" parameterType="pd" resultType="String">
+		select
+			ID
+		from
+			BD_DAILY_TASK
+		where
+			task_name = #{task_name}
+	</select>
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			a.id,	
+			a.task_code,	
+			a.task_name,	
+			a.task_type,
+			a.task_towho,
+			a.complete_standard,
+			a.task_comment,
+			a.is_check,
+			a.create_user,
+			a.create_time,
+			a.last_update_user,
+			a.last_update_time
+		from 
+			BD_DAILY_TASK a
+		where 
+			a.ID = #{ID}
+	</select>
+	<!-- 通过Code获取数据 -->
+	<select id="findByCode" parameterType="pd" resultType="pd">
+		select 
+			id,	
+			task_code,	
+			task_name,	
+			task_type,
+			task_towho,
+			complete_standard,
+			task_comment,
+			is_check,
+			create_user,
+			create_time,
+			last_update_user,
+			last_update_time
+		from 
+			BD_DAILY_TASK
+		where 
+			task_code = #{task_code}
+	</select>
+	
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			id,	
+			task_code,	
+			task_name,	
+			task_type,
+			task_towho,
+			complete_standard,
+			task_comment,
+			is_check,
+			create_user,
+			create_time,
+			last_update_user,
+			last_update_time
+		from 
+			BD_DAILY_TASK
+		where 1 = 1
+		<if test="pd.KEYW != null and pd.KEYW != ''"><!-- 关键词检索 -->
+			and
+				(
+					 task_code LIKE CONCAT(CONCAT('%', #{pd.KEYW}),'%')
+					 or 
+					 task_name LIKE CONCAT(CONCAT('%', #{pd.KEYW}),'%') 
+					 or
+					 task_type LIKE CONCAT(CONCAT('%', #{pd.KEYW}),'%')
+				)
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+			id,	
+			task_code,
+			task_name,
+			task_type,
+			task_towho,
+			complete_standard,
+			task_comment,
+			is_check,
+			create_user,
+			create_time,
+			last_update_user,
+			last_update_time
+		from 
+			BD_DAILY_TASK
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAllByIds" parameterType="pd" resultType="pd">
+		select
+			id,	
+			task_code,	
+			task_name,	
+			task_type,
+			task_towho,
+			complete_standard,
+			task_comment,
+			is_check,
+			create_user,
+			create_time,
+			last_update_user,
+			last_update_time
+		from 
+				BD_DAILY_TASK
+		where task_code not in 
+				(select
+						TASK_CODE
+					from BD_DTASK_MODEL_LINE
+					where MODEL_ID = #{MODEL_ID}
+				)
+				<if test="ZD_ID != null and ZD_ID != '' and ZD_ID != 'a1'">
+			AND task_type=#{ZD_ID}
+				</if>
+			
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from BD_DAILY_TASK
+		where 
+			ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量获取 -->
+	<select id="getAllById" parameterType="String" resultType="pd">
+		select PATH from BD_SUBJECT_FILES
+		where 
+			ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</select>
+	
+	<!-- 删除图片 -->
+	<update id="delTp" parameterType="pd">
+		update  BD_SUBJECT_FILES
+			set 
+				PATH = ''
+			where 
+				ID = #{ID}
+	</update>
+</mapper>

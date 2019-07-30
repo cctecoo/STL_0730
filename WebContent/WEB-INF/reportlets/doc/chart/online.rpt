@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20091224">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters/>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[FlyReportor]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT * FROM STSCORE]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+</ReportSettings>
+<RowHeight defaultValue="19">
+<![CDATA[37,32,19,19,19,19,19,19,19,19,19]]></RowHeight>
+<ColumnWidth defaultValue="72">
+<![CDATA[99,72,72,72,72,72,72,72,72,72,72]]></ColumnWidth>
+<FloatElementList>
+<com.fr.report.FloatElement>
+<Location column="0" row="0" leftDistance="11" topDistance="6" width="500.0" height="270.0"/>
+<O t="CC">
+<LayoutAttr selectedIndex="0" columns="0"/>
+<Chart name="柱形图">
+<Chart class="com.fr.chart.Chart">
+<GI>
+<Background name="ColorBackground" color="-3355393"/>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Alpha value="0.4000000059604645"/>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Plot class="com.fr.chart.plot.Bar2DPlot">
+<Plot>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<NewSeriesCollection>
+<SeriesAttr class="com.fr.chart.plot.BarSeriesAttr">
+<BarSeriesAttr>
+<DataLabelInfo class="com.fr.chart.axis.DataLabelInfo">
+<DataLabel>
+<Attr>
+<SeriesAttrPosition>
+<Attr position="1"/>
+</SeriesAttrPosition>
+</Attr>
+<SeriesLabelStyle>
+<Separation>
+<![CDATA[;]]></Separation>
+<Format class="java.text.DecimalFormat">
+<![CDATA[#0]]></Format>
+</SeriesLabelStyle>
+</DataLabel>
+</DataLabelInfo>
+<Marker class="com.fr.chart.marker.DiamondFilledMarker" size="5.0"/>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+</BarSeriesAttr>
+</SeriesAttr>
+</NewSeriesCollection>
+<Legend>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Attr position="4" legendNum="10" visible="true"/>
+<FRFont name="SimSun" style="0" size="12"/>
+</Legend>
+<CateAttr isStacked="false" bgStagger="false" bgColor="-1"/>
+<Axis class="com.fr.chart.axis.CategoryAxis">
+<AxisLine style="1" color="-8355712"/>
+<AxisPosition value="3"/>
+<AxisLabelPosition value="3"/>
+<MainGridLine style="0"/>
+<SecGridLine style="0"/>
+<AxisLabelCount value="-1"/>
+<TickLine type="2" mainStroke="1.0" len="8" secType="1" secStroke="1.0" secLen="0"/>
+<Stagger value="false"/>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+</Axis>
+<Axis class="com.fr.chart.axis.ValueAxis">
+<AxisLine style="1" color="-8355712"/>
+<AxisPosition value="2"/>
+<AxisLabelPosition value="3"/>
+<MainGridLine style="3" color="-8355712"/>
+<SecGridLine style="0"/>
+<AxisLabelCount value="-1"/>
+<TickLine type="2" mainStroke="1.0" len="8" secType="1" secStroke="1.0" secLen="0"/>
+<Stagger value="false"/>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+<AxisRange/>
+</Axis>
+<BarAttr isHorizontal="false" overlap="0.0" interval="2.0"/>
+</Plot>
+</Plot>
+</Chart>
+</Chart>
+<Chart name="折线图">
+<Chart class="com.fr.chart.Chart">
+<GI>
+<Background name="ColorBackground" color="-3355393"/>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Alpha value="0.4000000059604645"/>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Plot class="com.fr.chart.plot.LinePlot">
+<Plot>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<NewSeriesCollection>
+<SeriesAttr class="com.fr.chart.plot.LineSeriesAttr">
+<LineSeriesAttr>
+<DataLabelInfo class="com.fr.chart.axis.DataLabelInfo">
+<DataLabel>
+<Attr>
+<SeriesAttrPosition>
+<Attr position="1"/>
+</SeriesAttrPosition>
+</Attr>
+<SeriesLabelStyle>
+<Separation>
+<![CDATA[;]]></Separation>
+<Format class="java.text.DecimalFormat">
+<![CDATA[#0]]></Format>
+</SeriesLabelStyle>
+</DataLabel>
+</DataLabelInfo>
+<Marker class="com.fr.chart.marker.DiamondFilledMarker" size="5.0"/>
+<LineStyleInfo>
+<Attr alpha="1.0" lineStyle="1"/>
+</LineStyleInfo>
+</LineSeriesAttr>
+</SeriesAttr>
+</NewSeriesCollection>
+<Legend>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Attr position="4" legendNum="10" visible="true"/>
+<FRFont name="SimSun" style="0" size="12"/>
+</Legend>
+<CateAttr isStacked="false" bgStagger="false" bgColor="-1"/>
+<Axis class="com.fr.chart.axis.CategoryAxis">
+<AxisLine style="1" color="-8355712"/>
+<AxisPosition value="3"/>
+<AxisLabelPosition value="3"/>
+<MainGridLine style="0"/>
+<SecGridLine style="0"/>
+<AxisLabelCount value="-1"/>
+<TickLine type="2" mainStroke="1.0" len="8" secType="1" secStroke="1.0" secLen="0"/>
+<Stagger value="false"/>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+</Axis>
+<Axis class="com.fr.chart.axis.ValueAxis">
+<AxisLine style="1" color="-8355712"/>
+<AxisPosition value="2"/>
+<AxisLabelPosition value="3"/>
+<MainGridLine style="3" color="-8355712"/>
+<SecGridLine style="0"/>
+<AxisLabelCount value="-1"/>
+<TickLine type="2" mainStroke="1.0" len="8" secType="1" secStroke="1.0" secLen="0"/>
+<Stagger value="false"/>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+<AxisRange/>
+</Axis>
+<Show showMarker="false" showLine="true"/>
+</Plot>
+</Plot>
+</Chart>
+</Chart>
+<Chart name="饼图">
+<Chart class="com.fr.chart.Chart">
+<GI>
+<Background name="ColorBackground" color="-3355393"/>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Alpha value="0.4000000059604645"/>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Plot class="com.fr.chart.plot.PiePlot">
+<Plot>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<NewSeriesCollection>
+<SeriesAttr class="com.fr.chart.plot.BarSeriesAttr">
+<BarSeriesAttr>
+<DataLabelInfo class="com.fr.chart.axis.PieDataLabelInfo">
+<PieDataLabelInfo>
+<Attr guideLine="false"/>
+<DataLabel>
+<Attr>
+<SeriesAttrPosition>
+<Attr position="6"/>
+</SeriesAttrPosition>
+</Attr>
+<SeriesLabelStyle>
+<Separation>
+<![CDATA[;]]></Separation>
+<Format class="java.text.DecimalFormat">
+<![CDATA[#0]]></Format>
+</SeriesLabelStyle>
+</DataLabel>
+</PieDataLabelInfo>
+</DataLabelInfo>
+<Marker class="com.fr.chart.marker.DiamondFilledMarker" size="5.0"/>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+</BarSeriesAttr>
+</SeriesAttr>
+</NewSeriesCollection>
+<Legend>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Attr position="4" legendNum="10" visible="true"/>
+<FRFont name="SimSun" style="0" size="12"/>
+</Legend>
+<PieAttr startAngle="100" separate="0"/>
+</Plot>
+</Plot>
+</Chart>
+</Chart>
+<Chart name="面积图">
+<Chart class="com.fr.chart.Chart">
+<GI>
+<Background name="ColorBackground" color="-3355393"/>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Alpha value="0.4000000059604645"/>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Plot class="com.fr.chart.plot.AreaPlot">
+<Plot>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<NewSeriesCollection>
+<SeriesAttr class="com.fr.chart.plot.BarSeriesAttr">
+<BarSeriesAttr>
+<DataLabelInfo class="com.fr.chart.axis.DataLabelInfo">
+<DataLabel>
+<Attr>
+<SeriesAttrPosition>
+<Attr position="1"/>
+</SeriesAttrPosition>
+</Attr>
+<SeriesLabelStyle>
+<Separation>
+<![CDATA[;]]></Separation>
+<Format class="java.text.DecimalFormat">
+<![CDATA[#0]]></Format>
+</SeriesLabelStyle>
+</DataLabel>
+</DataLabelInfo>
+<Marker class="com.fr.chart.marker.DiamondFilledMarker" size="5.0"/>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+</BarSeriesAttr>
+</SeriesAttr>
+</NewSeriesCollection>
+<Legend>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Attr position="4" legendNum="10" visible="true"/>
+<FRFont name="SimSun" style="0" size="12"/>
+</Legend>
+<CateAttr isStacked="false" bgStagger="false" bgColor="-1"/>
+<Axis class="com.fr.chart.axis.CategoryAxis">
+<AxisLine style="1" color="-8355712"/>
+<AxisPosition value="3"/>
+<AxisLabelPosition value="3"/>
+<MainGridLine style="0"/>
+<SecGridLine style="0"/>
+<AxisLabelCount value="-1"/>
+<TickLine type="2" mainStroke="1.0" len="8" secType="1" secStroke="1.0" secLen="0"/>
+<Stagger value="false"/>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+</Axis>
+<Axis class="com.fr.chart.axis.ValueAxis">
+<AxisLine style="1" color="-8355712"/>
+<AxisPosition value="2"/>
+<AxisLabelPosition value="3"/>
+<MainGridLine style="3" color="-8355712"/>
+<SecGridLine style="0"/>
+<AxisLabelCount value="-1"/>
+<TickLine type="2" mainStroke="1.0" len="8" secType="1" secStroke="1.0" secLen="0"/>
+<Stagger value="false"/>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+<AxisRange/>
+</Axis>
+</Plot>
+</Plot>
+</Chart>
+</Chart>
+<Chart name="条形图">
+<Chart class="com.fr.chart.Chart">
+<GI>
+<Background name="ColorBackground" color="-3355393"/>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Alpha value="0.4000000059604645"/>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Plot class="com.fr.chart.plot.Bar2DPlot">
+<Plot>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<NewSeriesCollection>
+<SeriesAttr class="com.fr.chart.plot.BarSeriesAttr">
+<BarSeriesAttr>
+<DataLabelInfo class="com.fr.chart.axis.DataLabelInfo">
+<DataLabel>
+<Attr>
+<SeriesAttrPosition>
+<Attr position="1"/>
+</SeriesAttrPosition>
+</Attr>
+<SeriesLabelStyle>
+<Separation>
+<![CDATA[;]]></Separation>
+<Format class="java.text.DecimalFormat">
+<![CDATA[#0]]></Format>
+</SeriesLabelStyle>
+</DataLabel>
+</DataLabelInfo>
+<Marker class="com.fr.chart.marker.DiamondFilledMarker" size="5.0"/>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+</BarSeriesAttr>
+</SeriesAttr>
+</NewSeriesCollection>
+<Legend>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Attr position="4" legendNum="10" visible="true"/>
+<FRFont name="SimSun" style="0" size="12"/>
+</Legend>
+<CateAttr isStacked="false" bgStagger="false" bgColor="-1"/>
+<Axis class="com.fr.chart.axis.CategoryAxis">
+<AxisLine style="1" color="-8355712"/>
+<AxisPosition value="2"/>
+<AxisLabelPosition value="3"/>
+<MainGridLine style="0"/>
+<SecGridLine style="0"/>
+<AxisLabelCount value="-1"/>
+<TickLine type="2" mainStroke="1.0" len="8" secType="1" secStroke="1.0" secLen="0"/>
+<Stagger value="false"/>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+</Axis>
+<Axis class="com.fr.chart.axis.ValueAxis">
+<AxisLine style="1" color="-8355712"/>
+<AxisPosition value="3"/>
+<AxisLabelPosition value="3"/>
+<MainGridLine style="3" color="-8355712"/>
+<SecGridLine style="0"/>
+<AxisLabelCount value="-1"/>
+<TickLine type="2" mainStroke="1.0" len="8" secType="1" secStroke="1.0" secLen="0"/>
+<Stagger value="false"/>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+<AxisRange/>
+</Axis>
+<BarAttr isHorizontal="true" overlap="0.0" interval="2.0"/>
+</Plot>
+</Plot>
+</Chart>
+</Chart>
+<OneValueCDDefinition seriesName="COURSE" valueName="GRADE" function="com.fr.data.util.function.NoneFunction">
+<Top topCate="-1" topValue="-1"/>
+<TableData class="com.fr.data.impl.NameTableData">
+<Name>
+<![CDATA[ds1]]></Name>
+</TableData>
+<CategoryName value="CLASSNO"/>
+</OneValueCDDefinition>
+</O>
+<Style index="0"/>
+</com.fr.report.FloatElement>
+</FloatElementList>
+<CellElementList/>
+</Report>
+<StyleList>
+<Style>
+<FRFont name="SimSun" style="0" size="12"/>
+<Background name="ColorBackground" color="-1"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

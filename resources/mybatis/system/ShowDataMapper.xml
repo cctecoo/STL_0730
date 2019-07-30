@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="showDataMapper">
+	<!-- 根据职能查找部门 -->
+	<select id="findDeptByFun" parameterType="pd" resultType="pd">
+		SELECT ID,DEPT_NAME FROM
+		bd_department
+		WHERE FUNCTION = #{BIANMA}
+		AND ENABLED = 1
+		AND IS_DELETE = 0
+		<if test="deptIdList!=null and deptIdList!=''">
+				AND ID IN
+		<foreach collection="deptIdList" item="deptId" open="(" close=")"
+			separator=",">
+			'${deptId}'
+		</foreach>
+		</if> 
+		<if test="dept_id!=null and dept_id!=''">
+		AND ID = #{dept_id}
+		</if>
+	</select>
+	<!-- 根据地域查找部门 -->
+	<select id="findDeptByDis" parameterType="String" resultType="pd">
+		SELECT ID,DEPT_NAME,FUNCTION FROM
+		bd_department
+		WHERE AREA = #{BIANMA}
+		AND ENABLED = 1
+		AND IS_DELETE = 0
+		<if test="deptIdList!=null and deptIdList!=''">
+				AND ID IN
+		<foreach collection="deptIdList" item="deptId" open="(" close=")"
+			separator=",">
+			'${deptId}'
+		</foreach>
+		</if> 
+		<if test="dept_id!=null and dept_id!=''">
+		AND ID = #{dept_id}
+		</if>
+	</select>
+	<!-- 查询部门信息 -->
+	<select id="findDept" parameterType="pd" resultType="pd">
+		SELECT ID,DEPT_NAME,FUNCTION FROM
+		bd_department
+		WHERE ENABLED = 1
+		AND IS_DELETE = 0
+		<if test="deptIdList!=null and deptIdList!=''">
+		AND ID IN
+		<foreach collection="deptIdList" item="deptId" open="(" close=")"
+			separator=",">
+			'${deptId}'
+		</foreach>
+		</if>
+		<if test="dept_id!=null and dept_id!=''">
+		AND ID = #{dept_id}
+		</if>
+	</select>
+	<!-- 根据部门id查询部门名称 -->
+	<select id="findDeptNameById" parameterType="String" resultType="pd">
+		SELECT DEPT_NAME FROM bd_department
+		Where ID = #{deptId}
+	</select>
+	<!-- 查询部门下员工 -->
+	<select id="findEmpTasklistPage" parameterType="page"
+		resultType="pd">
+		SELECT e.ID,e.EMP_CODE,e.EMP_NAME,e.EMP_DEPARTMENT_NAME,p.SCORE AS LAST_SCORE FROM
+		bd_employee e
+		LEFT JOIN performance p ON p.EMP_CODE = e.EMP_CODE AND p.MONTH = #{pd.lastYm} AND
+		p.ISDEL = 0
+		WHERE e.EMP_DEPARTMENT_ID = #{pd.deptId}
+		AND e.ENABLED = 1
+		<if test="pd.USERNAME != null and pd.USERNAME != ''">
+		AND e.EMP_CODE = #{pd.USERNAME}
+		</if>
+		<choose>
+			<when test="pd.showDetail==true">
+				ORDER BY p.SCORE desc
+			</when>
+			<otherwise>
+				ORDER BY e.EMP_NAME
+			</otherwise>
+		</choose>
+			
+
+	</select>
+	<!-- 查询本月得分 -->
+	<select id="doQueryCurScore" parameterType="pd" resultType="pd">
+		SELECT SCORE FROM performance
+		WHERE EMP_CODE = #{EMP_CODE}
+		AND MONTH =
+		#{curYm}
+		AND ISDEL = 0
+	</select>
+	<!-- 查询员工详情 -->
+	<select id="queryBasicInfo" parameterType="String" resultType="pd">
+		SELECT e.EMP_CODE,e.EMP_NAME,d.DEPT_NAME FROM bd_employee e
+		LEFT JOIN bd_department d ON e.EMP_DEPARTMENT_ID = d.ID
+		WHERE e.ID = #{empId}
+	</select>
+	<!-- 查询工作经历列表 -->
+	<select id="queryRecordExplistPage" parameterType="page"
+		resultType="pd">
+		SELECT EXP,POSITION FROM bd_emp_record_exp
+		WHERE EMP_ID = #{pd.empId}
+		<choose>
+			<when test="pd.sortKey != null and pd.sortKey != ''">
+				order by ${pd.sortKey} ${pd.sortMethod}
+			</when>
+		</choose>
+	</select>
+	<!-- 查询周工作任务 -->
+	<select id="empWeekTasklistPage" parameterType="page"
+		resultType="pd">
+		select weekTask.ID, weekTask.YEAR, weekTask.MONTH, weekTask.WEEK,
+		weekTask.WEEK_COUNT,
+		target.NAME TARGET_NAME, weekTask.WEEK_START_DATE, weekTask.WEEK_END_DATE,
+		product.PRODUCT_NAME,
+		sys_status.NAME STATUS, emp.EMP_NAME, busiIndex.INDEX_NAME, u.UNIT_NAME,
+		dep.DEPT_NAME,
+		IFNULL((select sum(task.FINISH_PERCENT) from b_daily_emp_task task
+		where task.ISDEL!=1 and task.STATUS='YW_YSX' and
+		task.B_WEEK_EMP_TASK_ID=weekTask.ID), 0) actual_percent,
+			<![CDATA[ FORMAT( IF(taskDay.pastdays<0, 0, IF( (taskDay.pastdays+1)/taskdays>1, 1, (taskDay.pastdays+1)/taskdays ) )*100, 2) plan_percent ]]>
+		from b_week_emp_task weekTask
+		left join (
+		select ID, (TO_DAYS(now())-TO_DAYS(WEEK_START_DATE)) pastdays,
+		(TO_DAYS(WEEK_END_DATE)-TO_DAYS(WEEK_START_DATE))+1 taskdays
+		from b_week_emp_task
+		) as taskDay on taskDay.ID=weekTask.ID
+		left join b_year_target target on
+		(weekTask.B_YEAR_TARGET_CODE=target.CODE and target.ISDEL!=1)
+		left join
+		bd_bussiness_index busiIndex on
+		(target.INDEX_CODE=busiIndex.INDEX_CODE and busiIndex.ISDEL!=1)
+		left
+		join bd_unit u on (target.UNIT_CODE=u.UNIT_CODE and u.ISDEL!=1)
+		left
+		join bd_product product on (target.PRODUCT_CODE=product.PRODUCT_CODE
+		and product.ISDEL!=1)
+		left join sys_status on
+		weekTask.STATUS=sys_status.BIANMA
+		left join bd_employee emp on
+		(weekTask.EMP_CODE=emp.EMP_CODE and emp.ENABLED=1)
+		left join
+		bd_department dep on (dep.DEPT_CODE=weekTask.DEPT_CODE and
+		dep.ENABLED=1)
+		where weekTask.ISDEL!=1 and target.ISDEL!=1
+		and weekTask.STATUS!=#{pd.useStatus}
+		and weekTask.EMP_CODE = #{pd.empCode}
+		<if test="pd.showDept"><!-- 领导可以查看下属部门的 -->
+			and weekTask.DEPT_CODE in ${pd.deptCodeStr}
+			<choose>
+				<when test="pd.sortKey != null and pd.sortKey != ''">
+					order by ${pd.sortKey} ${pd.sortMethod}
+				</when>
+				<otherwise>
+					order by weekTask.WEEK_START_DATE desc,
+					weekTask.WEEK_END_DATE desc, TARGET_NAME desc
+				</otherwise>
+			</choose>
+		</if>
+	</select>
+	<!-- 查询目标 -->
+	<select id="targetlistPage" parameterType="page" resultType="pd">
+		SELECT * FROM (SELECT
+		t1.CODE,
+		t1.`NAME`,
+		t1.`START_DATE`,
+		t1.`END_DATE`,
+		pro.PRODUCT_NAME,
+		b_index.INDEX_NAME,
+		IFNULL(s1.COUNT_SUM, 0) AS COUNT,
+		unit.UNIT_NAME,
+		dept.DEPT_NAME,
+		emp.EMP_NAME,
+		sta.`NAME` AS STATUS_NAME
+
+		FROM
+		b_year_target t1
+		JOIN bd_department dept
+		ON t1.DEPT_CODE = dept.DEPT_CODE
+		JOIN bd_employee emp
+		ON t1.EMP_CODE = emp.EMP_CODE
+		<if test="pd.empId != null and pd.empId != ''">
+			AND emp.ID = #{pd.empId}
+		</if>
+		LEFT JOIN bd_product pro
+		ON (
+		t1.PRODUCT_CODE = pro.PRODUCT_CODE
+		AND pro.ISDEL = 0
+		)
+		LEFT JOIN bd_bussiness_index b_index
+		ON (
+		t1.INDEX_CODE = b_index.INDEX_CODE
+		AND b_index.ISDEL = 0
+		)
+		LEFT JOIN bd_unit unit
+		ON (
+		t1.UNIT_CODE = unit.UNIT_CODE
+		AND unit.ISDEL = 0
+		)
+		LEFT JOIN sys_status sta
+		ON (
+		t1.`STATUS` = sta.BIANMA
+		AND sta.TYPE = 2
+		)
+		LEFT JOIN
+		(SELECT
+		t2.B_YEAR_TARGET_CODE,
+		SUM(t2.COUNT) AS COUNT_SUM,
+		COUNT(1) AS COUNT_COUNT
+		FROM
+		b_year_dept_task t2
+		GROUP BY t2.B_YEAR_TARGET_CODE) s1
+		ON (t1.CODE = s1.B_YEAR_TARGET_CODE)
+		LEFT JOIN
+		(SELECT
+		t4.B_YEAR_TARGET_CODE,
+		COUNT(1) AS YSX_COUNT_COUNT
+		FROM
+		b_year_dept_task t4
+		WHERE t4.`STATUS` = 'YW_YSX'
+		GROUP BY t4.B_YEAR_TARGET_CODE) s2
+		ON (t1.CODE = s2.B_YEAR_TARGET_CODE)
+		WHERE t1.ISDEL = 0
+		<if test="pd.sysDeptArr != null and pd.sysDeptArr != ''">
+			AND t1.DEPT_CODE IN (
+			<foreach item="item" index="index" collection="pd.sysDeptArr"
+				separator=",">
+				'${item}'
+			</foreach>
+			)
+		</if>
+		UNION ALL
+		SELECT
+		a1.B_YEAR_TARGET_CODE AS CODE,
+		a2.`NAME`,
+		a2.START_DATE,
+		a2.END_DATE,
+		pro.PRODUCT_NAME,
+		b_index.INDEX_NAME,
+		IFNULL(y1.MONTH_COUNT_SUM, 0) AS COUNT,
+		unit.UNIT_NAME,
+		dept.DEPT_NAME,
+		emp.EMP_NAME,
+		sta.`NAME` AS STATUS_NAME
+		FROM
+		b_year_dept_task a1
+		JOIN b_year_target a2
+		ON a1.B_YEAR_TARGET_CODE = a2.`CODE`
+		JOIN bd_department dept
+		ON a1.DEPT_CODE = dept.DEPT_CODE
+		JOIN bd_employee emp
+		ON a1.EMP_CODE = emp.EMP_CODE
+		<if test="pd.empId != null and pd.empId != ''">
+			AND emp.ID = #{pd.empId}
+		</if>
+		LEFT JOIN bd_product pro
+		ON (
+		a2.PRODUCT_CODE = pro.PRODUCT_CODE
+		AND pro.ISDEL = 0
+		)
+		LEFT JOIN sys_status sta
+		ON (
+		a1.`STATUS` = sta.BIANMA
+		AND sta.TYPE = 2
+		)
+		LEFT JOIN bd_unit unit
+		ON (
+		a2.UNIT_CODE = unit.UNIT_CODE
+		AND unit.ISDEL = 0
+		)
+		LEFT JOIN bd_bussiness_index b_index
+		ON (
+		a2.INDEX_CODE = b_index.INDEX_CODE
+		AND b_index.ISDEL = 0
+		)
+		LEFT JOIN
+		(SELECT
+		a3.B_YEAR_DEPT_TASK_ID,
+		SUM(a3.MONTH_COUNT) AS MONTH_COUNT_SUM,
+		COUNT(1) AS MONTH_COUNT_COUNT
+		FROM
+		b_month_dept_task a3
+		GROUP BY a3.B_YEAR_DEPT_TASK_ID) y1
+		ON (a1.ID = y1.B_YEAR_DEPT_TASK_ID)
+		LEFT JOIN
+		(SELECT
+		a4.B_YEAR_DEPT_TASK_ID,
+		COUNT(1) AS YSX_MONTH_COUNT_COUNT
+		FROM
+		b_month_dept_task a4
+		WHERE a4.`STATUS` = 'YW_YSX'
+		GROUP BY a4.B_YEAR_DEPT_TASK_ID) y2
+		ON (a1.ID = y2.B_YEAR_DEPT_TASK_ID)
+		WHERE a1.ISDEL = 0
+		<if test="pd.sysDeptArr != null and pd.sysDeptArr != ''">
+			AND a1.DEPT_CODE IN (
+			<foreach item="item" index="index" collection="pd.sysDeptArr"
+				separator=",">
+				'${item}'
+			</foreach>
+			)
+		</if>
+		AND a1.`STATUS` = 'YW_YSX'
+		UNION ALL
+		SELECT
+		b1.B_YEAR_TARGET_CODE AS CODE,
+		b2.`NAME`,
+		b1.MONTH_START_DATE AS START_DATE,
+		b1.MONTH_END_DATE AS END_DATE,
+		pro.PRODUCT_NAME,
+		b_index.INDEX_NAME,
+		IFNULL(z1.MONTH_COUNT_SUM, 0) AS COUNT,
+		unit.UNIT_NAME,
+		dept.DEPT_NAME,
+		emp.EMP_NAME,
+		sta.`NAME` AS STATUS_NAME
+		FROM
+		b_month_dept_task b1
+		JOIN b_year_target b2
+		ON b1.B_YEAR_TARGET_CODE = b2.`CODE`
+		JOIN bd_department dept
+		ON b1.DEPT_CODE = dept.DEPT_CODE
+		JOIN bd_employee emp
+		ON b1.EMP_CODE = emp.EMP_CODE
+		<if test="pd.empId != null and pd.empId != ''">
+			AND emp.ID = #{pd.empId}
+		</if>
+		LEFT JOIN bd_product pro
+		ON (
+		b2.PRODUCT_CODE = pro.PRODUCT_CODE
+		AND pro.ISDEL = 0
+		)
+		LEFT JOIN sys_status sta
+		ON (
+		b1.`STATUS` = sta.BIANMA
+		AND sta.TYPE = 2
+		)
+		LEFT JOIN bd_unit unit
+		ON (
+		b2.UNIT_CODE = unit.UNIT_CODE
+		AND unit.ISDEL = 0
+		)
+		LEFT JOIN bd_bussiness_index b_index
+		ON (
+		b2.INDEX_CODE = b_index.INDEX_CODE
+		AND b_index.ISDEL = 0
+		)
+		LEFT JOIN
+		(SELECT
+		b3.B_MONTH_DEPT_TASK_ID,
+		SUM(b3.MONTH_COUNT) AS MONTH_COUNT_SUM,
+		COUNT(1) AS MONTH_COUNT_COUNT
+		FROM
+		b_month_emp_target b3
+		GROUP BY b3.B_MONTH_DEPT_TASK_ID) z1
+		ON (b1.ID = z1.B_MONTH_DEPT_TASK_ID)
+		LEFT JOIN
+		(SELECT
+		b4.B_MONTH_DEPT_TASK_ID,
+		COUNT(1) AS YSX_MONTH_COUNT_COUNT
+		FROM
+		b_month_emp_target b4
+		WHERE b4.`STATUS` = 'YW_YSX'
+		GROUP BY b4.B_MONTH_DEPT_TASK_ID) z2
+		ON (b1.ID = z2.B_MONTH_DEPT_TASK_ID)
+		WHERE b1.ISDEL = 0
+		<if test="pd.sysDeptArr != null and pd.sysDeptArr != ''">
+			AND b1.DEPT_CODE IN (
+			<foreach item="item" index="index" collection="pd.sysDeptArr"
+				separator=",">
+				'${item}'
+			</foreach>
+			)
+		</if>
+		AND b1.`STATUS` = 'YW_YSX') tb GROUP BY tb.CODE
+
+		<choose>
+			<when test="pd.sortKey != null and pd.sortKey != ''">
+				order by ${pd.sortKey} ${pd.sortMethod}
+			</when>
+		</choose>
+
+	</select>
+<!-- 	查询绩效得分 -->
+	<select id="queryPerInfo" resultType="pd" parameterType="pd">
+		
+		SELECT 
+			OBJ.EMP_CODE,
+			OBJ.EMP_NAME,
+			OBJ.EMP_DEPARTMENT_NAME,
+			OBJ.EMP_GRADE_NAME,
+			#{MONTH} AS MONTH,
+			OBJ.SCORE,
+			OBJ.ID as PERF_ID,
+			OBJ.LASTMONTH_SCORE,
+			OBJ.AVERAGE_SCORE,
+			@rownum := @rownum + 1 AS RANKING FROM
+		(
+		SELECT 
+			E.EMP_CODE,
+			E.EMP_NAME,
+			E.EMP_DEPARTMENT_NAME,
+			E.EMP_GRADE_NAME,
+			P.SCORE,
+			P.ID,
+			P2.SCORE AS LASTMONTH_SCORE,
+			PA.AVERAGE_SCORE
+		FROM bd_employee E LEFT JOIN performance P ON E.EMP_CODE = P.EMP_CODE AND P.`MONTH` = #{MONTH}
+											 LEFT JOIN performance P2 ON E.EMP_CODE = P2.EMP_CODE AND P2.`MONTH` = #{LAST_MONTH}
+											 LEFT JOIN (SELECT P3.EMP_CODE,AVG(P3.SCORE) AS AVERAGE_SCORE FROM performance P3 GROUP BY P3.EMP_CODE) PA ON E.EMP_CODE = PA.EMP_CODE
+		WHERE 1=1 
+		<if test="EMP_CODE != null and EMP_CODE != '' "> 
+ 			and E.EMP_CODE = #{EMP_CODE}
+		</if>
+		ORDER BY P.SCORE DESC) OBJ,(SELECT @rownum := 0) r
+
+
+	</select>
+	
+	<!--  任务统计，用于主页上方显示 -->
+	<!-- 任务统计-年度目标 -->
+	<select id="showMsgDataTargetYear" resultType="pd">
+	   SELECT
+		    "公司年度经营目标" NAME,
+		    "byeartarget/list.do" url,
+		    count(*) count
+		FROM
+		    b_year_target
+		WHERE
+		    EMP_CODE = #{EMP_CODE}
+		AND ISDEL = 0
+		AND `STATUS` = 'YW_CG'
+	</select>
+	<!-- 任务统计-部门年度目标 -->
+	<select id="showMsgDataTargetYearDept" resultType="pd">
+		SELECT
+		    "部门年度经营目标" NAME,
+		    'byeardepttask/list.do' url,
+		    count(*) count
+		FROM
+		    b_year_dept_task y,
+		    b_year_target t
+		WHERE
+		    t.CODE = y.B_YEAR_TARGET_CODE
+		and y.ISDEL = 0
+		and y.status='YW_YSX'
+		and t.ISDEL = 0
+		AND y.EMP_CODE = #{EMP_CODE}
+		AND (
+		    SELECT
+		        count(*)
+		    FROM
+		        b_month_dept_task m
+		    WHERE
+		        y.ID = m.b_year_dept_task_id
+		) = 0
+	</select>
+	<!-- 任务统计-员工月度经营目标 -->
+	<select id="showMsgDataTargetMonthEmp" resultType="pd">
+		SELECT
+		    "员工月度经营目标" NAME,
+		    'bmonthemptarget/list.do' url,
+		    count(*) count
+		FROM
+		    b_month_emp_target m,
+		    b_year_target t
+		WHERE
+		    t.CODE = m.B_YEAR_TARGET_CODE
+		and m.ISDEL = 0
+	    and t.ISDEL = 0
+	    AND m.B_MONTH_DEPT_TASK_ID in (
+			select mdt.ID from b_month_dept_task mdt 
+				where mdt.ISDEL = 0 and  mdt.B_YEAR_DEPT_TASK_ID in(
+					select ydt.ID from b_year_dept_task ydt where ydt.ISDEL=0
+				)
+		)
+		AND m.EMP_CODE = #{EMP_CODE}
+		AND (
+		    SELECT
+		        count(*)
+		    FROM
+		        b_week_emp_task w
+		    WHERE
+		        m.ID = w.B_month_emp_target_id
+		) = 0
+	</select>
+	<!-- 任务统计-项目审核 -->
+	<select id="showMsgDataProjectAudit" resultType="pd">
+		SELECT
+		    "重点协同项目审核" NAME,
+		    'cproject/audit_list.do?clickType=projectCheck' url,
+		    count(*) count
+		FROM
+		    c_project p
+		WHERE
+		    p.`status` = 'YW_DSX'
+		AND p.ISDEL = 0
+		AND p.AUDITOR = #{EMP_CODE}
+		AND (
+		    SELECT
+		        count(*)
+		    FROM
+		        project_countersign pc
+		    WHERE
+		        p.ID = pc.project_id
+		    AND pc.opinion = ''
+		) = 0
+	</select>
+	<!-- 任务统计-项目会签 -->
+	<select id="showMsgDataProjectComment" resultType="pd">
+		SELECT
+		    "重点协同项目会签" NAME,
+            'cproject/audit_list.do' url,
+		    count(*) count
+		FROM
+		    project_countersign pc,
+		    bd_employee e,
+		    c_project p
+		WHERE
+		    pc.AUDITOR = e.ID AND pc.OPINION=''
+		AND p.id = pc.PROject_id
+		AND e.EMP_CODE = #{EMP_CODE}
+		AND p.`STATUS` = 'YW_DSX'
+		and p.ISDEL = 0
+	</select>
+	<!-- 任务统计-项目退回 -->
+	<select id="showMsgDataProjectReject" resultType="pd">
+		SELECT
+		    "重点协同项目退回" NAME,
+            'cproject/list.do' url,
+		    count(*) count
+		FROM 
+		    c_project p
+		WHERE
+			p.EMP_CODE = #{EMP_CODE}
+		AND p.`STATUS` = 'YW_YTH'
+		AND p.ISDEL = 0
+	</select>
+	<!-- 任务统计-项目验收评价 -->
+	<select id="showMsgDataProjectAssess" resultType="pd">
+		SELECT
+		    "重点协同项目验收评价" NAME,
+		    'cproject/audit_list.do?clickType=projectAcceptance' url,
+		    count(ID) count
+		FROM
+		    project_acceptance acc
+		WHERE
+			acc.EMPCODE = #{EMP_CODE}
+		AND acc.STATE = 'YW_CG'
+		
+	</select>
+	<!-- 任务统计-项目验收不通过 -->
+	<select id="showMsgDataProjectAssessReject" resultType="pd">
+		SELECT
+		    "重点协同项目验收不通过" NAME,
+		    'cproject/list.do.do?clickType=projectAcceptanceUnfinish' url,
+		    count(ID) count
+		FROM
+		    c_project
+		WHERE
+			ISDEL = 0
+		AND EMP_CODE = #{EMP_CODE}
+		AND STATUS= 'YW_WWC'
+	</select>
+	<!-- 任务统计-项目未分解 -->
+	<select id="showMsgDataPorjectUnsplit" resultType="pd">
+		SELECT
+		    "未分解的重点协同项目" NAME,
+		    'cproject/nodesList.do?findType=unsplitProject' url,
+		    count(*) count
+		FROM
+		    c_project p
+		WHERE
+			p.EMP_CODE = #{EMP_CODE}
+		AND p.ISDEL = 0
+		AND p.STATUS = 'YW_YSX'
+		AND (select count(n.ID) from c_project_node n where n.C_PROJECT_CODE = p.CODE)=0
+	</select>
+	<!-- 任务统计-项目节点未分解 -->
+	<select id="showMsgDataProjectUnsplitNode" resultType="pd">
+		SELECT
+		    "未分解的重点协同任务节点" NAME,
+		    'cproject/nodesList.do?findType=unsplitNode' url,
+		    count(*) count
+		FROM
+		    c_project_node n
+		WHERE
+		    n.emp_code = #{EMP_CODE}
+		AND n.isdel = 0
+		AND (select STATUS from c_project where CODE = n.C_PROJECT_CODE)='YW_YSX'
+		AND n. STATUS = 'YW_YSX'
+		AND (
+		    (
+		        SELECT
+		            count(*)
+		        FROM
+		            c_project_node pn
+		        WHERE
+		            pn.ISDEL = 0
+		        AND pn.PARENT_ID = n.ID
+		    ) + (
+		        SELECT
+		            count(*)
+		        FROM
+		            c_project_event pe
+		        WHERE
+		            pe.ISDEL = 0
+		        AND pe.C_PROJECT_NODE_ID = n.ID
+		    )
+		) = 0
+	</select>
+	<!-- 任务统计-项目活动未分解 -->
+	<select id="showMsgDataProjectUnsplitEvent" resultType="pd">
+		SELECT
+		    "未分解的重点协同任务活动" NAME,
+		    'cproject/nodesList.do?findType=unsplitEvent' url,
+		    count(*) count
+		FROM
+		    c_project_event e
+		WHERE
+		    e.emp_code = #{EMP_CODE}
+		AND e.isdel = 0
+		AND (select STATUS from c_project where CODE = e.C_PROJECT_CODE)='YW_YSX'
+		AND (select STATUS from c_project_node where ID = e.C_PROJECT_NODE_ID)='YW_YSX'
+		AND e. STATUS = 'YW_YSX'
+		AND (
+		    SELECT
+		        count(*)
+		    FROM
+		        c_project_event_split es
+		    WHERE
+		        es.c_project_event_id = e.ID
+		) = 0
+	</select>
+	<!-- 任务统计-项目变更审核 -->
+	<select id="showMsgDataProjectChange" resultType="pd">
+		SELECT
+		    "重点协同任务变更审核" NAME,
+		    'projectChange/checkList.do' url,
+		    count(*) count
+		FROM
+				(select * from c_project_change where STATUS='YW_DSX' and ISDEL = 0) c
+				LEFT JOIN project_change_audit d on d.project_change_id = c.ID
+				LEFT JOIN c_project p ON  p.CODE = c.C_PROJECT_CODE
+				LEFT JOIN sys_user emp ON emp.USERNAME = c.CREATE_USER
+			   
+			WHERE  d.AUDITOR =  #{pd.queryEmpCode}
+	</select>
+	<!-- 任务统计-新临时工作 -->
+	<select id="showMsgDataTempTask" resultType="pd">
+		SELECT
+		    "待完成临时工作" NAME,
+		    'empDailyTask/listTask.do?loadType=T' url,
+		    count(*) count
+		FROM
+		    daily_task_information_detail t,
+		    bd_employee e,
+		    daily_task_information d
+		WHERE
+		    e.ID = t.EMP_ID
+		AND d.ID = t.DAILY_TASK_ID
+		AND d.STATUS = 'YW_YSX'
+		AND t.`STATUS` in ('YW_YSX', 'YW_YTH')
+		AND e.EMP_CODE = #{EMP_CODE}
+	</select>
+	<!-- 任务统计-新流程工作 -->
+	<select id="showMsgDataFlowTask" resultType="pd">
+		SELECT
+		    "新流程工作" NAME,
+		    'empDailyTask/listTask.do?loadType=F' url,
+		    count(*) count
+        FROM
+		    flow_work_node node
+			left join flow_work flow on node.FLOW_ID = flow.ID
+			left join flow_work_node_joint_checkup checkup on (checkup.FLOW_WORK_NODE_ID=node.ID and checkup.EMP_CODE=#{EMP_CODE})
+		WHERE 
+		node.ISDEL = 0 AND node.STATUS!='YW_DSX'
+		AND (
+			( node.EMP_CODE = #{EMP_CODE} AND flow.STATUS is null AND node.STATUS!='YW_YWB' )
+			OR
+			( checkup.EMP_CODE=#{pd.empCode} AND checkup.OPINION_TYPE is null )
+		)
+	</select>
+	<!-- 任务统计-临时工作申请 -->
+	<select id="showMsgDataTempTaskApply" resultType="pd">
+		SELECT
+		    "临时工作申请审核" NAME,
+		    'workOrder/listCheck.do?clickSearch=YW_DSX' url,
+		    count(*) count
+		FROM
+		    daily_task_information d
+		WHERE
+			d.STATUS = 'YW_DSX'
+		AND d.APPROVE_EMP_CODE = #{EMP_CODE}
+	</select>
+	<!-- 任务统计-临时工作申请被退回 -->
+	<select id="showMsgDataTempTaskApplyReject" resultType="pd">
+		SELECT
+		    "临时工作申请被退回" NAME,
+		    'workOrder/list.do?clickSearch=YW_YTH' url,
+		    count(*) count
+		FROM
+		    daily_task_information d
+		WHERE
+			d.STATUS = 'YW_YTH'
+		AND d.CREATE_USER = (select USERNAME from sys_user where number=#{EMP_CODE})
+		
+	</select>
+	<!-- 任务统计-目标工作审核 -->
+	<select id="showMsgDataEmpTargetTaskAssess" resultType="pd">
+		SELECT
+			"日清看板-目标工作审核" NAME,
+			'empDailyTask/listTaskForDept.do?loadType=B' url,
+		    count(distinct(B_WEEK_EMP_TASK_ID)) count
+		FROM
+		    b_daily_emp_task
+		WHERE
+			STATUS = 'YW_CG' and ISDEL=0
+		AND CHECK_EMP_CODE = #{EMP_CODE}
+	</select>
+	<!-- 任务统计-协同工作审核 -->
+	<select id="showMsgDataEmpEventTaskAssess" resultType="pd">
+		SELECT
+		    "日清看板-协同工作审核" NAME,
+		    'empDailyTask/listTaskForDept.do?loadType=C' url,
+		    count(ID) count
+		FROM
+			c_project_event 
+		WHERE
+			CHECK_EMP_CODE is not null 
+		AND SCORE is null AND STATUS='YW_YSX' AND ISDEL=0
+		AND CHECK_EMP_CODE = #{EMP_CODE}
+		AND ID in(
+			select distinct(C_PROJECT_EVENT_ID) id from c_daily_emp_task where ISDEL=0 and STATUS='YW_CG'
+			UNION 
+			select C_PROJECT_EVENT_ID id from c_daily_emp_task where ISDEL=0 and STATUS='YW_YSX' group by C_PROJECT_EVENT_ID
+				having IFNULL(sum(FINISH_PERCENT), 0)=100
+		)
+	</select>
+	<select id="showMsgDataEmpPositionTaskAssess" resultType="pd">
+		SELECT
+		    "日清看板-日常工作审核和评价" NAME,
+		    'empDailyTask/listTaskForDept.do?loadType=D' url,
+		    count(ID) count
+		FROM
+			position_daily_task 
+		WHERE
+			SCORE is null and (status = 'YW_YSX' or status = 'YW_YWB')
+		AND SCOREPERSON = #{EMP_CODE}
+	</select>
+	<select id="showMsgDataEmpPositionTaskReject" resultType="pd">
+		SELECT
+		    "日常工作退回" NAME,
+		    'empDailyTask/listTask.do?loadType=D' url,
+		    count(ID) count
+		FROM
+			position_daily_task 
+		WHERE 
+			status='YW_YTH'
+		AND EMP_CODE = #{EMP_CODE}
+	</select>
+	<select id="showMsgDataTempTaskAssess" resultType="pd">
+		SELECT 
+			"日清看板-临时工作评价" NAME,
+		    'empDailyTask/listTaskForDept.do?loadType=T' url,
+		    count(d.ID) count 
+		FROM daily_task_information_detail d
+		LEFT JOIN 
+			daily_task_information t ON t.ID = d.DAILY_TASK_ID
+		WHERE 
+			t.NEED_CHECK=1 AND d.STATUS='YW_YWB' 
+		AND t.CHECK_PERSON = (select ID from bd_employee where EMP_CODE=#{EMP_CODE})
+	</select>
+	<select id="showMsgDataRepairOrder" resultType="pd">
+		SELECT "维修工作单" NAME,
+		    'formBuilder/toRepairOrderSummary.do' url,
+		    count(work.ID) count 
+		FROM form_work work
+		WHERE 
+			work.FORM_TYPE  in ('维修工单')
+		AND work.WORK_STATUS='NORMAL' 
+		AND work.ID in (
+			select FORM_WORK_ID from form_work_step where CURRENT_EMPCODE=#{EMP_CODE} and IS_CURRENT_STEP='Y'
+		)
+	</select>
+	
+	<!-- 查询表单的sql -->
+	<sql id="findFormWorkSql">
+		AND work.WORK_STATUS='NORMAL' 
+		AND work.ID in (
+			select FORM_WORK_ID from form_work_step where CURRENT_EMPCODE = #{EMP_CODE} and IS_CURRENT_STEP='Y'
+			union
+			select FORM_WORK_ID from form_work_step_checkup where OPINION_TIME is null and EMP_CODE = #{EMP_CODE}
+			union
+			select FORM_WORK_ID from form_work_focus f where EMP_CODE = #{EMP_CODE} and COMMITED='N'
+				and exists(select ID from form_work_step step where step.FORM_WORK_ID = f.FORM_WORK_ID and step.STEP_LEVEL>1
+					and step.IS_CURRENT_STEP = 'Y' and step.CURRENT_USER_USERNAME is not null
+				)
+		)
+	</sql>
+	<select id="showMsgDataFormWork" resultType="pd">
+		SELECT "表单工作" NAME,
+		    'formBuilder/toFormFlowList.do' url,
+		    count(work.ID) count 
+		FROM form_work work
+		WHERE 
+			 work.FORM_MODEL_ID > 6
+			AND work.FORM_TYPE in ('普通表单', '财务表单')
+			<include refid="findFormWorkSql"></include>
+	</select>
+	
+	<select id="showMsgDataFormPurchase" resultType="pd">
+		SELECT "采购表单" NAME,
+		    'formBuilder/toPurchaseFormList.do' url,
+		    count(work.ID) count 
+		FROM form_work work
+		WHERE 
+			 work.FORM_TYPE in ('采购表单', '合同表单', '付款表单', '合并付款')
+			 <include refid="findFormWorkSql"></include>
+	</select>
+	
+</mapper>

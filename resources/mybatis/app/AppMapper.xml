@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AppMapper">
+	<select id="getScore" parameterType="pd" resultType="pd">
+		SELECT
+		convert((real_num/exp_num)*100,decimal) per, a.EMP_DEPARTMENT_NAME
+		FROM
+		(
+		SELECT
+		t.EMP_DEPARTMENT_ID,t.EMP_DEPARTMENT_NAME,COUNT(t.ID)*CAST(SUBSTR(
+		DATE_FORMAT(#{date}, '%Y-%m-%d')
+		FROM
+		- 2 FOR 2
+		) AS SIGNED INTEGER)
+		exp_num FROM bd_employee t
+		WHERE 1=1
+		GROUP BY t.EMP_DEPARTMENT_ID) a,
+
+
+		(SELECT d.EMP_DEPARTMENT_ID,count(t.ID) real_num FROM
+		position_daily_task t
+		LEFT JOIN bd_employee d ON t.EMP_CODE =
+		d.EMP_CODE
+		WHERE t.FINISH_TIME
+		IS NOT NULL
+		AND DATE_FORMAT(
+		t.FINISH_TIME,
+		'%Y-%m'
+		) = DATE_FORMAT(#{date}, '%Y-%m')
+		GROUP BY
+		d.EMP_DEPARTMENT_ID) b
+		WHERE
+		a.EMP_DEPARTMENT_ID = b.EMP_DEPARTMENT_ID
+		ORDER BY (real_num/exp_num)
+		DESC
+	</select>
+
+
+	<select id="getAllProduct" parameterType="pd" resultType="pd">
+		SELECT
+		IFNULL(SUM(a.WEEK_COUNT), 0) aim_count,
+		IFNULL(SUM(a.MONEY_COUNT), 0) aim_money,
+		IFNULL(SUM(a.DAILY_COUNT), 0) actual_count,
+		IFNULL(SUM(a.MONEY_COUNT), 0) actual_money
+		FROM
+		(
+		SELECT
+		IFNULL(SUM(weekTask.WEEK_COUNT), 0) WEEK_COUNT,
+		IFNULL(SUM(weekTask.MONEY_COUNT),0) MONEY_COUNT,
+		IFNULL(SUM(taskdaily.DAILY_COUNT),0) DAILY_COUNT,
+		IFNULL(SUM(taskdaily.MONEY_COUNT),0) DAILY_MONEY_COUNT
+		FROM
+		b_week_emp_task
+		weekTask
+		LEFT JOIN (
+		SELECT
+		B_WEEK_EMP_TASK_ID,
+		sum(daily.DAILY_COUNT)
+		DAILY_COUNT,
+		sum(daily.MONEY_COUNT) MONEY_COUNT,
+		CUSTOM_NAME
+		FROM
+		b_daily_emp_task daily
+		WHERE
+		daily.ISDEL = 0
+		GROUP BY
+		B_WEEK_EMP_TASK_ID,
+		CUSTOM_NAME
+		) taskdaily ON (
+		taskdaily.B_WEEK_EMP_TASK_ID = weekTask.ID
+		)
+		LEFT JOIN B_MONTH_EMP_TARGET monthEmpTarget ON (
+		weekTask.B_MONTH_EMP_TARGET_ID = monthEmpTarget.ID
+		)
+		LEFT JOIN
+		B_MONTH_DEPT_TASK monthDeptTarget ON (
+		monthEmpTarget.B_MONTH_DEPT_TASK_ID = monthDeptTarget.ID
+		)
+		LEFT JOIN
+		B_YEAR_DEPT_TASK yearDeptTarget ON (
+		monthDeptTarget.B_YEAR_DEPT_TASK_ID = yearDeptTarget.ID
+		)
+		LEFT JOIN
+		b_year_target target ON (
+		weekTask.B_YEAR_TARGET_CODE = target.`CODE`
+		AND target.ISDEL != 1
+		)
+		LEFT JOIN bd_product product ON (
+		yearDeptTarget.PRODUCT_CODE = product.PRODUCT_CODE
+		AND product.ISDEL !=
+		1
+		)
+		LEFT JOIN bd_department dep ON (
+		dep.dept_code = weekTask.dept_code
+		AND dep.ENABLED = 1
+		)
+		LEFT JOIN bd_customer cus ON (
+		cus.CUSTOMER_CODE =
+		yearDeptTarget.CUSTOMER_CODE
+		AND cus.isdel = 0
+		)
+		LEFT JOIN bd_employee
+		employee ON weekTask.EMP_CODE = employee.EMP_CODE
+		WHERE
+		weekTask.ISDEL =
+		0
+		AND target.TARGET_TYPE = 'XSH'
+		AND weekTask. YEAR = DATE_FORMAT(#{date},
+		'%Y')
+		AND 1 = 1
+		AND 1 = 1
+		AND 1 = 1
+		GROUP BY
+		product.PRODUCT_NAME,
+		cus.CUSTOMER_NAME,
+		taskdaily.CUSTOM_NAME,
+		employee.EMP_NAME )a WHERE 1=1
+	</select>
+
+
+	<select id="getEveryProduct" parameterType="pd" resultType="pd">
+		SELECT
+		a.PRODUCT_NAME,
+		SUM(a.WEEK_COUNT) aim_count,
+		SUM(a.MONEY_COUNT) aim_money,
+		SUM(a.DAILY_COUNT) actual_count,
+		SUM(a.DAILY_MONEY_COUNT) actual_money
+		FROM
+		(
+		SELECT
+		product.PRODUCT_NAME,
+		IFNULL(SUM(weekTask.WEEK_COUNT), 0) WEEK_COUNT,
+		IFNULL(SUM(weekTask.MONEY_COUNT),0) MONEY_COUNT,
+		IFNULL(SUM(taskdaily.DAILY_COUNT),0) DAILY_COUNT,
+		IFNULL(SUM(taskdaily.MONEY_COUNT),0) DAILY_MONEY_COUNT
+		FROM
+		b_week_emp_task weekTask
+		LEFT JOIN (
+		SELECT
+		B_WEEK_EMP_TASK_ID,
+		sum(daily.DAILY_COUNT) DAILY_COUNT,
+		sum(daily.MONEY_COUNT) MONEY_COUNT,
+		CUSTOM_NAME
+		FROM
+		b_daily_emp_task daily
+		WHERE
+		daily.ISDEL = 0
+		GROUP BY
+		B_WEEK_EMP_TASK_ID,
+		CUSTOM_NAME
+		) taskdaily ON (
+		taskdaily.B_WEEK_EMP_TASK_ID = weekTask.ID
+		)
+		LEFT JOIN B_MONTH_EMP_TARGET monthEmpTarget ON (
+		weekTask.B_MONTH_EMP_TARGET_ID = monthEmpTarget.ID
+		)
+		LEFT JOIN B_MONTH_DEPT_TASK monthDeptTarget ON (
+		monthEmpTarget.B_MONTH_DEPT_TASK_ID = monthDeptTarget.ID
+		)
+		LEFT JOIN B_YEAR_DEPT_TASK yearDeptTarget ON (
+		monthDeptTarget.B_YEAR_DEPT_TASK_ID = yearDeptTarget.ID
+		)
+		LEFT JOIN b_year_target target ON (
+		weekTask.B_YEAR_TARGET_CODE =
+		target.`CODE`
+		AND target.ISDEL != 1
+		)
+		LEFT JOIN bd_product product ON (
+		yearDeptTarget.PRODUCT_CODE =
+		product.PRODUCT_CODE
+		AND product.ISDEL != 1
+		)
+		LEFT JOIN bd_department dep ON (
+		dep.dept_code = weekTask.dept_code
+		AND
+		dep.ENABLED = 1
+		)
+		LEFT JOIN bd_customer cus ON (
+		cus.CUSTOMER_CODE =
+		yearDeptTarget.CUSTOMER_CODE
+		AND cus.isdel = 0
+		)
+		LEFT JOIN bd_employee employee ON weekTask.EMP_CODE = employee.EMP_CODE
+		WHERE
+		weekTask.ISDEL = 0
+		AND target.TARGET_TYPE = 'XSH'
+		AND weekTask. YEAR = DATE_FORMAT(#{date}, '%Y')
+		AND 1 = 1
+		AND 1 = 1
+		AND 1 = 1
+		GROUP BY
+		product.PRODUCT_NAME,
+		cus.CUSTOMER_NAME,
+		taskdaily.CUSTOM_NAME,
+		employee.EMP_NAME) a
+		GROUP BY a.PRODUCT_NAME
+	</select>
+	
+	
+	<select id="getUserForOpenId" parameterType="pd" resultType="pd">
+		SELECT
+			*
+		FROM
+			sys_user
+		WHERE
+			OPEN_ID IS NOT NULL
+		AND OPEN_ID != ''
+	</select>
+	
+	<!-- 日常任务提交情况 -->
+	<select id="getAllEmployee" parameterType="pd" resultType="pd">
+		SELECT A.*,
+        CASE  when 	A.FINISH_TIME='' THEN 1
+	          when 	A.FINISH_TIME!='' THEN 0 END as  num
+        FROM
+		(SELECT
+			bd_employee.EMP_NAME user1,
+			bd_employee.EMP_DEPARTMENT_NAME duty,
+		    p.datetime daily,
+			bd_employee.ID ,
+			bd_employee.EMP_CODE,
+			bd_employee.EMP_NAME,
+			bd_employee.EMP_DEPARTMENT_ID,
+			bd_employee.EMP_DEPARTMENT_NAME,
+			p.FINISH_TIME
+			
+			FROM bd_employee
+			LEFT JOIN position_daily_task p 
+			ON bd_employee.EMP_CODE=p.EMP_CODE AND  
+					  p.`status` != 'YW_CG' and 
+			 DATE_FORMAT(p.datetime, '%Y-%m-%d') = #{DATE}
+			 	WHERE
+			 	EMP_DEPARTMENT_ID in
+		        <foreach item="deptList" index="index" collection="deptList" open="(" separator="," close=")">
+					#{deptList}
+				</foreach>
+				 and ENABLED = 1)A
+				  ORDER BY num,A.EMP_DEPARTMENT_ID 
+			 
+	</select>
+	
+	<!-- 日常任务提交情况数量统计-->
+	<select id="getAllEmployeeCount" parameterType="pd" resultType="pd">
+		SELECT 
+			count(A.FINISH_TIME) YTJ,count(1) ZS
+        FROM
+			(SELECT
+				bd_employee.EMP_NAME user1,
+				bd_employee.EMP_DEPARTMENT_NAME duty,
+			    p.datetime daily,
+				bd_employee.ID ,
+				bd_employee.EMP_CODE,
+				bd_employee.EMP_NAME,
+				bd_employee.EMP_DEPARTMENT_ID,
+				bd_employee.EMP_DEPARTMENT_NAME,
+				p.FINISH_TIME
+			FROM bd_employee
+			LEFT JOIN position_daily_task p 
+				ON bd_employee.EMP_CODE=p.EMP_CODE 
+					AND  p.`status` != 'YW_CG' 
+					AND  DATE_FORMAT(p.datetime, '%Y-%m-%d') = #{DATE}
+			WHERE
+				EMP_DEPARTMENT_ID in
+		        <foreach item="deptList" index="index" collection="deptList" open="(" separator="," close=")">
+					#{deptList}
+				</foreach>
+				AND ENABLED = 1) A
+	</select>
+	<!-- 各类任务超期情况 ,SEND_DEPT_ID为发送人部门ID-->
+	<select id="getTimeout" parameterType="pd" resultType="pd">
+    SELECT CAST(@rownum:=@rownum+1 AS CHAR) AS rownum ,B.*
+	       FROM (SELECT @rownum:=0) r,
+	       (SELECT A.* FROM
+                (SELECT 
+				a.MAIN_EMP_NAME name,
+				(SELECT datediff(#{DATE},a.END_TIME)) days,
+				a.APPROVE_EMP_CODE EMP_CODE,
+				a.DEPT_ID DEPT_ID,
+				DATE_FORMAT(a.START_TIME, '%Y-%m-%d') START_TIME,
+				DATE_FORMAT(a.END_TIME, '%Y-%m-%d') END_TIME,
+				a.TASK_NAME activity,
+				'null' project,
+				1 num,
+				#{DATE} DATE,
+				a.DEPT_ID SEND_DEPT_ID,
+				#{EMP_CODE} SEND_EMP_CODE
+				FROM 
+				daily_task_information a ,daily_task_information_detail b
+				WHERE a.ID=b.DAILY_TASK_ID
+				AND a.`STATUS` = 'YW_YSX' AND a.END_TIME  &lt; #{DATE}  AND b.`STATUS` = 'YW_YSX'
+
+        UNION ALL
+                SELECT
+					(
+						SELECT
+							e.EMP_NAME
+						FROM
+							bd_employee e
+						WHERE
+							e.EMP_CODE = t.EMP_CODE 
+					) name,
+				  (SELECT datediff(#{DATE},t.END_DATE)) days,
+				    t.EMP_CODE EMP_CODE,
+				    t.DEPT_ID DEPT_ID,
+					t.START_DATE START_TIME,
+					t.END_DATE END_TIME,
+					t. NAME activity,
+				    c_project.NAME 
+                    project,
+                    0 num,
+                    #{DATE} DATE, 
+                    bd_department.ID SEND_DEPT_ID,
+                    #{EMP_CODE} SEND_EMP_CODE
+				FROM
+					(
+						SELECT
+							cEvent.ID 
+							eventID,
+							cEvent.C_PROJECT_CODE,
+							C_PROJECT_NODE_ID,
+							cEvent. NAME,
+							cEvent.START_DATE,
+							cEvent.END_DATE,
+							bd_department.ID DEPT_ID,
+							cEvent.EMP_CODE,
+							(
+								SELECT
+									IFNULL(sum(task.FINISH_PERCENT), 0)
+								FROM
+									c_daily_emp_task task		       
+								WHERE
+									task.ISDEL = 0
+								AND task.C_PROJECT_EVENT_ID = cEvent.ID 
+							) commitPercent
+						FROM
+							c_project_event cEvent LEFT JOIN bd_department ON bd_department.DEPT_CODE=cEvent.DEPT_CODE
+						WHERE
+							cEvent.ISDEL = 0
+						AND cEvent. STATUS = 'YW_YSX'
+					) t,
+				  c_project LEFT JOIN  bd_department ON bd_department.DEPT_CODE=  c_project.DEPT_CODE
+				WHERE
+					t.commitPercent  &lt; 100 AND t.EMP_CODE not in(7777,6666)
+				AND t.END_DATE  &lt; DATE_FORMAT(#{DATE}, '%Y-%m-%d')AND
+				    t.C_PROJECT_CODE=c_project.CODE
+				) A
+               WHERE A.EMP_CODE IN  
+				(select 
+			     EMP_CODE EMP_CODE
+		         from 
+			    bd_employee 
+		        where 
+	        	EMP_DEPARTMENT_ID in
+		        <foreach item="deptList" index="index" collection="deptList" open="(" separator="," close=")">
+					#{deptList}
+				</foreach>
+		        and ENABLED = 1) 
+		        ORDER BY num desc,days desc ) B
+	</select>
+	
+		<!-- 各类任务超期情况 存入历史表 ,SEND_DEPT_ID为发送人部门ID-->
+	<insert id="Timeout_history" parameterType="java.util.List" flushCache="false">
+        INSERT INTO timeout_history
+        (rownum,
+        name,
+        days,
+        EMP_CODE,
+        DEPT_ID,
+        START_TIME,
+        END_TIME,
+        activity,
+        project,
+        num ,
+        DATE)
+        VALUES
+        <foreach item="list" index="index" collection="list" separator=",">  
+           ( #{list.rownum} ,
+             #{list.name},
+             #{list.days},
+             #{list.EMP_CODE},
+             #{list.DEPT_ID},
+             #{list.START_TIME},
+             #{list.END_TIME},
+             #{list.activity},
+             #{list.project},
+             #{list.num},
+             #{list.DATE} )  
+        </foreach>   
+    </insert>
+	
+	<!-- 各类任务超期情况查询历史表 ,SEND_DEPT_ID为发送人部门ID-->
+	<select id="getTimeout_history" parameterType="pd" resultType="pd">
+	        SELECT * FROM timeout_history  WHERE DATE = #{DATE}  AND DEPT_ID in
+		        <foreach item="SEND_DEPT_ID" index="index" collection="SEND_DEPT_ID" open="(" separator="," close=")">
+					#{SEND_DEPT_ID}
+				</foreach> 
+	</select>
+	 
+	<!-- 周积分排名情况 -->
+     <select id="getWeeklysummary" parameterType="pd" resultType="pd">
+     
+     SELECT CAST(@rownum:=@rownum+1 AS CHAR) AS rownum ,A.*
+				FROM (SELECT @rownum:=0) r,
+         (SELECT
+		    *, CAST((
+		        PROJECT_SCORE + DAILY_SCORE + WORKORDER_SCORE + WORKORDER_SERVICE_SCORE + FLOW_SCORE
+		    )  AS SIGNED) SCORE_SUM
+		FROM
+		      (
+		        SELECT
+		            e.EMP_CODE,
+		            e.EMP_NAME,
+		            dept.DEPT_NAME,
+		            posi.GRADE_NAME,
+		            CAST(IFNULL(
+		                (
+		                    SELECT
+		                        SUM(eve.SCORE*(select AVG(acc.SCORE)ASCORE from project_acceptance acc where acc.PROJECT_ID=project.ID)*0.1) SCORE
+		                    FROM
+		                        c_project_event eve
+		                        LEFT JOIN c_project project on eve.C_PROJECT_CODE=project.`CODE`
+		                    WHERE
+		                        eve.EMP_CODE = e.EMP_CODE
+		                    	and eve.isdel=0
+		                    	and project.isdel=0
+		                    	and project.`STATUS`='YW_YWB'
+		                        AND (select MAX(acc.UPDATE_TIME)UPDATE_TIME from project_acceptance acc where acc.PROJECT_ID=project.ID) &gt;= #{DATES}
+			                    AND (select MAX(acc.UPDATE_TIME)UPDATE_TIME from project_acceptance acc where acc.PROJECT_ID=project.ID) &lt;= #{DATE}
+			                   ),
+		                0
+		            ) AS SIGNED) PROJECT_SCORE,
+		             CAST(IFNULL(
+		                (
+		                    SELECT
+		                        sum(daily.SCORE)
+		                    FROM
+		                        position_daily_task daily
+		                    WHERE
+		                        daily.EMP_CODE = e.EMP_CODE
+		                    AND daily.score_date &gt;= #{DATES}
+		                    AND daily.score_date &lt;= #{DATE}
+		                 ),
+		                0
+		            ) AS SIGNED) DAILY_SCORE,
+		            CAST(IFNULL(
+		                (
+		                    SELECT
+		                        sum(workorder.SCORE)
+		                    FROM
+		                        daily_task_information_detail workorder,
+		                        daily_task_information work
+		                    WHERE
+		                        workorder.EMP_ID = e.ID
+		                    AND work.ID = workorder.DAILY_TASK_ID
+		                    AND work.isService != 1
+		                    AND workorder.score_date &gt;= #{DATES}
+		                    AND workorder.score_date &lt;= #{DATE} 
+		                  ),
+		                0
+		            ) AS SIGNED) WORKORDER_SCORE,
+		             CAST(IFNULL(
+                        (
+                            SELECT
+                                sum(workorder.SCORE)
+                            FROM
+                                daily_task_information_detail workorder,
+                                daily_task_information work
+                            WHERE
+                                workorder.EMP_ID = e.ID
+                            AND work.ID = workorder.DAILY_TASK_ID
+                            AND work.isService = 1
+                            AND workorder.score_date &gt;= #{DATES}
+		                    AND workorder.score_date &lt;= #{DATE}
+		                  ),
+                        0
+                          ) AS SIGNED) WORKORDER_SERVICE_SCORE,
+		                CAST( IFNULL(
+		                (
+		                    SELECT
+		                        SUM(his.SCORE)
+		                    FROM
+		                        flow_work_history his
+		                    WHERE
+		                        his.OPERATOR_EMP_CODE = e.EMP_CODE
+		                    AND his.score_date &gt;= #{DATES}
+		                    AND his.score_date &lt;= #{DATE}
+		                  ),
+				                0
+				            ) AS SIGNED) FLOW_SCORE
+					        FROM
+					            bd_employee e
+					        LEFT JOIN bd_department dept ON e.EMP_DEPARTMENT_ID = dept.ID
+					        LEFT JOIN bd_position_level posi ON e.EMP_GRADE_ID = posi.ID
+					        where 1 = 1 and e.EMP_CODE in (select NUMBER from sys_user where DEPT_ID is not null )
+					        and e.ENABLED=1
+				         	and e.EMP_DEPARTMENT_ID in
+					        <foreach item="deptList1" index="index" collection="deptList1" open="(" separator="," close=")">
+								#{deptList1}
+							</foreach>
+		                ) AS result
+					     order by SCORE_SUM desc)A
+					      
+     </select>
+</mapper>

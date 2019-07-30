@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WorkBook>
+<Version>6.5</Version>
+<XMLVersion>FR_XML_CDATA_WEBLOGIC_BUG_20091127</XMLVersion>
+<TableDataMap>
+<TableData name="order" class="com.fr.data.impl.EmbeddedTableData">
+<Parameters>
+</Parameters>
+<Semantic>
+<Dictionary class="com.fr.data.impl.DatabaseDictionary">
+<FormulaDictAttr ki="0" vi="0"></FormulaDictAttr>
+<DBDictAttr tableName="" schemaName="" ki="0" vi="0"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+</Connection></Dictionary></Semantic>
+<ColumnNames><![CDATA[ID,,.,,approveDate,,.,,OrderDate,,.,,Sales,,.,,Customer,,.,,CustomerID,,.,,approve,,.,,Comment,,.,,ShipDate,,.,,ShipAdmin]]></ColumnNames><ColumnTypes><![CDATA[class java.lang.String,class java.lang.String,class java.lang.String,class java.lang.String,class java.lang.String,class java.lang.String,class java.lang.String,class java.lang.String,class java.lang.String,class java.lang.String]]></ColumnTypes><RowData>
+<![CDATA[L!WO%!DsO8i:ZUjr.1h'k76qQF4h+*UPnr0-F4PHdJ-hJO\uN48Qkk*Af;>*<c@Fe:E:.j:^
+'0"$8P&h/7S-,@>8N]AooA/Im)F
+!&Q-D*-j.&AY^tMS-`jgFHf;A`NcmkHMk[J@T^=kVP-\G3
+YU'=CJ=d8/Gb6-(V[CPa,!D*RrcP5Ujq_U,5;bY=[9\knu\X$;^:;
+$)FHs@BU0D2r8i,*4;K
+@Fh'`Vs_5lj@hmZ53*!)do7O!bUjRP:1/%!<~
+
+]]>
+</RowData>
+</TableData>
+</TableDataMap>
+<ReportSettings headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.27" left="0.7499999999999999" bottom="0.27" right="0.7499999999999999" />
+</ReportSettings>
+<ReportParameterAttr>
+<Attributes showWindow="false" delayPlaying="true" windowPosition="1" align="1" />
+<PWTitle><![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.27" left="0.75" bottom="0.27" right="0.75" />
+</ReportSettings>
+<ReportPageAttr>
+<HR F="0" T="1" /></ReportPageAttr>
+<Header reportPageType="0">
+<Background name="NullBackground" />
+<LeftList>
+</LeftList>
+<CenterList>
+</CenterList>
+<RightList>
+</RightList>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground" />
+<LeftList>
+</LeftList>
+<CenterList>
+</CenterList>
+<RightList>
+</RightList>
+</Footer>
+<RowHeight defaultValue="19">
+<![CDATA[46,19,26,26,19,19,19,19,19,19,19,19,19,44,19,26,26,19]]>
+</RowHeight>
+<ColumnWidth defaultValue="72">
+<![CDATA[33,72,108,72,100,72,72,72,39,72,72]]>
+</ColumnWidth>
+<CellElementList>
+<C c="1" r="0" cs="7" s="0"><O><![CDATA[产品发货单]]></O>
+</C>
+<C c="8" r="0"></C>
+<C c="0" r="2"><O><![CDATA[]]></O>
+</C>
+<C c="1" r="2"><O><![CDATA[订单编号]]></O>
+<Expand leftParentDefault="false" left="C3" />
+</C>
+<C c="2" r="2" s="1"><O t="DSColumn"><Attributes dsName="order" columnName="ID" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="3" r="2"><O><![CDATA[接单日期]]></O>
+</C>
+<C c="4" r="2" s="2"><O t="DSColumn"><Attributes dsName="order" columnName="OrderDate" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="5" r="2"><O><![CDATA[销售员]]></O>
+</C>
+<C c="6" r="2" cs="2" s="3"><O t="DSColumn"><Attributes dsName="order" columnName="Sales" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="1" r="3"><O><![CDATA[客户名称]]></O>
+</C>
+<C c="2" r="3" cs="3" s="1"><O t="DSColumn"><Attributes dsName="order" columnName="Customer" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" leftParentDefault="false" left="C3" />
+</C>
+<C c="5" r="3"><O><![CDATA[客户编号]]></O>
+</C>
+<C c="6" r="3" cs="2" s="1"><O t="DSColumn"><Attributes dsName="order" columnName="CustomerID" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="1" r="5" cs="7" rs="9" s="4"><O t="SubReport"><SubReportAttr />
+<packee class="com.fr.report.LinkReportTemplate"><Path><![CDATA[demo/basic/subReport.cpt]]></Path>
+</packee><KVS>
+<KV key="customerID">
+<O t="Formula" class="Formula"><Attributes><![CDATA[=G4]]></Attributes></O>
+</KV>
+</KVS>
+</O>
+</C>
+<C c="8" r="5"></C>
+<C c="8" r="6"></C>
+<C c="8" r="7"></C>
+<C c="8" r="8"></C>
+<C c="8" r="9"></C>
+<C c="8" r="10"></C>
+<C c="8" r="11"></C>
+<C c="8" r="12"></C>
+<C c="1" r="15"><O><![CDATA[审批日期：]]></O>
+</C>
+<C c="2" r="15" s="2"><O t="DSColumn"><Attributes dsName="order" columnName="approveDate" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" leftParentDefault="false" left="C3" />
+</C>
+<C c="3" r="15"><O><![CDATA[审批人：]]></O>
+</C>
+<C c="4" r="15" s="1"><O t="DSColumn"><Attributes dsName="order" columnName="approve" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="5" r="15"><O><![CDATA[审批意见：]]></O>
+</C>
+<C c="6" r="15" cs="2" s="1"><O t="DSColumn"><Attributes dsName="order" columnName="Comment" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="8" r="15"></C>
+<C c="1" r="16"><O><![CDATA[发货日期：]]></O>
+</C>
+<C c="2" r="16" s="5"><O t="DSColumn"><Attributes dsName="order" columnName="ShipDate" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" leftParentDefault="false" left="C3" />
+</C>
+<C c="3" r="16"><O><![CDATA[发货人：]]></O>
+</C>
+<C c="4" r="16" s="6"><O t="DSColumn"><Attributes dsName="order" columnName="ShipAdmin" />
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+</RG>
+</O>
+<Expand dir="0" />
+</C>
+<C c="5" r="16"></C>
+<C c="6" r="16"></C>
+<C c="7" r="16"><CellInsertPolicy></CellInsertPolicy><CellPageAttr pageAfterRow="true" /></C>
+</CellElementList>
+</Report>
+<StyleList>
+<Style style_name="Title" />
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="1" size="12" />
+<Background name="NullBackground" />
+<Border><Bottom style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style horizontal_alignment="0">
+<Format class="java.text.SimpleDateFormat"><![CDATA[yyyy-MM-dd]]></Format>
+<FRFont name="SimSun" style="1" size="12" />
+<Background name="NullBackground" />
+<Border><Bottom style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="12" />
+<Background name="NullBackground" />
+<Border><Bottom style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style>
+<FRFont name="SimSun" style="0" size="12" />
+<Background name="NullBackground" />
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /><Left style="1" color="-6894375"
+ /><Right style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style horizontal_alignment="0">
+<Format class="java.text.SimpleDateFormat"><![CDATA[yyyy-MM-dd]]></Format>
+<FRFont name="SimSun" style="1" size="12" />
+<Background name="NullBackground" />
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /></Border>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="1" size="12" />
+<Background name="NullBackground" />
+<Border><Top style="1" color="-6894375"
+ /><Bottom style="1" color="-6894375"
+ /></Border>
+</Style>
+</StyleList>
+</WorkBook>

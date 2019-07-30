@@ -1,0 +1,9 @@
+#myTabContent .bootgrid-table td{
+    text-overflow: ellipsis !important;;
+    white-space: nowrap !important;;
+    overflow: hidden !important;;
+}
+
+#myTabContent .bootgrid-table{
+    table-layout: fixed !important;;
+}

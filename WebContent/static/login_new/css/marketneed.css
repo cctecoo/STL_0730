@@ -1,0 +1,514 @@
+.marketcriclecg{
+	    width: 22px !important;    
+	    height: 22px !important;   
+	    background:#81c903;    
+	    -moz-border-radius: 11px;    
+	    -webkit-border-radius: 11px;    
+	    border-radius: 11px;
+	    color: white;
+	    font-size: 17px;
+	    text-align:center;
+	    display: block;
+	    line-height: 22px;
+	     border: 1px solid #81c903;
+}
+.marketcriclecw{
+	   width: 22px !important;    
+	    height: 22px !important;   
+	    background:white;    
+	    -moz-border-radius: 11px;    
+	    -webkit-border-radius: 11px;    
+	    border-radius: 11px;
+	    border: 1px solid #d0d0d0;
+	    color:#d0d0d0;
+	    font-size: 17px;
+	    text-align:center;
+	    line-height: 22px;
+}
+.showscheme{
+	display:none;
+}
+.showscheme1{
+	display:none;
+	
+}
+.showscheme1 td{
+	border-bottom: 1px solid #fff;
+}
+.borderhis-top{
+		border-top:1px dashed #ACC1D4!important;
+}
+.showschemecss{
+	background-color:#d5dee7 !important;
+}
+.fitheight{
+	height: 44px;
+}
+
+.marketneed{
+	float: left;
+	width: 931px;
+}
+.marketinfo{
+	overflow: hidden;
+	background: white;
+}
+.marketlike{
+	float: right;
+	width: 251px;
+}
+.marketimage{
+	float: left;
+	margin-left: 41px;
+	margin-top:32px;
+	width: 100px;
+	height: 100px;
+	border:1px solid #CCCCCC;	
+}
+.marketdetial{
+	float: left;
+    font-size:14px;
+    width: 788px;
+}
+.detialdiv{
+    margin-top: 16px;
+    margin-left: 21px;
+    overflow: hidden;
+}
+.detialdiv li{
+   margin-bottom: 16px;
+   width: 50%;
+	float: left;
+}
+.ditialone{
+	margin-top: 32px;
+	margin-bottom: 32px;
+}
+.detialcontent{
+	margin-top:20px;
+	font-size: 12px;
+	margin-left: 8px;
+	overflow: hidden;
+}
+.detialcontent li{
+	padding-bottom: 18px;
+	
+}
+.marketdescribe{
+	background:#FFFFFF;
+	
+}
+.detialcontent .contentlist li{
+	float:left;
+	width: 33%;
+}
+.ditialtwo{
+	width: 50%;
+}
+.ditialfour{
+	width: 50%;
+}
+.detialfont{
+	color:#0243DF;
+	text-decoration: underline;
+}
+.detialthrough{
+	text-decoration:line-through;
+	border-bottom:1px dashed #111;
+}
+.detialaccep{
+float:left;
+width: 55px;
+height: 25px;
+border:1px solid #CCCCCC;
+border-radius: 3px;
+background-color: #34CC67;
+color:#ffffff;
+line-height: 25px;
+}
+.detialnoaccepct{
+float:right;
+width: 55px;
+height: 25px;
+border:1px solid #CCCCCC;
+border-radius: 3px;
+background-color: #FF3300;
+line-height: 25px;
+color:#ffffff;
+}
+.marketlike-con{
+	margin-left: 50px;
+    margin-top: 10px;
+	height:181px;
+	width: 153px;
+	border:1px solid #ccc;
+}
+.marketlike{
+	background: #ffffff;	
+	padding-bottom: 10px;
+    font-size: 12px;
+}
+.marketlike-img{
+	background-color: #F5F5F5;
+	height:41px;
+	line-height: 41px;
+	text-align: center;
+}
+.markettd{
+	padding: 12px 5px;
+	font-size: 12px;
+	border-top: 2px solid #fff;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 197px;
+	border-top: 0; 
+	background-color:#d5dee7;	
+}
+.marketpop{
+	color:#0242E0;
+	text-decoration:underline;
+}
+.loginbottom{
+color: #4c4c4c;
+font-size: 12px;
+height: 44px;
+}
+.markbottom{
+overflow: hidden;
+width: 80%;
+padding-top: 13px;
+}
+/*表格部分*/
+.marketlistli .topic2 td {
+	padding: 16px 5px !important;
+	font-size: 14px;
+}
+
+.marketlistli tr:first-child td {
+	border-top: none;
+	border-bottom: none;
+}
+.marketsubmit{
+	height:50px;
+	width: 140px;
+	color:#FFFFFF;
+	background:#0059A9;
+	margin-left: 10px;
+	border-radius: 3px;
+	line-height: 50px;
+	text-align: center;
+	font-size: 14px;
+}
+.detialsubmit{
+	background: #FFFFFF;
+	padding-bottom: 62px;
+}
+.detialnew-need{
+	height: 35px;
+	color: #ffffff;
+	background: #34CC67;
+	line-height: 35px;
+	text-align: center;
+
+}
+.detialnew-font{
+	width: 147px;
+	height: 78px;
+	line-height:2em;
+	word-wrap:break-word;
+	text-overflow: ellipsis;
+	overflow:hidden;   
+}
+.detialnew-bottom{
+	background: #EBEBEB;
+	line-height: 35px;
+	text-align: center;
+}
+.detialchange-need{
+	height: 35px;
+	color: #ffffff;
+	background:#32CCFE;
+	line-height: 35px;
+	text-align: center;
+}
+.detialother-need{
+	height: 35px;
+	color: #ffffff;
+	background:#D6D6D6;
+	line-height: 35px;
+	text-align: center;
+}
+.marketdetial-tab{
+		width:50% ;
+		overflow: hidden;
+		height: 62px;
+}
+.marketdetial-tab li{
+	float:left;
+	width:50% ;
+	line-height:62px ;
+	text-align: center;
+}
+
+.market-triangle{
+	position: absolute;
+    top: 256px;
+	 width: 0;    
+	 height: 0;    
+	 border-left: 10px solid transparent;    
+	 border-right: 10px solid transparent;    
+	 border-bottom: 10px solid #F5F5F5;
+}
+.marketwey-li{
+	margin: 24px 0 24px 16px;
+	font-size: 12px;
+	
+}
+.marketwey-li li{
+	margin-bottom: 16px;
+	overflow: hidden;
+}
+.marketwey-colorg{
+	color:#B2B2B2;
+	float: left;
+}
+.marketwey-colorb{
+	float: left;
+}
+.dobbte{
+	border-bottom: 1px dashed #B2B2B2;
+}
+.newneedimg{
+	height: 30px;
+	width: 69px !important;
+	line-height: 30px;
+	text-align: center;
+	color: #FFFFFF;
+	border-radius: 3px;
+	background: #34CC67;
+	border:1px solid #34cc67;
+	float: left;
+	margin-left: 14px;
+	margin-right: 7px;
+}
+.hideneedimg{
+	height: 30px;
+	width: 98px !important;
+	line-height: 30px;
+	text-align: center;
+	color: #005ABB;
+	border:1px solid #005AA9;
+	border-radius: 3px;
+	float: left;
+}
+.marketpopdetial{
+	overflow: hidden;
+	font-size: 14px;
+	font-family: Simson;
+	margin-left: 22px;
+	margin-top: 25px;
+}
+.marketpopdetial li{
+	float:left;
+	width: 50%;
+	overflow: hidden;
+	margin-bottom: 16px;
+}
+.marketpopdetial li div{
+	float:left;
+}
+.wrapContentleft2{
+float: left;
+margin:12px 0 14px 0;
+}
+.marketpop-bot{
+	overflow: hidden;
+	font-size: 12px;
+	font-family: Simson;
+	margin-left: 22px;
+	margin-top: 25px;
+}
+.wrapContentright2{
+
+}
+.wlinput{
+height: 42px;
+width: 280px;
+border: 1px solid #ccc;
+color: #aaaaaa;
+}
+.poptextarea{
+float:left;
+height: 80px;
+width: 780px;
+padding: 10px;
+color: #aaaaaa;
+border: 1px solid #ccc;;
+}
+.poparea-text{
+float: left;
+}
+.popupload{
+border:1px solid #CCCCCC;
+border-radius: 3px;
+height:40px;
+width: 120px;
+text-align: center;
+line-height: 40px;
+}
+.marketpopdetial-pop{
+	overflow: hidden;
+	font-size: 12px;
+	font-family: Simson;
+	margin-left: 22px;
+	margin-top: 10px;
+	margin-right: 22px;
+}
+.poplist span{
+	float:left;
+}
+.poplist span.font{
+	margin-left: 10px;
+    margin-right: 10px;
+	font-size: 12px;
+}
+.poplist span.color{
+	color:#0063BE
+}
+.marketpopdetial-pop .heig{
+	margin-bottom: 20px;
+	overflow: hidden;	
+	
+}
+.market-login{
+background: #0059A9;
+color: #FFFFFF;
+height: 47px;
+width: 140px;
+float:right;
+border-radius: 3px;
+line-height: 47px;
+text-align: center;
+font-size:14px;
+}
+/*.market-login2{
+background: #0059A9;
+color: #FFFFFF;
+height: 47px;
+width: 140px;
+float:right;
+border-radius: 3px;
+line-height: 47px;
+text-align: center;
+font-size:14px;
+}*/
+.detialreadno{
+	height: 28px;
+    width: 60px;
+    border: 2px solid #FF3200;
+    color:#FF3200;
+    text-align: center;
+    line-height: 28px;
+}
+.detialaccep2{
+float:left;
+width: 35px;
+height: 25px;
+border-radius: 3px
+}
+.detialnoaccepct2{
+float:right;
+width: 35px;
+height: 25px;
+}
+.marketnoread-pop{
+	border-top: 0; 
+	border-top:1px dashed #ACC1D4!important;
+}
+.marketpop{
+	color:#0242E0;
+	text-decoration:underline;
+}
+.projectcss{
+	margin-top: 10px; 
+	background: white; 
+	padding-bottom: 10px;
+}
+.detialnewneed{
+	margin-top: 10px;
+	margin-left: 6px;
+	height: 101px;
+}
+.detialchangeneed{
+	margin-top: 10px;
+	margin-left: 6px;
+	height: 101px;
+}
+.detialotherneed{
+	margin-top: 10px;
+	margin-left: 6px;
+	height: 101px;
+}
+.modulebox.moduleboxmid ul li {
+float: left;
+margin-right: 10px;
+display: inline;
+}
+.modulebox.moduleboxmid ul li input {
+display: none;
+}
+.modulebox.moduleboxmid ul li a.current {
+background: url(../images/right-icon.png) no-repeat 100% 100%;
+border: 2px solid #035aa9;
+background-color: #fff;
+}
+.modulebox.moduleboxmid ul li a span {
+color: #4b4b4b;
+}
+.modulebox.moduleboxmid ul li a {
+float: left;
+background: #fff;
+font-size: 14px;
+border: 1px solid #ccc;
+height: 14px;
+line-height: 14px;
+padding: 6px 9px;
+display: block;
+}
+.productmessage{
+background: #FFFFFF;
+margin-top: 10px;
+font-size: 14px;
+}
+.changeposition{
+	margin-left: 143px;
+}
+.detialnum{
+	float: left;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+.popcss{
+clear:both;
+margin-bottom: 10px;
+}
+.marketinfopop,.marketinfopop1{
+	position:relative;
+	bottom:300px;
+}
+.marketinfopop1 .Contentstyle{
+	font-family: simnon;
+
+}
+.marketinfopop1 .rowStyle{
+margin-left: 6px;
+}
+.marketinfopop1 .wrapStyle .wrapContent span.contentText{
+	line-height: 20px;
+}
+.detialcontent .wrapStyle .wrapContent span.contentText{
+	}
+.detialsubmit .rowStyle{
+	margin:0;
+}

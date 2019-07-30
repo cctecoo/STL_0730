@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="repositoryMapper">
+	<!-- 查询表格数据 -->
+	<select id="listPage" resultType="pd" parameterType="page">
+		(select
+		  doc.ID, 
+		  doc.FILENAME,
+		  doc.FILENAME_SERVER,
+		  doc.FILEPATH,
+		  doc.DEPT_ID,
+		  doc.DEPT_NAME,
+		  doc.REMARK,
+		  doc.UPLOADTIME,
+		  doc.UPLOADPERSON,
+		  suser.`NAME`
+		from 
+			repository_doc doc 
+		left join
+			sys_user suser on doc.UPLOADPERSON_ID = suser.USER_ID
+		where
+		doc.ISDEL = '0'
+		and doc.DOC_TYPE='1'
+		and doc.uploadperson_id=#{pd.UPLOADPERSON_ID} and doc.id in(select doc_id from repository_issued issued where issued.isdel='0')
+		<if test="pd.DEPT_NAME != null and pd.DEPT_NAME != ''">
+			and
+			doc.DEPT_NAME like CONCAT('%',#{pd.DEPT_NAME},'%') 
+		</if>
+		 <if test="pd.UPLOADTIME != null and pd.UPLOADTIME != ''">
+            AND doc.date_format(UPLOADTIME,"%Y-%m-%d") = #{pd.UPLOADTIME}
+        </if>
+        )UNION(
+        	select
+			  doc.ID, 
+			  doc.FILENAME,
+			  doc.FILENAME_SERVER,
+			  doc.FILEPATH,
+			  doc.DEPT_ID,
+			  doc.DEPT_NAME,
+			  doc.REMARK,
+			  doc.UPLOADTIME,
+			  doc.UPLOADPERSON,
+			  suser.`NAME`
+			from 
+				repository_doc doc 
+			left join 
+				repository_issued issued on doc.id=issued.doc_id
+			left join
+				sys_user suser on doc.UPLOADPERSON_ID = suser.USER_ID
+			where
+			doc.ISDEL = '0'
+			and doc.DOC_TYPE='1'
+			and issued.isdel='0' and issued.emp_code=#{pd.EMP_CODE}
+			<if test="pd.DEPT_NAME != null and pd.DEPT_NAME != ''">
+				and
+				doc.DEPT_NAME like CONCAT('%',#{pd.DEPT_NAME},'%') 
+			</if>
+			 <if test="pd.UPLOADTIME != null and pd.UPLOADTIME != ''">
+	            AND doc.date_format(UPLOADTIME,"%Y-%m-%d") = #{pd.UPLOADTIME}
+	        </if>
+        )
+		<choose>
+			<when test="pd.sortKey != null and pd.sortKey != ''">
+				order by ${pd.sortKey} ${pd.sortMethod}
+			</when>
+			<otherwise>
+				order by UPLOADTIME
+			</otherwise>
+		</choose>
+	</select>
+<!-- 	新增知识库数据 -->
+	<insert id="save" parameterType="pd" keyProperty="ID"  useGeneratedKeys="true">
+		INSERT INTO
+		repository_doc
+		(FILENAME,FILENAME_SERVER,FILEPATH,DEPT_ID,DEPT_NAME,REMARK,UPLOADTIME,UPLOADPERSON,UPLOADPERSON_ID,ISDEL,DOC_TYPE,DEPT_CLASSIFY)
+		VALUES(
+		#{FILENAME},#{FILENAME_SERVER},#{FILEPATH},#{DEPT_ID},#{DEPT_NAME},#{REMARK},#{UPLOADTIME},#{UPLOADPERSON},#{UPLOADPERSON_ID},0,#{DOC_TYPE},#{DEPT_CLASSIFY}
+		)
+
+	</insert>
+<!-- 	根据id查询数据 -->
+		<select id="findById" parameterType="pd" resultType="pd">
+			select * from repository_doc where ISDEL = 0
+			<if test="ID != null and ID != ''">
+				and ID = #{ID}
+			</if>
+		</select>
+
+
+		<!-- 逻辑删除数据 -->
+		<update id="delete" parameterType="pd">
+			update repository_doc
+			set ISDEL = 1
+			<if test="ID!=null and ID!=''">
+			where ID = #{ID}
+			</if>
+		</update>
+		
+		<insert id="saveIssued" parameterType="pd">
+			insert into 
+				repository_issued(doc_id,emp_id,emp_code,issued_time)
+			values(#{ID},#{EMP_ID},#{EMP_CODE},#{ISSUED_TIME})
+		</insert>
+		
+		<!-- 批量保存数据 -->
+		<insert id="batchSaveIssued" parameterType="pd">
+			insert into 
+				repository_issued(doc_id,emp_id,emp_code,issued_time)
+			values
+			<foreach collection="list" separator="," item="issue">
+				(#{issue.ID}, #{issue.EMP_ID}, #{issue.EMP_CODE}, now())
+			</foreach>
+		</insert>
+		
+		<!-- 批量保存共享文件 -->
+		<insert id="batchSaveShare" parameterType="pd">
+			insert into 
+				repository_share(doc_id,share_dept_id,issued_time)
+			values
+			<foreach collection="list" separator="," item="share">
+				(#{share.ID}, #{share.SHARE_DEPT_ID}, now())
+			</foreach>
+		</insert>
+		
+		<update id="deleteIssued" parameterType="pd">
+			update repository_issued
+			set ISDEL = '1'
+			<if test="ID!=null and ID!=''">
+			where DOC_ID = #{ID}
+			</if>
+		</update>
+		
+		<!-- 删除共享部门 -->
+		<update id="deleteShareDept" parameterType="pd">
+			update repository_share
+			set isdel = '1'
+			where doc_id = #{ID}
+		</update>
+		
+		<update id="deleteIssuedExceptOp" parameterType="pd">
+			update repository_issued
+			set ISDEL = '1'
+			where DOC_ID = #{ID}
+				and OPINION is null
+		</update>
+		
+		<select id="findIssuedById" parameterType="pd" resultType="pd">
+			select * 
+			from 
+				repository_issued
+			where 
+				isdel='0'
+				and doc_id=#{DOC_ID}
+				and emp_code=#{EMP_CODE}
+		</select>
+		
+		<select id="findIssuedByDocId" parameterType="pd" resultType="pd">
+			select * 
+			from 
+				repository_issued
+			where 
+				isdel='0'
+				and doc_id=#{ID}
+		</select>
+		
+		<update id="updateIssued" parameterType="pd">
+			update
+				repository_issued
+			set
+				opinion=#{OPINION},
+				last_update_time=#{UPDATETIME}
+			where 
+				isdel='0'
+				and doc_id=#{DOC_ID}
+				and emp_code=#{EMP_CODE}
+		</update>
+		
+		<select id="findIssuedOpinions" parameterType="pd" resultType="pd">
+			select 
+				issued.id, issued.doc_id, issued.emp_id, issued.emp_code, issued.issued_time,
+				issued.opinion, issued.isdel, DATE_FORMAT(issued.last_update_time, '%Y-%m-%d %T') last_update_time, emp.emp_name 
+			from 
+				repository_issued issued LEFT JOIN bd_employee emp on issued.emp_code=emp.EMP_CODE 
+			where 
+				issued.doc_id=#{DOC_ID}
+				and issued.opinion is not null 
+			order by last_update_time;
+		</select>
+		
+		<!-- 查询共享文件 -->
+		<select id="findByDeptIdlistPage" resultType="pd" parameterType="page">
+			select 
+				doc.ID, 
+			  	doc.FILENAME,
+			  	doc.FILENAME_SERVER,
+			  	doc.FILEPATH,
+			  	doc.DEPT_ID,
+			  	doc.DEPT_NAME,
+			  	doc.REMARK,
+			  	doc.UPLOADTIME,
+			  	doc.UPLOADPERSON,
+			  	suser.NAME
+			from repository_doc doc
+			left join sys_user suser on suser.USER_ID = doc.UPLOADPERSON_ID
+			where  doc.ISDEL = '0' and doc.DOC_TYPE='${pd.DOC_TYPE}'
+			<if test="pd.DEPT_CLASSIFY != null and pd.DEPT_CLASSIFY != ''">
+				and doc.DEPT_CLASSIFY=#{pd.DEPT_CLASSIFY}
+			</if>
+			and (
+				doc.UPLOADPERSON_ID=#{pd.UPLOADPERSON_ID}
+				or 
+				doc.ID in (
+					select share.doc_id from repository_share share 
+					where share.isdel='0' and share.share_dept_id = #{pd.deptId}
+				)
+			)
+			<choose>
+				<when test="pd.sortKey != null and pd.sortKey != ''">
+					order by ${pd.sortKey} ${pd.sortMethod}
+				</when>
+				<otherwise>
+					order by doc.UPLOADTIME
+				</otherwise>
+			</choose>
+		</select>
+		
+		<!-- 查询文件共享的部门 -->
+		<select id="findSharedDeptByDocId" parameterType="pd" resultType="pd">
+			select * 
+			from 
+				repository_share
+			where 
+				isdel='0'
+				and doc_id=#{ID}
+		</select>
+		
+		<select id="hasExist" resultType="Integer" parameterType="pd">
+			select 
+				count(1) 
+			from 
+				repository_issued 
+			where 
+				doc_id = #{ID}
+				and isdel = 0 
+				and emp_id = #{EMP_ID}
+		</select>
+</mapper>

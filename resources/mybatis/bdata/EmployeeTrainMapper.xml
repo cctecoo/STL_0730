@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EmployeeTrainMapper">
+
+	<select id="findTrainlistPage" resultType="pd" parameterType="page">
+		select 
+			t.ID, t.EMP_CODE, t.TRAIN_CONTENT, t.TRAIN_DATE, t.TRAIN_ADDRESS, t.TRAIN_MODE,
+			t.TRAIN_TEACHER, t.LESSON_PERIOD, t.EVALUATION, t.TRAIN_RESULT, t.GRADE_CHANGE,
+			t.START_DATE, t.END_DATE, t.TRAIN_DATE_STR, t.STATUS, t.IS_DEL, t.CREATE_USER, 
+			t.CREATE_TIME, t.UPDATE_USER, t.UPDATE_TIME, e.EMP_NAME, e.EMP_DEPARTMENT_NAME,
+			s.NAME STATUS_NAME
+		from 
+			bd_emp_train t 
+		LEFT JOIN bd_employee e ON t.EMP_CODE=e.EMP_CODE
+		LEFT JOIN sys_status s on s.BIANMA=t.STATUS
+		WHERE 
+		t.IS_DEL=0 
+		<choose>
+			<when test="pd.selfEmpCode != null and pd.selfEmpCode != '' ">
+				and e.EMP_CODE = #{pd.selfEmpCode}
+			</when>
+			<otherwise>
+				and t.STATUS != 'YW_CG'
+				<if test="pd.findAll == null or pd.findAll == '' ">
+					and e.EMP_DEPARTMENT_ID  in
+					<foreach collection="pd.deptIdList" item="dept" open="(" separator="," close=")" >
+						${dept}
+					</foreach>
+				</if>
+			</otherwise>
+		</choose>
+		<if test="null != pd.name and '' != pd.name">
+			and e.EMP_NAME like "%"#{pd.name}"%"
+		</if>
+		<if test="null != pd.empCode and '' != pd.empCode">
+			and t.EMP_CODE = #{pd.empCode}
+		</if>
+		<if test="null != pd.deptId and '' != pd.deptId">
+			and E.EMP_DEPARTMENT_ID = #{pd.deptId}
+		</if>
+		<if test="null != pd.trainDate and '' != pd.trainDate">
+			<![CDATA[ and (t.START_DATE = #{pd.trainDate} or (t.START_DATE>=#{pd.trainDate} and t.END_DATE<=#{pd.trainDate})) ]]>
+		</if>
+		<if test="null != pd.trainTeacher and '' != pd.trainTeacher">
+			and t.TRAIN_TEACHER like "%"#{pd.trainTeacher}"%"
+		</if>
+		<if test="pd.empDeptId != null and pd.empDeptId!=''">
+			and e.EMP_DEPARTMENT_ID = #{pd.empDeptId}
+		</if>
+		<choose>
+			<when test="pd.sortKey != null and pd.sortKey != ''">
+				order by ${pd.sortKey} ${pd.sortMethod}
+			</when>
+			<otherwise>
+				order by t.START_DATE desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save" parameterType="pd" useGeneratedKeys="true" keyProperty="ID">
+		INSERT INTO 
+			bd_emp_train(EMP_CODE,TRAIN_CONTENT,
+						TRAIN_ADDRESS,TRAIN_MODE,
+						TRAIN_TEACHER,
+						<if test="LESSON_PERIOD != null and LESSON_PERIOD != ''">LESSON_PERIOD,</if>
+						<if test="TRAIN_RESULT != null and TRAIN_RESULT != ''">TRAIN_RESULT,</if>
+						<if test="GRADE_CHANGE != null and GRADE_CHANGE != ''">GRADE_CHANGE,</if>
+						START_DATE,
+						<if test="END_DATE != null and END_DATE != ''">END_DATE,</if>
+						<if test="TRAIN_DATE_STR != null and TRAIN_DATE_STR != ''">TRAIN_DATE_STR,</if>
+						CREATE_USER,CREATE_TIME)
+		VALUES(#{EMP_CODE},#{TRAIN_CONTENT},
+				#{TRAIN_ADDRESS},#{TRAIN_MODE},
+				#{TRAIN_TEACHER},
+				<if test="LESSON_PERIOD!=null and LESSON_PERIOD!=''">#{LESSON_PERIOD},</if>
+				<if test="TRAIN_RESULT!=null and TRAIN_RESULT!=''">#{TRAIN_RESULT},</if>
+				<if test="GRADE_CHANGE != null and GRADE_CHANGE != ''">#{GRADE_CHANGE},</if>
+				#{START_DATE},
+				<if test="END_DATE != null and END_DATE != ''">#{END_DATE},</if>
+				<if test="TRAIN_DATE_STR != null and TRAIN_DATE_STR != ''">#{TRAIN_DATE_STR},</if>
+				#{CREATE_USER},#{CREATE_TIME})
+	</insert>
+	
+	<!-- 批量新增员工培训记录 -->
+	<insert id="saveByBatch" parameterType="pd">
+		INSERT INTO 
+			bd_emp_train(EMP_CODE,TRAIN_CONTENT,TRAIN_DATE,TRAIN_ADDRESS,TRAIN_MODE,TRAIN_TEACHER,
+				LESSON_PERIOD,EVALUATION,TRAIN_RESULT,GRADE_CHANGE,START_DATE,END_DATE, 
+				TRAIN_DATE_STR,STATUS,CREATE_USER,CREATE_TIME)
+		VALUES
+		<foreach collection="list" item="item" separator=",">
+			(#{item.EMP_CODE},#{item.TRAIN_CONTENT},#{item.TRAIN_DATE},#{item.TRAIN_ADDRESS},#{item.TRAIN_MODE},#{item.TRAIN_TEACHER},
+				#{item.LESSON_PERIOD},#{item.EVALUATION},#{item.TRAIN_RESULT},#{item.GRADE_CHANGE},#{item.START_DATE},#{item.END_DATE},
+				#{item.TRAIN_DATE_STR},#{item.STATUS},#{item.CREATE_USER},#{item.CREATE_TIME})
+		</foreach>
+	</insert>
+	
+	<update id="edit" parameterType="pd">
+		UPDATE 
+			bd_emp_train 
+		SET 
+			EMP_CODE=#{EMP_CODE},TRAIN_CONTENT=#{TRAIN_CONTENT},
+			START_DATE=#{START_DATE},TRAIN_ADDRESS=#{TRAIN_ADDRESS},
+			TRAIN_MODE=#{TRAIN_MODE},TRAIN_TEACHER=#{TRAIN_TEACHER},
+			<if test="LESSON_PERIOD != null and LESSON_PERIOD !=''">LESSON_PERIOD=#{LESSON_PERIOD},</if>
+			<if test="TRAIN_RESULT != null and TRAIN_RESULT !=''">TRAIN_RESULT=#{TRAIN_RESULT},</if>
+			<if test="GRADE_CHANGE != null and GRADE_CHANGE !=''">GRADE_CHANGE=#{GRADE_CHANGE},</if>
+			START_DATE=#{START_DATE},
+			<if test="END_DATE != null and END_DATE !=''">END_DATE=#{END_DATE},</if>
+			<if test="TRAIN_DATE_STR != null and TRAIN_DATE_STR !=''">TRAIN_DATE_STR=#{TRAIN_DATE_STR},</if>
+			UPDATE_USER=#{UPDATE_USER},UPDATE_TIME=#{UPDATE_TIME}
+		WHERE
+			ID = #{ID}
+	</update>
+	
+	<!-- 删除单条记录 -->
+	<update id="deleteRecord" parameterType="pd">
+		UPDATE 
+			bd_emp_train 
+		SET 
+			IS_DEL = '1',
+			UPDATE_USER=#{UPDATE_USER},
+			UPDATE_TIME=#{UPDATE_TIME}
+		WHERE
+			ID = #{ID}
+	</update>
+	
+	<!-- 批量删除 -->
+	<update id="batchDeleteRecord" parameterType="pd">
+		UPDATE 
+			bd_emp_train 
+		SET 
+			IS_DEL = '1',
+			UPDATE_USER=#{UPDATE_USER},
+			UPDATE_TIME=now()
+		WHERE
+			ID in (${idArr})
+	</update>
+	
+	<!-- 根据员工编码删除记录 -->
+	<update id="deleteRecordByEmpcode" parameterType="pd">
+		UPDATE 
+			bd_emp_train 
+		SET 
+			IS_DEL = '1',
+			UPDATE_USER=#{updateUser},
+			UPDATE_TIME=now()
+		WHERE
+			EMP_CODE = #{empCode}
+	</update>
+	
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			t.*,e1.EMP_NAME
+		from 
+			bd_emp_train t 
+		LEFT JOIN bd_employee e1 ON t.EMP_CODE=e1.EMP_CODE
+		WHERE 
+			t.IS_DEL=0
+			and t.ID=#{ID}
+		
+	</select>
+	
+	<select id="findByEmpCode" parameterType="pd" resultType="pd">
+		select 
+			t.*,e1.EMP_NAME 
+		from 
+			bd_emp_train t 
+		LEFT JOIN bd_employee e1 ON t.EMP_CODE=e1.EMP_CODE
+		WHERE 
+			t.IS_DEL=0
+			and t.EMP_CODE=#{EMP_CODE}
+		ORDER BY t.TRAIN_DATE desc
+	</select>
+	
+	<!-- 更新员工培训记录 -->
+	<update id="updateEmpTrain" parameterType="pd">
+		update bd_emp_train
+		<set>
+			<if test="status != null and status != ''">
+				STATUS = #{status},
+			</if>
+			UPDATE_USER = #{updateUser}, UPDATE_TIME = #{updateTime}
+		</set>
+		where ID=#{ID}
+	</update>
+
+</mapper>

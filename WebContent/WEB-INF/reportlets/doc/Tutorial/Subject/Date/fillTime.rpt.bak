@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20091224">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters/>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[FRDemo]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT SIGNDATE,EMPNAME,AMOUNT FROM ORDERS,EMPLOYEE WHERE EMPLOYEE.EMPID=ORDERS.EMPID AND TITLE='Sales Manager' AND YEAR(SIGNDATE)=2008]]></Query>
+</TableData>
+</TableDataMap>
+<ReportSettings orientation="1" shrinkToFitMode="0" headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.27" left="0.7499999999999999" bottom="0.27" right="0.7499999999999999"/>
+</ReportSettings>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="true" windowPosition="1" align="1"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings shrinkToFitMode="0" headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.27" left="0.75" bottom="0.27" right="0.75"/>
+</ReportSettings>
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+<RowHeight defaultValue="19">
+<![CDATA[42,19,19,19,19,19,19,19,19,19,19]]></RowHeight>
+<ColumnWidth defaultValue="72">
+<![CDATA[42,42,54,72,72,72,72,72,148,97,72]]></ColumnWidth>
+<FloatElementList>
+<com.fr.report.FloatElement>
+<Location column="0" row="6" leftDistance="12" topDistance="7" width="689.0" height="290.0"/>
+<O t="CC">
+<LayoutAttr selectedIndex="0" columns="0"/>
+<Chart name="Default">
+<Chart class="com.fr.chart.Chart">
+<GI>
+<Background name="ColorBackground" color="-1"/>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Title>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<O>
+<![CDATA[]]></O>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+<TitleVisible value="true"/>
+</Title>
+<Plot class="com.fr.chart.plot.LinePlot">
+<Plot>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<NewSeriesCollection>
+<SeriesAttr class="com.fr.chart.plot.LineSeriesAttr">
+<LineSeriesAttr>
+<DataLabelInfo class="com.fr.chart.axis.DataLabelInfo">
+<DataLabel>
+<Attr>
+<SeriesAttrPosition>
+<Attr position="1"/>
+</SeriesAttrPosition>
+</Attr>
+<SeriesLabelStyle>
+<Separation>
+<![CDATA[,]]></Separation>
+<Format class="java.text.DecimalFormat">
+<![CDATA[#0]]></Format>
+</SeriesLabelStyle>
+</DataLabel>
+</DataLabelInfo>
+<Marker class="com.fr.chart.marker.DiamondFilledMarker" size="5.0"/>
+<LineStyleInfo>
+<Attr alpha="1.0" lineStyle="1"/>
+</LineStyleInfo>
+</LineSeriesAttr>
+</SeriesAttr>
+</NewSeriesCollection>
+<Legend>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Attr position="4" legendNum="10" visible="true"/>
+<FRFont name="SimSun" style="0" size="12"/>
+</Legend>
+<CateAttr isStacked="false" bgStagger="false" bgColor="-1"/>
+<Axis class="com.fr.chart.axis.CategoryAxis">
+<Title>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<O>
+<![CDATA[X轴]]></O>
+<TextAttr>
+<Attr alignText="0">
+<FRFont name="SimSun" style="0" size="12"/>
+</Attr>
+</TextAttr>
+<TitleVisible value="true"/>
+</Title>
+<AxisLine style="1" color="-8355712"/>
+<AxisPosition value="3"/>
+<AxisLabelPosition value="3"/>
+<MainGridLine style="0" color="-8355712"/>
+<SecGridLine style="0"/>
+<AxisLabelCount value="-1"/>
+<TickLine type="1" mainStroke="1.0" len="4" secType="1" secStroke="1.0" secLen="0"/>
+<Stagger value="false"/>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+</Axis>
+<Axis class="com.fr.chart.axis.ValueAxis">
+<Title>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<O>
+<![CDATA[Y轴]]></O>
+<TextAttr>
+<Attr alignText="0">
+<FRFont name="SimSun" style="0" size="12"/>
+</Attr>
+</TextAttr>
+<TitleVisible value="true"/>
+</Title>
+<AxisLine style="1" color="-8355712"/>
+<AxisPosition value="2"/>
+<AxisLabelPosition value="3"/>
+<MainGridLine style="3" color="-8355712"/>
+<SecGridLine style="0"/>
+<AxisLabelCount value="-1"/>
+<TickLine type="1" mainStroke="1.0" len="4" secType="1" secStroke="1.0" secLen="0"/>
+<Stagger value="false"/>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+<AxisRange/>
+</Axis>
+<Show showMarker="true" showLine="true"/>
+</Plot>
+</Plot>
+</Chart>
+</Chart>
+<ReportDataDefinition>
+<CategoryDefinition value="C5"/>
+<SeriesDefinition name="A6" value="C6"/>
+<SeriesPos value="1"/>
+<BaseOn value="true"/>
+<Top topCate="-1" topValue="-1"/>
+</ReportDataDefinition>
+</O>
+<Style index="0"/>
+</com.fr.report.FloatElement>
+</FloatElementList>
+<CellElementList>
+<C c="0" r="0" cs="3" s="1">
+<O>
+<![CDATA[2008年员工业绩统计表]]></O>
+</C>
+<C c="0" r="1" s="2"/>
+<C c="1" r="1" s="2"/>
+<C c="2" r="1" s="2"/>
+<C c="0" r="2" cs="3" s="3"/>
+<C c="0" r="3" rs="2" s="4">
+<O>
+<![CDATA[员工]]></O>
+</C>
+<C c="1" r="3" rs="2" s="4">
+<O>
+<![CDATA[累计]]></O>
+</C>
+<C c="2" r="3" s="4">
+<O>
+<![CDATA[业绩数额]]></O>
+</C>
+<C c="2" r="4" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=range(12)]]></Attributes>
+</O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Condition class="com.fr.data.condition.ListCondition"/>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($$$,'月')]]></Attributes>
+</O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand dir="1"/>
+</C>
+<C c="0" r="5" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="EMPNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="5" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AMOUNT"/>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.SummaryGrouper">
+<FN>
+<![CDATA[com.fr.data.util.function.SumFunction]]></FN>
+</RG>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="5" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AMOUNT"/>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[MONTH(SIGNDATE)=C5]]></Formula>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.SummaryGrouper">
+<FN>
+<![CDATA[com.fr.data.util.function.SumFunction]]></FN>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+</O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Condition class="com.fr.data.condition.ObjectCondition">
+<Compare op="1">
+<O t="I">
+<![CDATA[0]]></O>
+</Compare>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE('￥',$$$)]]></Attributes>
+</O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+</C>
+<C c="4" r="5">
+<O>
+<![CDATA[]]></O>
+</C>
+<C c="3" r="7"/>
+<C c="3" r="8"/>
+<C c="3" r="9"/>
+<C c="3" r="10"/>
+<C c="3" r="11"/>
+<C c="3" r="12"/>
+</CellElementList>
+</Report>
+<StyleList>
+<Style>
+<FRFont name="SimSun" style="0" size="12"/>
+<Background name="ColorBackground" color="-1"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="1" size="18" foreground="-6697729"/>
+<Background name="NullBackground"/>
+<Border>
+<Bottom style="6" color="-6697729"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="12"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="12"/>
+<Background name="ColorBackground" color="-3342337"/>
+<Border>
+<Top style="1" color="-6697729"/>
+<Bottom style="1" color="-6697729"/>
+<Left style="1" color="-6697729"/>
+<Right style="1" color="-6697729"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="12"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1" color="-6697729"/>
+<Bottom style="1" color="-6697729"/>
+<Left style="1" color="-6697729"/>
+<Right style="1" color="-6697729"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20091224">
+<TableDataMap>
+<TableData name="weekSaleReport" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="enddaytime"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dept_code"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="employee"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="startdaytime"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[FlyReportor]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT
+	cus.CUSTOMER_NAME MARKET_NAME,
+	product.PRODUCT_NAME,
+	taskdaily.CUSTOM_NAME,
+	employee.EMP_NAME,
+  IFNULL(SUM(weekTask.WEEK_COUNT),0) WEEK_COUNT,
+  IFNULL(SUM(weekTask.MONEY_COUNT),0) MONEY_COUNT,
+  IFNULL(SUM(taskdaily.DAILY_COUNT),0) DAILY_COUNT,
+  IFNULL(SUM(taskdaily.MONEY_COUNT),0) DAILY_MONEY_COUNT
+
+FROM
+	b_week_emp_task weekTask
+LEFT JOIN (select B_WEEK_EMP_TASK_ID,sum(daily.DAILY_COUNT)DAILY_COUNT,sum(daily.MONEY_COUNT)MONEY_COUNT ,CUSTOM_NAME
+					from b_daily_emp_task daily 
+					where daily.ISDEL=0 
+					group by B_WEEK_EMP_TASK_ID,CUSTOM_NAME)taskdaily ON(taskdaily.B_WEEK_EMP_TASK_ID = weekTask.ID)
+LEFT JOIN B_MONTH_EMP_TARGET monthEmpTarget ON (
+	weekTask.B_MONTH_EMP_TARGET_ID = monthEmpTarget.ID
+)
+LEFT JOIN B_MONTH_DEPT_TASK monthDeptTarget ON (
+	monthEmpTarget.B_MONTH_DEPT_TASK_ID = monthDeptTarget.ID
+)
+LEFT JOIN B_YEAR_DEPT_TASK yearDeptTarget ON (
+	monthDeptTarget.B_YEAR_DEPT_TASK_ID = yearDeptTarget.ID
+)
+LEFT JOIN b_year_target target ON (
+	weekTask.B_YEAR_TARGET_CODE = target.`CODE`
+	AND target.ISDEL != 1
+)
+LEFT JOIN bd_product product ON (
+	yearDeptTarget.PRODUCT_CODE = product.PRODUCT_CODE
+	AND product.ISDEL != 1
+)
+LEFT JOIN bd_department dep ON (
+	dep.DEPT_CODE = weekTask.DEPT_CODE
+	AND dep.ENABLED = 1
+)
+LEFT JOIN bd_customer cus ON (
+	cus.CUSTOMER_CODE = yearDeptTarget.CUSTOMER_CODE
+  AND cus.isdel=0 
+)
+LEFT JOIN bd_employee employee on weekTask.EMP_CODE=employee.EMP_CODE
+WHERE
+	weekTask.ISDEL = 0
+  AND target.TARGET_TYPE='XSH'
+	and weekTask.YEAR=SUBSTRING('${startdaytime}',1,4)
+	and weekTask.WEEK_START_DATE <= '${enddaytime}' and weekTask.WEEK_END_DATE>='${startdaytime}'
+	AND ${if(len(dept_code)=0," 1=1"," weekTask.DEPT_CODE='"+dept_code+"'")}
+	AND ${if(len(employee)=0," 1=1"," weekTask.EMP_CODE='"+employee+"'")}
+GROUP BY 
+	product.PRODUCT_NAME,
+          cus.CUSTOMER_NAME,
+	taskdaily.CUSTOM_NAME,
+	employee.EMP_NAME]]></Query>
+</TableData>
+<TableData name="dept" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="dept_code"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[FlyReportor]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select dept_name from bd_department where dept_code='${dept_code}']]></Query>
+</TableData>
+<TableData name="employee" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="employee"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[FlyReportor]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select e.emp_name, d.dept_leader_name
+from bd_employee e 
+LEFT JOIN bd_department d on d.id=e.emp_department_id
+where e.emp_code='${employee}']]></Query>
+</TableData>
+<TableData name="week" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="enddaytime"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[FlyReportor]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select DISTINCT(`WEEK`) 
+from b_week_emp_task 
+where WEEK_END_DATE>='${enddaytime}'
+ and WEEK_START_DATE<='${enddaytime}']]></Query>
+</TableData>
+</TableDataMap>
+<ReportSettings orientation="1" headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.27" left="0.7499999999999999" bottom="0.27" right="0.7499999999999999"/>
+</ReportSettings>
+<ReportParameterAttr>
+<Attributes showWindow="false" delayPlaying="true" windowPosition="1" align="1"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.27" left="0.75" bottom="0.27" right="0.75"/>
+</ReportSettings>
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<ReportWebAttr>
+<EmailManager mailHost="" password="___" user="" fromEmailAddres=""/>
+<ServerPrinter/>
+<WebPageContent>
+<ToolBars>
+<ToolBarManager>
+<Location>
+<Embed position="1"/>
+</Location>
+<ToolBar>
+<Widget class="com.fr.report.web.ui.impl.page.First">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[首页]]></Text>
+<IconName>
+<![CDATA[first]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.Previous">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[上一页]]></Text>
+<IconName>
+<![CDATA[previous]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.PageNavi">
+<WidgetAttr/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.Next">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[下一页]]></Text>
+<IconName>
+<![CDATA[next]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.Last">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[末页]]></Text>
+<IconName>
+<![CDATA[last]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.PageSetup">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[页面设置]]></Text>
+<IconName>
+<![CDATA[pagesetup]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.FlashPrint">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[打印[客户端]A]]></Text>
+<IconName>
+<![CDATA[flashprint]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Print">
+<PrintButtons appletPrint="false"/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Export">
+<Buttons pdf="true" excelP="true" excelO="true" excelS="true" word="true"/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Email">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[邮件]]></Text>
+<ShowIcon>
+<![CDATA[false]]></ShowIcon>
+<ShowText>
+<![CDATA[false]]></ShowText>
+<IconName>
+<![CDATA[email]]></IconName>
+</Widget>
+</ToolBar>
+</ToolBarManager>
+</ToolBars>
+<WebPage isPage="true"/>
+<WebMargin margins="0,auto,0,auto"/>
+</WebPageContent>
+<WebFormContent>
+<ToolBars/>
+</WebFormContent>
+<WebWriteContent>
+<ToolBars>
+<ToolBarManager>
+<Location>
+<Embed position="1"/>
+</Location>
+<ToolBar>
+<Widget class="com.fr.report.web.ui.impl.write.Submit">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[提交]]></Text>
+<IconName>
+<![CDATA[submit]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.write.Verify">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[数据校验]]></Text>
+<IconName>
+<![CDATA[verify]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.FlashPrint">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[Flash打印[客户端]A]]></Text>
+<IconName>
+<![CDATA[flashprint]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Print">
+<PrintButtons/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Export">
+<Buttons pdf="true" excelP="true" excelO="true" excelS="true" word="true"/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Email">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[邮件]]></Text>
+<IconName>
+<![CDATA[email]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.write.AppendColumnRow">
+<WidgetAttr disabled="true"/>
+<Text>
+<![CDATA[增加记录]]></Text>
+<IconName>
+<![CDATA[appendcolumn]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.write.ShowCellValue">
+<WidgetAttr/>
+</Widget>
+</ToolBar>
+</ToolBarManager>
+</ToolBars>
+<SelectedColor/>
+</WebWriteContent>
+<Background name="NullBackground"/>
+</ReportWebAttr>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<RowHeight defaultValue="19">
+<![CDATA[41,19,19,19,19,19,19,45,19,19,19]]></RowHeight>
+<ColumnWidth defaultValue="72">
+<![CDATA[72,72,72,98,81,104,116,95,71,81,72]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" cs="10" s="0">
+<O>
+<![CDATA[浙江司太立制药有限公司]]></O>
+<Expand/>
+</C>
+<C c="0" r="2" cs="10" s="1">
+<O>
+<![CDATA[销售周报]]></O>
+<Expand/>
+</C>
+<C c="7" r="3" s="2">
+<O>
+<![CDATA[部门：]]></O>
+<Expand/>
+</C>
+<C c="8" r="3" cs="2">
+<O t="DSColumn">
+<Attributes dsName="dept" columnName="dept_name"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="0" r="4" cs="2" s="3">
+<O>
+<![CDATA[报告周期]]></O>
+<Expand/>
+</C>
+<C c="2" r="4" cs="2" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$startdaytime+"至"+$enddaytime]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="4" s="3">
+<O>
+<![CDATA[业务员]]></O>
+<Expand/>
+</C>
+<C c="5" r="4" cs="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="employee" columnName="emp_name"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="4" s="3">
+<O>
+<![CDATA[月份]]></O>
+<Expand/>
+</C>
+<C c="8" r="4" cs="2" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=MID($startdaytime,6,2)+"月份"]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="5" cs="2" s="3">
+<O>
+<![CDATA[报告日期]]></O>
+<Expand/>
+</C>
+<C c="2" r="5" cs="2" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=LEFT(TODAY(),10)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="5" s="3">
+<O>
+<![CDATA[上级领导]]></O>
+<Expand/>
+</C>
+<C c="5" r="5" cs="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="employee" columnName="dept_leader_name"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="5" s="3">
+<O>
+<![CDATA[周数]]></O>
+<Expand/>
+</C>
+<C c="8" r="5" cs="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="week" columnName="WEEK"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="0" r="7" s="3">
+<O>
+<![CDATA[市场]]></O>
+<Expand/>
+</C>
+<C c="1" r="7" s="3">
+<O>
+<![CDATA[客户]]></O>
+<Expand/>
+</C>
+<C c="2" r="7" s="3">
+<O>
+<![CDATA[产品]]></O>
+<Expand/>
+</C>
+<C c="3" r="7" s="3">
+<O>
+<![CDATA[年计划销量（T）]]></O>
+<Expand/>
+</C>
+<C c="4" r="7" s="3">
+<O>
+<![CDATA[年计划销售额（万元）]]></O>
+<Expand/>
+</C>
+<C c="5" r="7" s="3">
+<O>
+<![CDATA[截止本周完成销量（T）]]></O>
+<Expand/>
+</C>
+<C c="6" r="7" s="3">
+<O>
+<![CDATA[截止本周完成销售额（万元）]]></O>
+<Expand/>
+</C>
+<C c="7" r="7" s="3">
+<O>
+<![CDATA[金额完成率（%）]]></O>
+<Expand/>
+</C>
+<C c="8" r="7" s="3">
+<O>
+<![CDATA[未完成金额（万元）]]></O>
+<Expand/>
+</C>
+<C c="9" r="7" s="3">
+<O>
+<![CDATA[备注]]></O>
+<Expand/>
+</C>
+<C c="0" r="8" s="3">
+<O t="DSColumn">
+<Attributes dsName="weekSaleReport" columnName="MARKET_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="8" s="3">
+<O t="DSColumn">
+<Attributes dsName="weekSaleReport" columnName="CUSTOM_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="8" s="3">
+<O t="DSColumn">
+<Attributes dsName="weekSaleReport" columnName="PRODUCT_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="8" s="3">
+<O t="DSColumn">
+<Attributes dsName="weekSaleReport" columnName="MONEY_COUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="8" s="3">
+<O t="DSColumn">
+<Attributes dsName="weekSaleReport" columnName="WEEK_COUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="8" s="3">
+<O t="DSColumn">
+<Attributes dsName="weekSaleReport" columnName="DAILY_MONEY_COUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="8" s="3">
+<O t="DSColumn">
+<Attributes dsName="weekSaleReport" columnName="DAILY_COUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="8" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(E9=0,0,ROUND((G9/E9)*100,2)+"%")]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="8" r="8" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=E9-G9]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="9" r="8" s="3">
+<Expand/>
+</C>
+<C c="0" r="9" cs="3" s="3">
+<O>
+<![CDATA[合计]]></O>
+<Expand/>
+</C>
+<C c="3" r="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(D9)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(E9)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="5" r="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(F9)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="6" r="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(G9)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="7" r="9" s="3">
+<Expand/>
+</C>
+<C c="8" r="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(I9)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="9" r="9" s="3">
+<Expand/>
+</C>
+</CellElementList>
+</Report>
+<StyleList>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="1" size="20"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="1" size="16"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style>
+<FRFont name="SimSun" style="1" size="12"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="12"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

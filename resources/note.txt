@@ -1,0 +1,21 @@
+1.回车查询时，页面会刷新：
+1）检查查询区域是否添加了form,如果只有一个输入项时，不能使用form
+2）多个输入项时可以使用form
+
+<div id="collapseTwo" class="panel-collapse collapse" style="position:absolute; top:32px; z-index:999">
+								<div class="panel-body">
+									<form id="searchForm">
+										<table>
+										
+2.添加微信菜单后，发送消息
+1）需要修改消息的配置文件
+
+#表单工作
+appsocket.url.sendFormWork=app_task/toFormFlowList.do
+websocket.url.sendFormWork=formBuilder/toFormFlowList.do
+websocket.msg.sendFormWork=转交了表单工作({name})
+
+2）发送消息时，会检查是否配置该类型消息的发送计划
+remindConfigService.saveMessage
+3）点击消息，跳转页面时，根据消息类型，跳转页面
+appService.findPage

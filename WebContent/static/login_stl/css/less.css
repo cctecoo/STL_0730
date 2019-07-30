@@ -1,0 +1,770 @@
+/* CSS Document */
+@charset "utf-8";
+/********
+	 鍏敤鏍峰紡鎶藉彇
+     2015.5.29
+*******/
+/* ----------------------------------LESS鍏冪礌---------------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+}
+img {
+  border: none;
+}
+body {
+  /* background-color: #f5f5f5; */
+}
+a {
+  text-decoration: none;
+}
+a,
+button,
+input,
+select,
+textarea,
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+[onclick] {
+  outline: 0;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+ul li {
+  list-style-type: none;
+}
+/*鏍峰紡瀹氫箟*/
+.sinlin {
+  display: inline-block !important;
+}
+.bgcolor {
+  background-color: #ffffff !important;
+}
+.mT6{
+	margin-top:6px !important;
+}
+.mT10 {
+  margin-top: 10px !important;
+}
+.mT20 {
+  margin-top: 20px !important;
+}
+.mT30 {
+  margin-top: 30px !important;
+}
+.mT40 {
+  margin-top: 40px !important;
+}
+.ml10 {
+  margin-left: 10px !important;
+}
+.ml14 {
+  margin-left: 14px !important;
+}
+.ml17 {
+  margin-left: 17px !important;
+}
+.ml30 {
+  margin-left: 30px !important;
+  margin-left: 13px !important\9;
+}
+.ml80 {
+  margin-left: 80px !important;
+}
+.w85 {
+  width: 85px !important;
+}
+.ml87 {
+  margin-left: 87px !important;
+}
+.ml90 {
+  margin-left: 90px !important;
+}
+.ml100 {
+  margin-left: 100px !important;
+}
+.ml140 {
+  margin-left: 140px !important;
+  margin-left: 125px !important\9;
+}
+.mr10 {
+  margin-right: 10px !important;
+}
+.mr20 {
+  margin-right: 20px !important;
+}
+.mr60 {
+  margin-right: 60px !important;
+}
+.mb10 {
+  margin-bottom: 10px !important;
+}
+.mb20 {
+  margin-bottom: 20px !important;
+}
+.mt20 {
+  margin-top: 20px !important;
+}
+.mln {
+  margin-left: 0px !important;
+}
+.mrn {
+  margin-right: 0px !important;
+}
+.pt10 {
+  padding-top: 10px !important;
+}
+.pb10 {
+  padding-bottom: 10px !important;
+}
+.pln {
+  padding-left: 0px !important;
+}
+.prn {
+  padding-right: 0px !important;
+}
+.mtn {
+  margin-top: 0px !important;
+}
+.mbn {
+  margin-bottom: 0px !important;
+}
+.mn {
+  margin: :0px !important;
+}
+.pn {
+  padding: 0px !important;
+}
+/*瀹藉害瀹氫箟*/
+.w48 {
+  width: 48px !important;
+}
+.w67 {
+  width: 67px !important;
+}
+.w70 {
+  width: 70px !important;
+}
+.w75 {
+  width: 75px !important;
+}
+.w79 {
+  width: 79px !important;
+}
+.w84 {
+  width: 84px !important;
+}
+.w86 {
+  width: 86px !important;
+}
+.w88 {
+  width: 88px !important;
+}
+.w89 {
+  width: 89px !important;
+}
+.w94 {
+  width: 94px !important;
+}
+.w98 {
+  width: 98px !important;
+}
+.w99 {
+  width: 99px !important;
+}
+.w100 {
+  width: 100px !important;
+}
+.w110 {
+  width: 110px !important;
+}
+.w104 {
+  width: 104px !important;
+}
+.w120 {
+  width: 120px !important;
+}
+.w125 {
+  width: 125px !important;
+}
+.w130 {
+  width: 130px !important;
+}
+.w136 {
+  width: 136px !important;
+}
+.w148 {
+  width: 148px !important;
+}
+.w150 {
+  width: 150px !important;
+}
+.w153 {
+  width: 153px !important;
+}
+.w160 {
+  width: 160px !important;
+}
+.w161 {
+  width: 161px !important;
+}
+.w168 {
+  width: 168px !important;
+}
+.w180 {
+  width: 180px !important;
+}
+.w185 {
+  width: 185px !important;
+}
+.w188 {
+  width: 188px !important;
+}
+.w193 {
+  width: 193px !important;
+}
+.w196 {
+  width: 196px !important;
+}
+.w198 {
+  width: 198px !important;
+}
+.w200 {
+  width: 200px !important;
+}
+.w205 {
+  width: 205px !important;
+}
+.w210 {
+  width: 210px !important;
+}
+.w220 {
+  width: 220px !important;
+}
+.w230 {
+  width: 230px !important;
+}
+.w248 {
+  width: 248px !important;
+}
+.w260 {
+  width: 260px !important;
+}
+.w280 {
+  width: 280px !important;
+}
+.w292 {
+  width: 292px !important;
+}
+.w297 {
+  width: 297px !important;
+}
+.w300 {
+  width: 300px !important;
+}
+.w340 {
+  width: 340px !important;
+}
+.w347{
+	width:347px !important;
+}
+.w350 {
+  width: 350px !important;
+}
+.w374 {
+  width: 374px !important;
+}
+.w400 {
+  width: 400px !important;
+}
+.w410 {
+  width: 410px !important;
+}
+.w419 {
+  width: 419px !important;
+}
+.w420 {
+  width: 420px !important;
+}
+.w424 {
+  width: 424px !important;
+}
+.w439 {
+  width: 439px !important;
+}
+.w440 {
+  width: 440px !important;
+}
+.w445 {
+  width: 445px !important;
+}
+.w459 {
+	width: 459px !important;
+}
+.w467{
+	width: 467px !important;
+}
+.w500 {
+  width: 500px !important;
+}
+.w504 {
+  width: 504px !important;
+}
+.w508 {
+  width: 508px !important;
+}
+.w600 {
+  width: 600px !important;
+}
+.w604 {
+  width: 604px !important;
+}
+.w700 {
+  width: 700px !important;
+}
+.w710 {
+  width: 710px !important;
+}
+.w800 {
+  width: 800px !important;
+}
+.w832 {
+  width: 832px !important;
+}
+.w900 {
+  width: 900px !important;
+}
+.w970 {
+  width: 970px !important;
+}
+.w990 {
+  width: 990px !important;
+}
+.w998 {
+  width: 998px !important;
+}
+.w1000 {
+  width: 1000px !important;
+}
+.w1002 {
+  width: 1002px !important;
+}
+.w1012{
+	width:1012px !important;
+}
+.w1190 {
+  width: 1190px !important;
+}
+/*瀛椾綋棰滆壊瀹氫箟*/
+.color1 {
+  color: #666666 !important;
+}
+.color2 {
+  color: #ffffff !important;
+}
+/*鑷畾涔夋牱寮�*/
+.cBoth {
+  clear: both !important;
+}
+.bNo {
+  border: none !important;
+}
+.fright {
+  float: right !important;
+}
+.fleft {
+  float: left !important;
+}
+.p5 {
+  padding-left: 5px !important;
+}
+.p24 {
+  padding: 0 24px !important;
+}
+.pb35 {
+  padding-bottom: 35px !important;
+}
+.bbottom {
+  border-bottom: 1px solid #f6f5f4 !important;
+}
+.mn {
+  margin: 0px !important;
+}
+.pn {
+  padding: 0px !important;
+}
+.btnright {
+  display: inline-block;
+  position: relative;
+  left: 37%;
+}
+.btnright1 {
+  display: inline-block;
+  position: relative;
+  left: 14%;
+}
+.tcenter {
+  text-align: center !important;
+}
+/*
+鑳屾櫙棰滆壊
+*/
+.bg_color_1 {
+  background-color: #f5f5f5;
+}
+.bg_color_2 {
+  background-color: #f6f6f6;
+}
+.bg_color_3 {
+  background-color: #005aaa;
+}
+.bg_color_4 {
+  background-color: #3498db;
+}
+.bg_color_5 {
+  background-color: #cee3f4;
+}
+.bg_color_6 {
+  background-color: #80c902;
+}
+.bg_color_7 {
+  background-color: #1d88cf;
+}
+.bg_color_8 {
+  background-color: #3498db;
+}
+.bg_color_9 {
+  background-color: #f2f4f6;
+}
+/*
+閫氱敤瀛楀彿銆佽楂樸�佺矖缁嗐�侀鑹�
+*/
+.font_size_1 {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: normal;
+  color: #333333;
+}
+.font_size_2 {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: bold;
+  color: #333333;
+}
+.font_size_3 {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: bold;
+  color: #ffffff;
+}
+.font_size_4 {
+  font-size: 12px;
+  line-height: 36px;
+  font-weight: normal;
+  color: #336793;
+}
+.font_size_5 {
+  font-size: 12px;
+  line-height: 36px;
+  font-weight: normal;
+  color: #666666;
+}
+.font_size_6 {
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: normal;
+  color: #333333;
+}
+.font_size_7 {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: normal;
+  color: #828181;
+}
+.font_size_8 {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: normal;
+  color: #005aaa;
+}
+/*瀛椾綋棰滆壊*/
+/*瀛椾綋鐨勯鑹�*/
+/*婧㈠嚭鏍峰紡*/
+.ellipsisStyle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: nowrap;
+}
+/*
+浣嶇疆
+*/
+/*
+鏈�灏忛珮搴�
+*/
+/*
+琛岄珮
+*/
+/*
+鏈�灏忓搴�
+*/
+/*
+TOP鍊�
+*/
+/*
+LEFT鍊�
+*/
+/*
+RIGHT鍊�
+*/
+/*
+BOTTOM鍊�
+*/
+/*
+闅愯棌婧㈠嚭
+*/
+/*
+娴姩
+*/
+/*
+鍧楀睍绀烘柟寮�
+*/
+/*
+padding
+*/
+/*
+杈规
+*/
+/*
+瀵归綈鏂瑰紡
+*/
+/***********************************鍏蜂綋鍐呭***********************************/
+/*绐楀彛鏍峰紡1*/
+.windowStyle {
+  z-index: 100;
+  position: fixed;
+  background-color: #ffffff;
+  overflow: hidden;
+  left: 50%;
+  margin-left: -440px;
+  top: 50%;
+  margin-top: -219px;
+}
+.wrap_content {
+  display: inline-block;
+  padding-left: 15px;
+  vertical-align: top;
+  font-size: 12px;
+}
+.windowRadio .element_radio {
+  display: inline-block;
+  padding-top: 3px;
+  font-size: 14px;
+  line-height: 21px;
+  height: 21px;
+  vertical-align: middle;
+}
+.windowRadio .text_radio {
+  display: inline-block;
+  height: 21px;
+  line-height: 21px;
+  padding: 3px 20px 3px 5px;
+  vertical-align: auto;
+  font-size: 14px;
+  color: #252525;
+}
+.windowCheckbox .element_checkbox {
+  padding: 11px 0px 0px 0px;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 12px;
+}
+.windowCheckbox .text_checkbox {
+  padding: 11px 0px 0px 0px;
+  font-size: 12px;
+  line-height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 260px;
+  _width: 261px;
+  width: 261px\9;
+}
+/*缃戞牸甯冨眬鏍峰紡*/
+.rowStyle {
+  margin: 10px 0px;
+  overflow: hidden;
+  font-size: 0px;
+}
+.blackStyle {
+  margin: 0px 10px 10px 10px;
+  display: inline-block;
+  font-size: 0px;
+  vertical-align: top;
+}
+.wrapStyle {
+  height: auto;
+  overflow: hidden;
+}
+/*鎸夐挳鏍峰紡*/
+.wrapStyle a.btnstyle {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 22px;
+  width: auto;
+  border-radius:5px;
+  padding:4px 20px;
+  background-color:#fafafa;
+  border: 1px solid #AEB5BB;
+  min-width:50px;
+  text-align:center;
+}
+.wrapStyle a.btnstyle span.btnImg{ display:inline-block; width:22px;  height:22px; vertical-align:middle;text-align:center;}
+.wrapStyle a.btnstyle.grayBtn{
+  border: 1px solid #AEB5BB;
+    background-color:#fafafa;
+}
+
+.wrapStyle a.btnstyle.blueBtn{
+  border: 1px solid #3498db;
+    background-color:#3498db;
+}
+.wrapStyle a.btnstyle.blueBtn:hover{
+	background-color:#0062b8;
+	border:1px solid #0062b8;
+}
+.wrapStyle a.btnstyle.blueBtn:active{
+	background-color:#165fa0;
+	border:1px solid #165fa0;
+}
+.wrapStyle a.btnstyle.yellowBtn{
+  border: 1px solid #ff7902;
+    background-color:#ff7902;
+}
+.wrapStyle a.btnstyle.yellowBtn:hover{
+	background-color:#ff861b;
+	border:1px solid #ff861b;
+}
+.wrapStyle a.btnstyle.yellowBtn:active{
+	background-color:#dc7922;
+	border:1px solid #dc7922;
+}
+.wrapStyle a.btnstyle.greenBtn{
+    border: 1px solid #80c902;
+    background-color:#80c902;
+}
+.wrapStyle a.btnstyle.greenBtn:hover{
+	background-color:#8ed711;
+	border:1px solid #8ed711;
+}
+.wrapStyle a.btnstyle.greenBtn:active{
+	background-color:#7db917;
+	border:1px solid #7db917;
+}
+
+/*.wrapStyle a.grayBtn {
+	
+  border: 1px solid #AEB5BB;
+  display: inline-block;
+  vertical-align: middle;
+  background-color:#fafafa;
+}
+.wrapStyle a. span.color1 {
+  color: #005aaa !important;
+  padding-left: 5px;
+}
+.wrapStyle a.blueBtn {
+  padding: 12px 45px 13px 45px;
+  vertical-align: middle;
+  display: inline-block;
+  background-color: #005aaa;
+}
+.wrapStyle a.blueBtn img {
+  vertical-align: middle;
+  border: none;
+}
+.wrapStyle a.blueBtn span.color1 {
+  color: #ffffff !important;
+  padding-left: 5px;
+  vertical-align: middle;
+}
+.wrapStyle a.blueBtn:hover {
+  background-color: #116aba;
+}
+.wrapStyle a.blueBtn:active {
+  background-color: #165fa0;
+}
+.wrapStyle a.smallBtn {
+  padding: 4px 12px;
+  border: 1px solid #005aaa;
+  display: inline-block;
+  vertical-align: bottom;
+  background-color:#fafafa;
+}
+.wrapStyle a.smallBtn span.color1 {
+  color: #005aaa !important;
+  padding-left: 5px;
+}
+.wrapStyle a.greenBtn {
+  background-color: #80c902;
+  padding: 13px 55px 11px 55px;
+  vertical-align: bottom;
+}
+.wrapStyle a.greenBtn:hover {
+  background-color: #92d61d;
+}*/
+.projectListRight {
+  display: inline-block;
+  margin-top: 8px;
+  vertical-align: top;
+  font-size: 0px;
+}
+/*tab鍒囨崲椤靛搴︽帶鍒跺紑濮�*/
+/*3tab*/
+.S3tag ul:first-child li {
+  width: 33.33% !important;
+}
+.S3tag ul:first-child li:last-child {
+  width: 33.34% !important;
+}
+/*4tab*/
+.S4tag ul:first-child li {
+  width: 25% !important;
+}
+/*5tab*/
+.S5tag ul:first-child li {
+  width: 20% !important;
+}
+/*6tab閫傜敤浜庢垚鍝佸簱璇︽儏椤�*/
+.S6tag ul:first-child li {
+  width: 16.66% !important;
+}
+.S6tag ul:first-child li:last-child {
+  width: 16.67% !important;
+}
+/*7tab*/
+.S7tag ul:first-child li {
+  width: 14.286% !important;
+}
+.S7tag ul:first-child li:last-child {
+  width: 14.284% !important;
+}
+/*8tab*/
+.S8tag ul:first-child li {
+  width: 12.5% !important;
+}
+/*9tab*/
+.S9tag ul:first-child li {
+  width: 11.11% !important;
+}
+.S9tag ul:first-child li:last-child {
+  width: 11.12% !important;
+}
+/*10tab*/
+.S10tag ul:first-child li {
+  width: 10% !important;
+}
+/*tab鍒囨崲椤靛搴︽帶鍒剁粨鏉�*/

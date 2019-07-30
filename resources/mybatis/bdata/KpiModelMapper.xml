@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="KpiModelMapper">
+	
+	<sql id="kpiModelColumns">
+		ID,
+		CODE,	
+		NAME,
+		IS_DEL, 
+		STATUS,
+		ENABLE,
+		CREATE_USER,	
+		CREATE_TIME,	
+		LAST_UPDATE_USER,	
+		LAST_UPDATE_TIME,
+		PREPARATION1,
+		PREPARATION2,
+		PREPARATION3,
+		PREPARATION4,
+		PREPARATION5,
+		PREPARATION6
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd" keyProperty="ID">
+		insert into BD_KPI_MODEL(
+			CODE,	
+			NAME,
+			IS_WORK_SHOP_MODEL,
+			MODEL_TYPE,
+			IS_DEL, 
+			STATUS,
+			ENABLE,
+			CREATE_USER,	
+			CREATE_TIME,	
+			LAST_UPDATE_USER,	
+			LAST_UPDATE_TIME,
+			PREPARATION1,
+			PREPARATION2,
+			PREPARATION3,
+			PREPARATION4,
+			PREPARATION5,
+			PREPARATION6
+		) values (
+			#{CODE},	
+			#{NAME},
+			#{IS_WORK_SHOP_MODEL},	
+			#{MODEL_TYPE},
+			0,
+			0,
+			#{ENABLE},
+			#{CREATE_USER},	
+			#{CREATE_TIME},	
+			#{LAST_UPDATE_USER},	
+			#{LAST_UPDATE_TIME},
+			#{PREPARATION1},
+			#{PREPARATION2},
+			#{PREPARATION3},
+			#{PREPARATION4},
+			#{PREPARATION5},
+			#{PREPARATION6}
+		)
+	</insert>
+	
+	<!-- 逻辑删除 -->
+	<update id="delete" parameterType="pd">
+		update BD_KPI_MODEL
+			set 
+				IS_DEL = 1
+			where 
+				ID = #{ID}
+	</update>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update BD_KPI_MODEL
+			set 
+				NAME = #{NAME},
+				ENABLE = #{ENABLE},
+				IS_WORK_SHOP_MODEL = #{IS_WORK_SHOP_MODEL},
+				MODEL_TYPE = #{MODEL_TYPE},
+				LAST_UPDATE_USER = #{LAST_UPDATE_USER},
+				LAST_UPDATE_TIME = #{LAST_UPDATE_TIME}
+			where 
+				ID = #{MODEL_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			ID, CODE, NAME, IS_WORK_SHOP_MODEL, MODEL_TYPE, IS_DEL, STATUS, ENABLE,
+			CREATE_USER, DATE_FORMAT(CREATE_TIME, '%Y-%m-%d %T') CREATE_TIME, 
+			LAST_UPDATE_USER, DATE_FORMAT(LAST_UPDATE_TIME, '%Y-%m-%d %T') LAST_UPDATE_TIME,
+			PREPARATION1, PREPARATION2, PREPARATION3,
+			PREPARATION4, PREPARATION5, PREPARATION6
+		from 
+			BD_KPI_MODEL 
+		where 
+			ID = #{ID}
+	</select>
+	
+	<!-- 通过CODE获取数据 -->
+	<select id="findByCode" parameterType="pd" resultType="pd">
+		select 
+			<include refid="kpiModelColumns"/>
+		from 
+			BD_KPI_MODEL 
+		where 
+			CODE = #{CODE}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			<include refid="kpiModelColumns"/>
+		from 
+			BD_KPI_MODEL a 
+		where   a.IS_DEL = 0
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+			ID, CODE, NAME, IS_WORK_SHOP_MODEL, MODEL_TYPE, IS_DEL, STATUS, ENABLE, 
+		CREATE_USER, DATE_FORMAT(CREATE_TIME, '%Y-%m-%d %T') CREATE_TIME, 
+		LAST_UPDATE_USER, DATE_FORMAT(LAST_UPDATE_TIME, '%Y-%m-%d %T') LAST_UPDATE_TIME,
+		(select NAME from sys_user where USERNAME=k.LAST_UPDATE_USER) LAST_UPDATE_EMP_NAME,
+		PREPARATION1,
+		PREPARATION2,
+		PREPARATION3,
+		PREPARATION4,
+		PREPARATION5,
+		PREPARATION6
+		from BD_KPI_MODEL k
+		where IS_DEL = 0
+		<if test="kpiName != null and kpiName != ''">
+			and NAME like concat('%', #{kpiName}, '%')
+		</if>
+		<if test="searchField != null and searchField != ''">
+			<choose>
+				<when test="searchField=='workshopEmp'"> and IS_WORK_SHOP_MODEL=1 </when>
+				<when test="searchField=='workshop'"> and IS_WORK_SHOP_MODEL=2 </when>
+				<when test="searchField=='all'"> and 1=1 </when>
+				<otherwise> and MODEL_TYPE=#{searchField} </otherwise>
+			</choose>
+		</if>
+		<choose>
+			<when test="sortKey != null and sortKey != ''">
+				ORDER BY ${sortKey} ${sortMethod}
+			</when>
+			<otherwise>
+				ORDER BY ID desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAllForCount" parameterType="pd" resultType="pd">
+		select
+			max(cast(CODE as signed)) as CODE
+		from BD_KPI_MODEL
+	</select>
+	
+	<!-- 查询已启用列表(全部) -->
+	<select id="listAllEnable" parameterType="pd" resultType="pd">
+		select
+			ID, CODE, NAME, IS_WORK_SHOP_MODEL, MODEL_TYPE, IS_DEL, STATUS, ENABLE,
+			CREATE_USER, CREATE_TIME, LAST_UPDATE_USER,	LAST_UPDATE_TIME,
+			PREPARATION1, PREPARATION2, PREPARATION3,
+			PREPARATION4, PREPARATION5, PREPARATION6
+		from BD_KPI_MODEL 
+		where IS_DEL = 0 and ENABLE = 1 
+		<if test="modelType != null and modelType !=''">
+			and MODEL_TYPE = #{modelType}
+		</if>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		update  BD_KPI_MODEL set IS_DEL = 1
+		where 
+			ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 列表(全部) -->
+	<select id="listAllUsedModel" parameterType="pd" resultType="pd">
+		select 
+			a.ID 
+		from 
+			budget_dept_model a 
+		where 
+			a.MODEL_ID = #{MODEL_ID} 
+	</select>
+	
+	<!-- 根据kpi模板id查询是否有岗位关联 -->
+	<select id="findPositionCountByKpiModelId" parameterType="pd" resultType="pd">
+		select COUNT(ID) COUNT
+		from bd_position_level
+		where ISDEL=0 and ATTACH_KPI_MODEL=#{MODEL_ID}
+	</select>
+	
+</mapper>

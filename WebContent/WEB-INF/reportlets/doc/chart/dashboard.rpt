@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20091224">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters/>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[FlyReportor]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT * FROM STSCORE]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings headerHeight="0.0" footerHeight="0.0">
+<Margin top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+</ReportSettings>
+<RowHeight defaultValue="19">
+<![CDATA[19,19,19,19,19,19,19,19,19,19,19]]></RowHeight>
+<ColumnWidth defaultValue="72">
+<![CDATA[72,72,72,72,72,72,72,72,72,72,72]]></ColumnWidth>
+<FloatElementList>
+<com.fr.report.FloatElement>
+<Location column="0" row="1" leftDistance="47" topDistance="17" width="734.0" height="373.0"/>
+<O t="CC">
+<LayoutAttr selectedIndex="0" columns="0"/>
+<Chart name="Default">
+<Chart class="com.fr.chart.Chart">
+<GI>
+<Background name="ColorBackground" color="-3355393"/>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Alpha value="0.4000000059604645"/>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Plot class="com.fr.chart.plot.MeterPlot">
+<Plot>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<NewSeriesCollection>
+<SeriesAttr class="com.fr.chart.plot.GeneralSeriesAttr">
+<GeneralSeriesAttr>
+<DataLabelInfo class="com.fr.chart.axis.DataLabelInfo">
+<DataLabel>
+<Attr>
+<SeriesAttrPosition>
+<Attr position="1"/>
+</SeriesAttrPosition>
+</Attr>
+<SeriesLabelStyle>
+<Separation>
+<![CDATA[,]]></Separation>
+<Format class="java.text.DecimalFormat">
+<![CDATA[#0]]></Format>
+</SeriesLabelStyle>
+</DataLabel>
+</DataLabelInfo>
+<Marker class="com.fr.chart.marker.DiamondFilledMarker" size="5.0"/>
+<ColorInfo>
+<Attr borderStyle="0" borderColor="-8355712" defaultAlpha="1.0"/>
+</ColorInfo>
+</GeneralSeriesAttr>
+</SeriesAttr>
+</NewSeriesCollection>
+<Legend>
+<GI>
+<SeriesBorderAttr>
+<Border borderColor="-16777216"/>
+</SeriesBorderAttr>
+<Is3DSimulation value="false"/>
+<IsHorizontal value="false"/>
+</GI>
+<Attr position="4" legendNum="10" visible="true"/>
+<FRFont name="SimSun" style="0" size="12"/>
+</Legend>
+<MeterStyle>
+<Attr meterAngle="270" startValue="0.0" endValue="400.0" tickSize="50.0" tickColor="-13382452" units="单位" needleColor="-16711681" dialBackgroudColor="-8355712" tickLabelsVisible="true" dialShape="CIRCLE"/>
+<TextAttr>
+<Attr alignText="0"/>
+</TextAttr>
+<IntervalList>
+<MeterInterval label="分段区域1(默认)" beginValue="0.0" endValue="150.0" backgroudColor="-5493460" outlineColor="-1" outlineSize="5.0"/>
+<MeterInterval label="分段区域2(默认)" beginValue="0.0" endValue="300.0" backgroudColor="-5328071" outlineColor="-1" outlineSize="5.0"/>
+<MeterInterval label="分段区域3(默认)" beginValue="0.0" endValue="400.0" backgroudColor="-13277638" outlineColor="-1" outlineSize="5.0"/>
+</IntervalList>
+</MeterStyle>
+</Plot>
+</Plot>
+</Chart>
+</Chart>
+<MoreNameCDDefinition>
+<Top topCate="-1" topValue="-1"/>
+<TableData class="com.fr.data.impl.NameTableData">
+<Name>
+<![CDATA[ds1]]></Name>
+</TableData>
+<CategoryName value="CLASSNO"/>
+<ChartSummaryColumn name="GRADE" function="com.fr.data.util.function.MaxFunction" customName="GRADE"/>
+</MoreNameCDDefinition>
+</O>
+<Style index="0"/>
+</com.fr.report.FloatElement>
+</FloatElementList>
+<CellElementList/>
+</Report>
+<StyleList>
+<Style>
+<FRFont name="SimSun" style="0" size="12"/>
+<Background name="ColorBackground" color="-1"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BaseDataReformMapper" >
+	
+	<!-- 查询有效产品 -->
+	<select id="findProductList" parameterType="pd" resultType="pd">
+		select p.ID, p.PRODUCT_CODE, p.PRODUCT_NAME,
+			IFNULL((select PRODUCT_NAME from bd_product f where f.PRODUCT_CODE=p.PARENT_PRODUCT_CODE), ''
+			)  PARENT_PRODUCT_NAME,
+			(select d.NAME from sys_dictionaries d where d.BIANMA=p.PRODUCT_TYPE) PRODUCT_TYPE_NAME
+		from bd_product p
+		where p.ISDEL = 0
+		<if test="productType != null and productType != ''">
+			and p.PRODUCT_TYPE = #{productType}
+		</if>
+		order by p.PRODUCT_TYPE, p.PRODUCT_NAME
+	</select>
+	
+	<!-- 查询所有部门 -->
+	<select id="findDeptList" resultType="pd">
+		select
+				a.ID,	
+				a.DEPT_CODE,	
+				a.DEPT_NAME,
+				a.PARENT_ID,
+				a.DEPT_SIGN,	
+				a.DEPT_LEADER_ID,	
+				a.DEPT_LEADER_NAME,	
+				a.ENABLED
+		from 
+				bd_department a
+		WHERE
+				a.IS_DELETE = 0		
+		ORDER BY
+				a.PARENT_ID,
+				a.ORDER_NUM,
+				a.CREATE_TIME DESC
+	</select>
+	
+	<!-- 通过部门id查找员工，形成组织人员树查到的人员信息 -->
+	<select id="findEmpListByDeptId" parameterType="Integer" resultType="pd">
+		select 
+			ID,
+			EMP_CODE DEPT_CODE,
+			EMP_NAME DEPT_NAME,
+			#{id} PARENT_ID
+		from 
+			bd_employee 
+		where EMP_DEPARTMENT_ID = #{id}
+		and ENABLED = 1
+	</select>
+	
+	<!-- 查询单位列表 -->
+	<select id="findUnitList" resultType="pd">
+		select ID, UNIT_CODE, UNIT_NAME, UNIT_TYPE_NAME, BASE_UNIT_CODE, CONVERT_BASE_COUNT
+		from bd_unit
+		where ISDEL=0
+	</select>
+	
+</mapper>
